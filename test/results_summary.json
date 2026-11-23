@@ -5,13 +5,13 @@
   "best_by_task": {
     "task1": {
       "task": "task1",
-      "experiment": "08_repeat_aggregation",
-      "name": "task1_repeat_mean",
+      "experiment": "11_retrieval_ablation",
+      "name": "task1_directional_pooling",
       "variant": "independent",
-      "ocf_mean": 18.391639662733894,
+      "ocf_mean": 18.483120787328367,
       "top1_accuracy": null,
       "n": 1688,
-      "source": "test\\08_repeat_aggregation\\results_task1_repeat_mean.json"
+      "source": "test\\11_retrieval_ablation\\results_task1_retrieval.json"
     },
     "task2": {
       "task": "task2",
@@ -34,9 +34,29 @@
       "source": "test\\09_ensemble\\results_task3_ensemble.json"
     }
   },
-  "equal_task_composite": 19.431861244031698,
-  "gap_to_rank_1_snapshot": 34.582998755968305,
+  "equal_task_composite": 19.46235495222986,
+  "gap_to_rank_1_snapshot": 34.55250504777014,
   "candidates": [
+    {
+      "task": "task1",
+      "experiment": "11_retrieval_ablation",
+      "name": "task1_directional_pooling",
+      "variant": "independent",
+      "ocf_mean": 18.483120787328367,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\11_retrieval_ablation\\results_task1_retrieval.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "10_task1_ensemble",
+      "name": "task1_bin25_bin50_ensemble",
+      "variant": "independent",
+      "ocf_mean": 18.391639662733894,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\10_task1_ensemble\\results_task1_ensemble.json"
+    },
     {
       "task": "task1",
       "experiment": "08_repeat_aggregation",
@@ -129,6 +149,16 @@
     },
     {
       "task": "task1",
+      "experiment": "07_ddpm",
+      "name": "task1_ddpm_bin50_e10",
+      "variant": "retrieval",
+      "ocf_mean": 12.535986915278368,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\07_ddpm\\results_task1_ddpm_bin50_e10.json"
+    },
+    {
+      "task": "task1",
       "experiment": "05_task1_pooled",
       "name": "task1_pooled_mlp_bin25_pca256_singles",
       "variant": "direct",
@@ -206,6 +236,16 @@
       "top1_accuracy": null,
       "n": 1688,
       "source": "test\\01_ridge_task1\\results_bin50_dct32_log.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "07_ddpm",
+      "name": "task1_ddpm_bin50_e10",
+      "variant": "direct",
+      "ocf_mean": 11.17738810848611,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\07_ddpm\\results_task1_ddpm_bin50_e10.json"
     },
     {
       "task": "task1",
