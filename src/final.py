@@ -257,7 +257,13 @@ def predict_final(config, models, output):
     png_folder = output / "png"
     if png_folder.exists():
         raise FileExistsError(f"Refuse to mix predictions with an existing folder: {png_folder}")
-    save_images(predictions_by_task, ids_by_task, png_folder)
+    for task in ("task1", "task2", "task3"):
+        task_folder = png_folder / task
+        task_folder.mkdir(parents=True, exist_ok=False)
+        task_array = np.concatenate(predictions_by_task[task]).astype(np.float32)[:, None]
+        save_images(
+            torch.from_numpy(task_array), ids_by_task[task], task_folder, image_size=(64, 64)
+        )
     png_archive = output / "submission_png.zip"
     pack_submission(png_folder, png_archive, ids_by_task)
     kaggle_archive = output / "kaggle_submission.zip"

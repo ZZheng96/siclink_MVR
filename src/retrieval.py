@@ -50,6 +50,19 @@ def _blur(images, sigma):
 
 
 @torch.inference_mode()
+def glyph_similarity(bank, metric="directional2", device=None):
+    """Return pairwise structural similarity for a binary glyph bank."""
+    if metric not in {"directional2", "directional", "directional8", "directional_multi"}:
+        raise ValueError("glyph_similarity requires a directional metric.")
+    if device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    images = np.asarray(bank, dtype=np.float32)
+    embeddings = torch.from_numpy(images[:, None]).to(device)
+    embeddings = F.normalize(_retrieval_embedding(embeddings, metric), dim=1)
+    return (embeddings @ embeddings.T).cpu().numpy()
+
+
+@torch.inference_mode()
 def retrieve_glyphs(predictions, bank, metric="cosine", blur_sigma=1.0, batch_size=64, device=None):
     """Return the nearest binary bank glyph and its index for every prediction."""
     predictions = np.asarray(predictions, dtype=np.float32)

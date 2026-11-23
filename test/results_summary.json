@@ -289,6 +289,16 @@
     },
     {
       "task": "task2",
+      "experiment": "12_structural_medoid",
+      "name": "task2_structural_medoid",
+      "variant": "independent",
+      "ocf_mean": 21.237602207540277,
+      "top1_accuracy": 0.0302734375,
+      "n": 1024,
+      "source": "test\\12_structural_medoid\\results_task2_medoid.json"
+    },
+    {
+      "task": "task2",
       "experiment": "09_ensemble",
       "name": "task2_mlp_encoding_ensemble",
       "variant": "independent",
