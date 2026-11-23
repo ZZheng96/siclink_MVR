@@ -1,0 +1,105 @@
+{
+  "experiment": "10_task1_ensemble",
+  "name": "task1_bin25_bin50_ensemble",
+  "config": {
+    "task": "task1",
+    "weights": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ]
+  },
+  "protocol": {
+    "tune_pictures": [
+      175,
+      342,
+      454,
+      795,
+      1004,
+      1220,
+      1276,
+      1388,
+      1628,
+      1667,
+      1759,
+      1804,
+      1884,
+      2127,
+      2148,
+      2527
+    ],
+    "evaluation_picture_count": 211
+  },
+  "tuning": [
+    {
+      "bin25_weight": 0.0,
+      "ocf_mean": 14.449320808954209
+    },
+    {
+      "bin25_weight": 0.25,
+      "ocf_mean": 14.828154307585994
+    },
+    {
+      "bin25_weight": 0.5,
+      "ocf_mean": 15.351203471883482
+    },
+    {
+      "bin25_weight": 0.75,
+      "ocf_mean": 15.550178158857126
+    },
+    {
+      "bin25_weight": 1.0,
+      "ocf_mean": 15.946220506049446
+    }
+  ],
+  "selected": {
+    "bin25_weight": 1.0,
+    "ocf_mean": 15.946220506049446
+  },
+  "evaluation": {
+    "n": 1688,
+    "ocf_mean": 18.391639662733894,
+    "ocf_std": 8.676482194730054,
+    "groups": {
+      "mice1/session1": {
+        "n": 211,
+        "ocf_mean": 17.572575578822256
+      },
+      "mice1/session2": {
+        "n": 211,
+        "ocf_mean": 19.11176866959398
+      },
+      "mice1/session3": {
+        "n": 211,
+        "ocf_mean": 18.03397934635396
+      },
+      "mice1/session4": {
+        "n": 211,
+        "ocf_mean": 18.554207227634073
+      },
+      "mice2/session1": {
+        "n": 211,
+        "ocf_mean": 18.72550098298254
+      },
+      "mice2/session2": {
+        "n": 211,
+        "ocf_mean": 17.763460735604834
+      },
+      "mice2/session3": {
+        "n": 211,
+        "ocf_mean": 18.846913493790737
+      },
+      "mice2/session4": {
+        "n": 211,
+        "ocf_mean": 18.524711267088765
+      }
+    },
+    "group_macro_mean": 18.391639662733894
+  },
+  "leaderboard_reference": {
+    "rank_1": 54.01486,
+    "comparable": false
+  }
+}

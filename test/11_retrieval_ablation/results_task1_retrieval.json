@@ -1,0 +1,110 @@
+{
+  "experiment": "11_retrieval_ablation",
+  "name": "task1_directional_pooling",
+  "config": {
+    "task": "task1",
+    "metrics": [
+      "cosine",
+      "mse",
+      "directional2",
+      "directional",
+      "directional8",
+      "directional_multi"
+    ]
+  },
+  "protocol": {
+    "tune_pictures": [
+      175,
+      342,
+      454,
+      795,
+      1004,
+      1220,
+      1276,
+      1388,
+      1628,
+      1667,
+      1759,
+      1804,
+      1884,
+      2127,
+      2148,
+      2527
+    ],
+    "evaluation_picture_count": 211
+  },
+  "tuning": [
+    {
+      "metric": "cosine",
+      "ocf_mean": 11.509302056969725
+    },
+    {
+      "metric": "mse",
+      "ocf_mean": 12.098545436129992
+    },
+    {
+      "metric": "directional2",
+      "ocf_mean": 16.977138560330083
+    },
+    {
+      "metric": "directional",
+      "ocf_mean": 15.946220506049446
+    },
+    {
+      "metric": "directional8",
+      "ocf_mean": 15.871194920103056
+    },
+    {
+      "metric": "directional_multi",
+      "ocf_mean": 16.712575239592766
+    }
+  ],
+  "selected": {
+    "metric": "directional2",
+    "ocf_mean": 16.977138560330083
+  },
+  "evaluation": {
+    "n": 1688,
+    "ocf_mean": 18.483120787328367,
+    "ocf_std": 8.53762771191407,
+    "groups": {
+      "mice1/session1": {
+        "n": 211,
+        "ocf_mean": 19.259632569162623
+      },
+      "mice1/session2": {
+        "n": 211,
+        "ocf_mean": 18.806697175997282
+      },
+      "mice1/session3": {
+        "n": 211,
+        "ocf_mean": 17.610597782317644
+      },
+      "mice1/session4": {
+        "n": 211,
+        "ocf_mean": 18.672532695558438
+      },
+      "mice2/session1": {
+        "n": 211,
+        "ocf_mean": 18.462552036168873
+      },
+      "mice2/session2": {
+        "n": 211,
+        "ocf_mean": 17.91548414733107
+      },
+      "mice2/session3": {
+        "n": 211,
+        "ocf_mean": 18.36142806913225
+      },
+      "mice2/session4": {
+        "n": 211,
+        "ocf_mean": 18.776041822958742
+      }
+    },
+    "group_macro_mean": 18.483120787328367
+  },
+  "leaderboard_reference": {
+    "rank_1": 54.01486,
+    "comparable": false
+  }
+}

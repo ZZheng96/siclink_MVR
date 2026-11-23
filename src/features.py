@@ -101,8 +101,8 @@ def aggregate_samples(features, group_ptr, sample_indices=None, average=True):
     return output
 
 
-def aggregate_by_target(features, targets):
-    """Average independent training rows that share a character target."""
+def aggregate_by_target(features, targets, method="mean"):
+    """Aggregate independent training rows that share a character target."""
     features = np.asarray(features, dtype=np.float32)
     targets = np.asarray(targets)
     if features.ndim != 2 or targets.ndim != 1 or len(features) != len(targets):
@@ -113,10 +113,20 @@ def aggregate_by_target(features, targets):
     sorted_targets = targets[order]
     sorted_features = features[order]
     starts = np.concatenate(([0], np.flatnonzero(np.diff(sorted_targets)) + 1))
-    sums = np.add.reduceat(sorted_features, starts, axis=0, dtype=np.float32)
     counts = np.diff(np.concatenate((starts, [len(targets)])))
     unique_targets = sorted_targets[starts]
-    return unique_targets, sums / counts[:, None]
+    if method == "mean":
+        sums = np.add.reduceat(sorted_features, starts, axis=0, dtype=np.float32)
+        return unique_targets, sums / counts[:, None]
+    if method == "median":
+        if np.all(counts == counts[0]):
+            grouped = sorted_features.reshape(len(starts), counts[0], features.shape[1])
+            return unique_targets, np.median(grouped, axis=1).astype(np.float32)
+        return unique_targets, np.stack([
+            np.median(sorted_features[start:start + count], axis=0)
+            for start, count in zip(starts, counts)
+        ]).astype(np.float32)
+    raise ValueError("method must be 'mean' or 'median'.")
 
 
 def trials_for_samples(group_ptr, sample_indices):

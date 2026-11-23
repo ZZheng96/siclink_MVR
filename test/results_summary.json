@@ -1,0 +1,641 @@
+{
+  "metric": "official OCF on fixed local validation subsets; not a Kaggle score",
+  "leaderboard_rank_1_snapshot": 54.01486,
+  "comparable_to_hidden_leaderboard": false,
+  "best_by_task": {
+    "task1": {
+      "task": "task1",
+      "experiment": "08_repeat_aggregation",
+      "name": "task1_repeat_mean",
+      "variant": "independent",
+      "ocf_mean": 18.391639662733894,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\08_repeat_aggregation\\results_task1_repeat_mean.json"
+    },
+    "task2": {
+      "task": "task2",
+      "experiment": "09_ensemble",
+      "name": "task2_mlp_encoding_ensemble",
+      "variant": "assignment",
+      "ocf_mean": 23.329312169146995,
+      "top1_accuracy": 0.072265625,
+      "n": 1024,
+      "source": "test\\09_ensemble\\results_task2_ensemble.json"
+    },
+    "task3": {
+      "task": "task3",
+      "experiment": "09_ensemble",
+      "name": "task3_mlp_encoding_ensemble",
+      "variant": "assignment",
+      "ocf_mean": 16.57463190021421,
+      "top1_accuracy": 0.015625,
+      "n": 4096,
+      "source": "test\\09_ensemble\\results_task3_ensemble.json"
+    }
+  },
+  "equal_task_composite": 19.431861244031698,
+  "gap_to_rank_1_snapshot": 34.582998755968305,
+  "candidates": [
+    {
+      "task": "task1",
+      "experiment": "08_repeat_aggregation",
+      "name": "task1_repeat_mean",
+      "variant": "independent",
+      "ocf_mean": 18.391639662733894,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\08_repeat_aggregation\\results_task1_repeat_mean.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_mlp_bin25_singles",
+      "variant": "retrieval",
+      "ocf_mean": 18.385237178306813,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_mlp_bin25_singles.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_mlp_bin25_pca256_singles",
+      "variant": "retrieval",
+      "ocf_mean": 17.9474856140742,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_mlp_bin25_pca256_singles.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "08_repeat_aggregation",
+      "name": "task1_repeat_median",
+      "variant": "independent",
+      "ocf_mean": 17.713194625400025,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\08_repeat_aggregation\\results_task1_repeat_median.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_ridge_bin25_pca256",
+      "variant": "retrieval",
+      "ocf_mean": 17.229325655582635,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_ridge_bin25_pca256.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_ridge_bin25",
+      "variant": "retrieval",
+      "ocf_mean": 17.16390651882735,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_ridge_bin25.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_mlp_dct32",
+      "variant": "retrieval",
+      "ocf_mean": 15.821677907238302,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_mlp_dct32.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_ridge_dct32",
+      "variant": "retrieval",
+      "ocf_mean": 14.701679741530988,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_ridge_dct32.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_mlp_bin25_singles",
+      "variant": "direct",
+      "ocf_mean": 13.129377614860884,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_mlp_bin25_singles.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_mlp_bin25_pca256_singles",
+      "variant": "direct",
+      "ocf_mean": 12.528524935860643,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_mlp_bin25_pca256_singles.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_mlp_dct32",
+      "variant": "direct",
+      "ocf_mean": 12.059440347425877,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_mlp_dct32.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "07_ddpm",
+      "name": "software_smoke",
+      "variant": "retrieval",
+      "ocf_mean": 11.702881119194455,
+      "top1_accuracy": null,
+      "n": 844,
+      "source": "test\\07_ddpm\\results_software_smoke.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_ridge_dct32",
+      "variant": "direct",
+      "ocf_mean": 11.645001631654251,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_ridge_dct32.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_ridge_bin25_pca256",
+      "variant": "direct",
+      "ocf_mean": 11.455312843856698,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_ridge_bin25_pca256.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "05_task1_pooled",
+      "name": "task1_pooled_ridge_bin25",
+      "variant": "direct",
+      "ocf_mean": 11.412666800760157,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\05_task1_pooled\\results_task1_pooled_ridge_bin25.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "01_ridge_task1",
+      "name": "bin50_dct32_raw",
+      "variant": "independent",
+      "ocf_mean": 11.259706340439674,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\01_ridge_task1\\results_bin50_dct32_raw.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "01_ridge_task1",
+      "name": "bin50_dct32_log",
+      "variant": "independent",
+      "ocf_mean": 11.229921848578881,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\01_ridge_task1\\results_bin50_dct32_log.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "01_ridge_task1",
+      "name": "bin50_dct64_raw",
+      "variant": "independent",
+      "ocf_mean": 10.860254775107187,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\01_ridge_task1\\results_bin50_dct64_raw.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "01_ridge_task1",
+      "name": "bin50_dct64_log",
+      "variant": "independent",
+      "ocf_mean": 10.802077297950259,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\01_ridge_task1\\results_bin50_dct64_log.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "07_ddpm",
+      "name": "software_smoke",
+      "variant": "direct",
+      "ocf_mean": 2.9169332274536792,
+      "top1_accuracy": null,
+      "n": 844,
+      "source": "test\\07_ddpm\\results_software_smoke.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "09_ensemble",
+      "name": "task2_mlp_encoding_ensemble",
+      "variant": "assignment",
+      "ocf_mean": 23.329312169146995,
+      "top1_accuracy": 0.072265625,
+      "n": 1024,
+      "source": "test\\09_ensemble\\results_task2_ensemble.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "09_ensemble",
+      "name": "task2_mlp_encoding_ensemble",
+      "variant": "independent",
+      "ocf_mean": 20.41189408882866,
+      "top1_accuracy": 0.04296875,
+      "n": 1024,
+      "source": "test\\09_ensemble\\results_task2_ensemble.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "08_repeat_aggregation",
+      "name": "task2_repeat_mean",
+      "variant": "independent",
+      "ocf_mean": 20.41189408882866,
+      "top1_accuracy": null,
+      "n": 1024,
+      "source": "test\\08_repeat_aggregation\\results_task2_repeat_mean.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_mlp_bin50_sessionnorm_assign",
+      "variant": "independent",
+      "ocf_mean": 20.38823691489752,
+      "top1_accuracy": 0.04296875,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_mlp_bin50_sessionnorm_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_mlp_bin50_sessionnorm_assign",
+      "variant": "assignment",
+      "ocf_mean": 20.101536548908047,
+      "top1_accuracy": 0.0458984375,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_mlp_bin50_sessionnorm_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_mlp_bin50_assign",
+      "variant": "assignment",
+      "ocf_mean": 19.899478660539593,
+      "top1_accuracy": 0.046875,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_mlp_bin50_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_temporal_bin50_sessionnorm_assign",
+      "variant": "assignment",
+      "ocf_mean": 19.73993118187248,
+      "top1_accuracy": 0.044921875,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_temporal_bin50_sessionnorm_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "06_encoding_seen",
+      "name": "task2_encoding_dct16",
+      "variant": "assignment",
+      "ocf_mean": 19.414916063007535,
+      "top1_accuracy": 0.0302734375,
+      "n": 1024,
+      "source": "test\\06_encoding_seen\\results_task2_encoding_dct16.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_temporal_bin50_sessionnorm_assign",
+      "variant": "independent",
+      "ocf_mean": 19.3663242645556,
+      "top1_accuracy": 0.0419921875,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_temporal_bin50_sessionnorm_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "08_repeat_aggregation",
+      "name": "task2_repeat_median",
+      "variant": "independent",
+      "ocf_mean": 19.32141518405488,
+      "top1_accuracy": null,
+      "n": 1024,
+      "source": "test\\08_repeat_aggregation\\results_task2_repeat_median.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "06_encoding_seen",
+      "name": "task2_encoding_dct16",
+      "variant": "independent",
+      "ocf_mean": 18.921931227185336,
+      "top1_accuracy": 0.0322265625,
+      "n": 1024,
+      "source": "test\\06_encoding_seen\\results_task2_encoding_dct16.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_mlp_bin25_sessionnorm_assign",
+      "variant": "assignment",
+      "ocf_mean": 18.70988102049522,
+      "top1_accuracy": 0.0302734375,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_mlp_bin25_sessionnorm_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_mlp_bin25_sessionnorm_assign",
+      "variant": "independent",
+      "ocf_mean": 18.069805243295853,
+      "top1_accuracy": 0.02734375,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_mlp_bin25_sessionnorm_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_mlp_bin50_assign",
+      "variant": "independent",
+      "ocf_mean": 17.977187931968928,
+      "top1_accuracy": 0.0322265625,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_mlp_bin50_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "02_seen_baselines",
+      "name": "task2_centroid_log_assign",
+      "variant": "assignment",
+      "ocf_mean": 17.02447403165336,
+      "top1_accuracy": 0.025390625,
+      "n": 1024,
+      "source": "test\\02_seen_baselines\\results_task2_centroid_log_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_mlp_bin25_assign",
+      "variant": "assignment",
+      "ocf_mean": 16.932942182790118,
+      "top1_accuracy": 0.025390625,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_mlp_bin25_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_mlp_bin25_assign",
+      "variant": "independent",
+      "ocf_mean": 16.904192074593716,
+      "top1_accuracy": 0.0205078125,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_mlp_bin25_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_temporal_bin25_sessionnorm_assign",
+      "variant": "assignment",
+      "ocf_mean": 16.40416993603796,
+      "top1_accuracy": 0.0205078125,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_temporal_bin25_sessionnorm_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "04_neural_seen",
+      "name": "task2_temporal_bin25_sessionnorm_assign",
+      "variant": "independent",
+      "ocf_mean": 15.625056782461833,
+      "top1_accuracy": 0.0146484375,
+      "n": 1024,
+      "source": "test\\04_neural_seen\\results_task2_temporal_bin25_sessionnorm_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "03_seen_ridge",
+      "name": "task2_ridge_log",
+      "variant": "retrieval",
+      "ocf_mean": 15.369567977085993,
+      "top1_accuracy": 0.0087890625,
+      "n": 1024,
+      "source": "test\\03_seen_ridge\\results_task2_ridge_log.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "02_seen_baselines",
+      "name": "task2_centroid_log",
+      "variant": "independent",
+      "ocf_mean": 14.646866596795004,
+      "top1_accuracy": 0.017578125,
+      "n": 1024,
+      "source": "test\\02_seen_baselines\\results_task2_centroid_log.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "02_seen_baselines",
+      "name": "task2_centroid_log_assign",
+      "variant": "independent",
+      "ocf_mean": 14.646866596795004,
+      "top1_accuracy": 0.017578125,
+      "n": 1024,
+      "source": "test\\02_seen_baselines\\results_task2_centroid_log_assign.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "03_seen_ridge",
+      "name": "task2_ridge_log",
+      "variant": "direct",
+      "ocf_mean": 10.447684472219745,
+      "top1_accuracy": null,
+      "n": 1024,
+      "source": "test\\03_seen_ridge\\results_task2_ridge_log.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "09_ensemble",
+      "name": "task3_mlp_encoding_ensemble",
+      "variant": "assignment",
+      "ocf_mean": 16.57463190021421,
+      "top1_accuracy": 0.015625,
+      "n": 4096,
+      "source": "test\\09_ensemble\\results_task3_ensemble.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "09_ensemble",
+      "name": "task3_mlp_encoding_ensemble",
+      "variant": "independent",
+      "ocf_mean": 16.3239948723827,
+      "top1_accuracy": 0.015380859375,
+      "n": 4096,
+      "source": "test\\09_ensemble\\results_task3_ensemble.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "04_neural_seen",
+      "name": "task3_mlp_bin50_pooled_sessionnorm_assign",
+      "variant": "assignment",
+      "ocf_mean": 15.978638611427264,
+      "top1_accuracy": 0.014404296875,
+      "n": 4096,
+      "source": "test\\04_neural_seen\\results_task3_mlp_bin50_pooled_sessionnorm_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "04_neural_seen",
+      "name": "task3_mlp_bin50_pooled_sessionnorm_assign",
+      "variant": "independent",
+      "ocf_mean": 15.860857281617433,
+      "top1_accuracy": 0.01416015625,
+      "n": 4096,
+      "source": "test\\04_neural_seen\\results_task3_mlp_bin50_pooled_sessionnorm_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "04_neural_seen",
+      "name": "task3_mlp_bin50_pooled_assign",
+      "variant": "assignment",
+      "ocf_mean": 15.61711277442768,
+      "top1_accuracy": 0.012451171875,
+      "n": 4096,
+      "source": "test\\04_neural_seen\\results_task3_mlp_bin50_pooled_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "04_neural_seen",
+      "name": "task3_mlp_bin50_pooled_assign",
+      "variant": "independent",
+      "ocf_mean": 15.582489164337595,
+      "top1_accuracy": 0.011474609375,
+      "n": 4096,
+      "source": "test\\04_neural_seen\\results_task3_mlp_bin50_pooled_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "06_encoding_seen",
+      "name": "task3_encoding_dct16",
+      "variant": "assignment",
+      "ocf_mean": 15.286482749839358,
+      "top1_accuracy": 0.009521484375,
+      "n": 4096,
+      "source": "test\\06_encoding_seen\\results_task3_encoding_dct16.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "06_encoding_seen",
+      "name": "task3_encoding_dct16",
+      "variant": "independent",
+      "ocf_mean": 15.015599644577078,
+      "top1_accuracy": 0.00830078125,
+      "n": 4096,
+      "source": "test\\06_encoding_seen\\results_task3_encoding_dct16.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "04_neural_seen",
+      "name": "task3_mlp_bin25_pooled_sessionnorm_assign",
+      "variant": "independent",
+      "ocf_mean": 14.984894335022833,
+      "top1_accuracy": 0.007080078125,
+      "n": 4096,
+      "source": "test\\04_neural_seen\\results_task3_mlp_bin25_pooled_sessionnorm_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "04_neural_seen",
+      "name": "task3_mlp_bin25_pooled_sessionnorm_assign",
+      "variant": "assignment",
+      "ocf_mean": 14.973827241087875,
+      "top1_accuracy": 0.0068359375,
+      "n": 4096,
+      "source": "test\\04_neural_seen\\results_task3_mlp_bin25_pooled_sessionnorm_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "02_seen_baselines",
+      "name": "task3_centroid_log",
+      "variant": "independent",
+      "ocf_mean": 13.67098697217303,
+      "top1_accuracy": 0.004150390625,
+      "n": 4096,
+      "source": "test\\02_seen_baselines\\results_task3_centroid_log.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "02_seen_baselines",
+      "name": "task3_centroid_log_assign",
+      "variant": "independent",
+      "ocf_mean": 13.67098697217303,
+      "top1_accuracy": 0.004150390625,
+      "n": 4096,
+      "source": "test\\02_seen_baselines\\results_task3_centroid_log_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "02_seen_baselines",
+      "name": "task3_centroid_log_assign",
+      "variant": "assignment",
+      "ocf_mean": 13.429618144640939,
+      "top1_accuracy": 0.002685546875,
+      "n": 4096,
+      "source": "test\\02_seen_baselines\\results_task3_centroid_log_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "04_neural_seen",
+      "name": "task3_mlp_bin50_persession_assign",
+      "variant": "assignment",
+      "ocf_mean": 13.257171381594027,
+      "top1_accuracy": 0.003173828125,
+      "n": 4096,
+      "source": "test\\04_neural_seen\\results_task3_mlp_bin50_persession_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "04_neural_seen",
+      "name": "task3_mlp_bin50_persession_assign",
+      "variant": "independent",
+      "ocf_mean": 13.179373827993345,
+      "top1_accuracy": 0.001708984375,
+      "n": 4096,
+      "source": "test\\04_neural_seen\\results_task3_mlp_bin50_persession_assign.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "03_seen_ridge",
+      "name": "task3_ridge_log",
+      "variant": "retrieval",
+      "ocf_mean": 11.632974959834447,
+      "top1_accuracy": 0.00390625,
+      "n": 4096,
+      "source": "test\\03_seen_ridge\\results_task3_ridge_log.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "03_seen_ridge",
+      "name": "task3_ridge_log",
+      "variant": "direct",
+      "ocf_mean": 10.621198072125015,
+      "top1_accuracy": null,
+      "n": 4096,
+      "source": "test\\03_seen_ridge\\results_task3_ridge_log.json"
+    }
+  ]
+}

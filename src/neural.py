@@ -47,6 +47,39 @@ class SpikeClassifier(nn.Module):
         return self.network(features)
 
 
+class SpikeTemporalClassifier(SpikeClassifier):
+    """Learn unit-specific temporal kernels before character classification."""
+
+    def __init__(self, n_features, n_units, n_bins, n_classes=2748, hidden=512, dropout=0.2, apply_log=True):
+        super().__init__(n_features, n_classes, hidden, dropout, apply_log)
+        if n_units * n_bins != n_features:
+            raise ValueError("n_units*n_bins must equal n_features.")
+        self.n_units = n_units
+        self.n_bins = n_bins
+        self.architecture = "temporal"
+        self.network = nn.Identity()
+        channels = 4
+        self.temporal = nn.Conv1d(
+            n_units, n_units * channels, kernel_size=3, padding=1, groups=n_units
+        )
+        flattened = n_units * channels * n_bins
+        self.head = nn.Sequential(
+            nn.LayerNorm(flattened),
+            nn.Linear(flattened, hidden),
+            nn.SiLU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden, n_classes),
+        )
+
+    def forward(self, features):
+        if self.apply_log:
+            features = torch.log1p(features.clamp_min(0))
+        features = (features - self.feature_mean) / self.feature_scale
+        features = features.reshape(-1, self.n_units, self.n_bins)
+        features = torch.nn.functional.silu(self.temporal(features))
+        return self.head(features.flatten(1))
+
+
 def _loader(features, targets, batch_size, shuffle):
     dataset = TensorDataset(
         torch.from_numpy(np.asarray(features, dtype=np.float32)),
@@ -131,6 +164,9 @@ def fit_classifier(model, train, validation, output, *, epochs=30, batch_size=25
                 "hidden": model.hidden,
                 "dropout": model.dropout,
                 "apply_log": model.apply_log,
+                "architecture": getattr(model, "architecture", "mlp"),
+                "n_units": getattr(model, "n_units", None),
+                "n_bins": getattr(model, "n_bins", None),
                 "state_dict": model.state_dict(),
                 "epoch": epoch,
                 "validation_accuracy": best_accuracy,
@@ -162,10 +198,16 @@ def load_classifier(path, device=None):
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
     checkpoint = torch.load(path, map_location=device, weights_only=True)
-    model = SpikeClassifier(
-        checkpoint["n_features"], checkpoint["n_classes"], checkpoint["hidden"], checkpoint["dropout"],
-        checkpoint.get("apply_log", True),
-    )
+    if checkpoint.get("architecture", "mlp") == "temporal":
+        model = SpikeTemporalClassifier(
+            checkpoint["n_features"], checkpoint["n_units"], checkpoint["n_bins"],
+            checkpoint["n_classes"], checkpoint["hidden"], checkpoint["dropout"], checkpoint.get("apply_log", True),
+        )
+    else:
+        model = SpikeClassifier(
+            checkpoint["n_features"], checkpoint["n_classes"], checkpoint["hidden"], checkpoint["dropout"],
+            checkpoint.get("apply_log", True),
+        )
     model.load_state_dict(checkpoint["state_dict"])
     return model.to(device).eval()
 

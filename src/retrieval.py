@@ -17,16 +17,25 @@ def unique_assignment(scores):
     return assigned
 
 
-def _directional_embedding(images):
+def _directional_embedding(images, pool_size=4):
     """Compact multi-scale signed orientation fields aligned with OCF's image basis."""
     from src.ocf.ocf_cuda import directional_fields
 
     embeddings = []
     for sigma in (1, 2, 4):
         fields = directional_fields(images[:, 0], sigma)
-        pooled = F.avg_pool2d(fields, kernel_size=4, stride=4).flatten(1)
+        pooled = F.avg_pool2d(fields, kernel_size=pool_size, stride=pool_size).flatten(1)
         embeddings.append(F.normalize(pooled, dim=1))
     return torch.cat(embeddings, dim=1)
+
+
+def _retrieval_embedding(images, metric):
+    if metric == "directional_multi":
+        return torch.cat([
+            _directional_embedding(images, pool_size) for pool_size in (2, 4, 8)
+        ], dim=1)
+    pool_size = {"directional2": 2, "directional": 4, "directional8": 8}[metric]
+    return _directional_embedding(images, pool_size)
 
 
 def _blur(images, sigma):
@@ -47,27 +56,28 @@ def retrieve_glyphs(predictions, bank, metric="cosine", blur_sigma=1.0, batch_si
     bank = np.asarray(bank, dtype=np.float32)
     if predictions.ndim != 3 or bank.ndim != 3 or predictions.shape[1:] != bank.shape[1:]:
         raise ValueError("Expected matched (N, H, W) predictions and (K, H, W) bank images.")
-    if metric not in ("cosine", "mse", "directional"):
-        raise ValueError("metric must be 'cosine', 'mse', or 'directional'.")
+    directional_metrics = {"directional2", "directional", "directional8", "directional_multi"}
+    if metric not in ("cosine", "mse", *directional_metrics):
+        raise ValueError("Unsupported glyph retrieval metric.")
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
     bank_tensor = torch.from_numpy(bank[:, None]).to(device)
-    if metric == "directional":
-        bank_tensor = _directional_embedding(bank_tensor)
+    if metric in directional_metrics:
+        bank_tensor = _retrieval_embedding(bank_tensor, metric)
     else:
         bank_tensor = _blur(bank_tensor, blur_sigma).flatten(1)
-    if metric in ("cosine", "directional"):
+    if metric == "cosine" or metric in directional_metrics:
         bank_tensor = F.normalize(bank_tensor, dim=1)
     bank_square = bank_tensor.square().sum(dim=1)
 
     indices = []
     for start in range(0, len(predictions), batch_size):
         batch = torch.from_numpy(predictions[start:start + batch_size, None]).to(device)
-        if metric == "directional":
-            batch = _directional_embedding(batch)
+        if metric in directional_metrics:
+            batch = _retrieval_embedding(batch, metric)
         else:
             batch = _blur(batch, blur_sigma).flatten(1)
-        if metric in ("cosine", "directional"):
+        if metric == "cosine" or metric in directional_metrics:
             scores = F.normalize(batch, dim=1) @ bank_tensor.T
         else:
             scores = 2 * batch @ bank_tensor.T - batch.square().sum(dim=1, keepdim=True) - bank_square

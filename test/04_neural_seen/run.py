@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT))
 from src.dataloader import load_images
 from src.evaluation import score_predictions, summarize_scores
 from src.features import aggregate_by_target, load_feature_blocks
-from src.neural import SpikeClassifier, fit_classifier, load_classifier, predict_logits
+from src.neural import SpikeClassifier, SpikeTemporalClassifier, fit_classifier, load_classifier, predict_logits
 from src.retrieval import unique_assignment
 from src.splits import make_split
 
@@ -43,6 +43,7 @@ def parse_args():
     parser.add_argument("--pool-sessions", action="store_true", help="Pool Task 3 sessions per mouse.")
     parser.add_argument("--session-norm", action="store_true", help="Use unlabeled per-session log-count statistics.")
     parser.add_argument("--unique-assignment", action="store_true", help="Also evaluate one-to-one assignment per block.")
+    parser.add_argument("--architecture", choices=("mlp", "temporal"), default="mlp")
     parser.add_argument("--hidden", type=int, default=512)
     parser.add_argument("--dropout", type=float, default=0.2)
     parser.add_argument("--epochs", type=int, default=30)
@@ -55,7 +56,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    name = args.name or (f"{args.task}_mlp_h{args.hidden}_e{args.epochs}"
+    name = args.name or (f"{args.task}_{args.architecture}_h{args.hidden}_e{args.epochs}"
                          + ("_pooled" if args.pool_sessions else "")
                          + ("_sessionnorm" if args.session_norm else "")
                          + ("_assign" if args.unique_assignment else ""))
@@ -125,10 +126,16 @@ def main():
         validation_x = np.concatenate(validation_x_parts)
         validation_targets = np.concatenate(validation_y_parts)
         tune_mask = np.isin(validation_targets, tune_pictures)
-        model = SpikeClassifier(
-            n_features=train_x.shape[1], n_classes=len(images), hidden=args.hidden, dropout=args.dropout,
-            apply_log=not args.session_norm,
-        )
+        if args.architecture == "temporal":
+            model = SpikeTemporalClassifier(
+                n_features=train_x.shape[1], n_units=group_blocks[0].n_units, n_bins=round(250 / args.bin_ms),
+                n_classes=len(images), hidden=args.hidden, dropout=args.dropout, apply_log=not args.session_norm,
+            )
+        else:
+            model = SpikeClassifier(
+                n_features=train_x.shape[1], n_classes=len(images), hidden=args.hidden, dropout=args.dropout,
+                apply_log=not args.session_norm,
+            )
         group_output = artifacts / group
         history = fit_classifier(
             model,

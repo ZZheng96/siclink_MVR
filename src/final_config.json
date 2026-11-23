@@ -1,0 +1,36 @@
+{
+  "name": "mlp_encoding_directional_v2",
+  "task1": {
+    "bin_ms": 25,
+    "basis": "dct32",
+    "hidden": 512,
+    "dropout": 0.4,
+    "weight_decay": 0.01,
+    "epochs": {"mice1": 8, "mice2": 11},
+    "retrieval": "directional2"
+  },
+  "task2": {
+    "bin_ms": 50,
+    "architecture": "mlp",
+    "hidden": 512,
+    "dropout": 0.2,
+    "weight_decay": 0.001,
+    "epochs": {"mice1": 7, "mice2": 4},
+    "session_norm": true,
+    "assignment": true,
+    "mlp_weight": 0.5,
+    "encoding_alpha": 1.0
+  },
+  "task3": {
+    "bin_ms": 50,
+    "architecture": "mlp",
+    "hidden": 512,
+    "dropout": 0.2,
+    "weight_decay": 0.001,
+    "epochs": {"mice1": 7, "mice2": 7},
+    "session_norm": true,
+    "assignment": true,
+    "mlp_weight": 0.5,
+    "encoding_alpha": 0.01
+  }
+}
