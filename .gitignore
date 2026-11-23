@@ -1,0 +1,18 @@
+# 数据集（体积过大，不纳入版本控制）
+data/*
+SiClink Mouse Visual Reconstruction BCI Competition - Kaggle.url
+siclink-mouse-visual-reconstruction-bci-challenge-publicleaderboard-2026-11-23T14_53_20.csv
+
+# 本地缓存与生成产物（体积大或可重建，不纳入版本控制）
+
+
+# 实验中间产物：可重建的大数组缓存
+test/*
+
+# 系统与工具
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.venv/
+.venv*/
