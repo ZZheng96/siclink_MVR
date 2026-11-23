@@ -88,4 +88,4 @@ D:\WORK\siclink\.venv\Scripts\python.exe D:\WORK\siclink\ref\chen2024_reproducti
 - 仅数据布局从 NHWC 改为 NCHW；层数、顺序、卷积核、stride、padding、BN、Dropout、激活、nearest 上采样及输出空间尺寸均对应原实现。
 - 本类的 `forward` 同时返回 `(dense_out, cae_out)`，对应原仓库的 multi-output 模型；原训练模型的损失只作用于 `cae_out`，最小测试也遵循这一点。
 - 未读取或转换官方训练权重。Keras 与 PyTorch 的默认随机初始化及底层浮点算子不同，因此随机初始化后的逐元素输出不应期望一致；本测试也不是数值一致性或科研复现验证。
-- 未开始正式训练，未生成模型权重或科研结果。
+- 已在作者示例数据上完成 30 epochs 的缩短训练，并复算了作者发布结果的指标；完整命令、曲线与结论边界见 [REPRODUCTION.md](REPRODUCTION.md)。该训练未达到论文 400 epochs 的数值，也不能与 SiClink 的 OCF 分数比较。

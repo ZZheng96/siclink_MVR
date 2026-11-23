@@ -16,6 +16,7 @@
 | Code / Models / Discussion | [community.md](community.md) | 2 个公开 notebook、Models 空状态、1 个讨论主题及官方澄清评论 |
 | Leaderboard | [leaderboard.md](leaderboard.md) | 用户提供的 CSV 中 42 支队伍全量转录 |
 | 本地数据与示例 | [local_dataset.md](local_dataset.md) | 实际路径、完整文件组织、NPZ 结构、官方示例及提交适配器核查 |
+| 机理研究与复现方案 | [../ref/siclink_research_and_solution.md](../ref/siclink_research_and_solution.md) | 文献与科学机理、模型对比、Chen 2024 与官方 DDPM 复现、可行方案 |
 
 已检查比赛网页当时可见的 **Overview、Data、Code、Models、Discussion、Leaderboard、Rules** 七个标签页；Rules 页中分开显示的两套规则均已保存。
 
