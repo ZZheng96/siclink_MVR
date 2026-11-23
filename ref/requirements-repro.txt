@@ -1,0 +1,19 @@
+# Reproduction environment actually used on 2026-11-24.
+# Interpreter: D:\WORK\siclink\.venv\Scripts\python.exe (CPython 3.10.22, Windows x64)
+# GPU: NVIDIA GeForce RTX 3080 Laptop GPU 16 GiB; torch CUDA build 12.1
+# Install with: <venv-python> -m pip install -r ref/requirements-repro.txt
+# torch was originally installed from a local wheel; the public equivalent is:
+#   torch==2.5.1+cu121 --index-url https://download.pytorch.org/whl/cu121
+torch==2.5.1
+diffusers==0.35.2
+numpy==1.26.4
+scipy==1.13.1
+pillow==12.3.0
+huggingface_hub==2.4.0
+filelock==4.1.0
+tqdm==4.70.1
+requests==2.34.2
+gdown==6.5.2
+scikit-image==0.25.2
+matplotlib==3.10.9
+pypdf==7.1.1

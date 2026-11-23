@@ -16,3 +16,14 @@ __pycache__/
 *.pyc
 .venv/
 .venv*/
+
+# 文献、第三方源码与复现产物：本地保留，不重复分发或提交大文件
+ref/papers/
+ref/third_party/
+ref/downloads/
+ref/official_ddpm_reproduction/*
+!ref/official_ddpm_reproduction/REPRODUCTION.md
+!ref/official_ddpm_reproduction/validate_demo.py
+ref/chen2024_reproduction/runs/
+ref/chen2024_reproduction/*.log
+ref/chen2024_reproduction/*.err
