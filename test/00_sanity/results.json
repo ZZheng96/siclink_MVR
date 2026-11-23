@@ -1,0 +1,39 @@
+{
+  "experiment": "00_sanity",
+  "timestamp_utc": "2026-11-23T18:34:55.300247+00:00",
+  "command": ".venv/Scripts/python.exe -B test/00_sanity/run.py",
+  "device": "cuda",
+  "results": {
+    "oracle_binary": {
+      "n": 16,
+      "ocf_mean": 100.0,
+      "ocf_std": 0.0
+    },
+    "oracle_raw_antialiased": {
+      "n": 16,
+      "ocf_mean": 70.53071133293615,
+      "ocf_std": 3.7271442806856228
+    },
+    "blank": {
+      "n": 16,
+      "ocf_mean": 0.0,
+      "ocf_std": 0.0
+    },
+    "bank_mean_blur": {
+      "n": 16,
+      "ocf_mean": 0.8525963986085385,
+      "ocf_std": 0.1640779900662306
+    },
+    "random_crisp_glyph": {
+      "n": 16,
+      "ocf_mean": 13.846509491218072,
+      "ocf_std": 6.719771749566206
+    },
+    "raw_threshold_128": {
+      "n": 16,
+      "ocf_mean": 100.0,
+      "ocf_std": 0.0
+    }
+  },
+  "status": "PASS"
+}
