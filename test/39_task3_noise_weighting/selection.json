@@ -1,0 +1,302 @@
+{
+  "preregistration": {
+    "protocol_source": "test/36_task3_fusion/run.py",
+    "checkpoint_source": "test/35_task3_contrastive/artifacts/{mouse}/contrastive.pt and test/04_neural_seen/artifacts/task3_mlp_bin50_pooled_sessionnorm_assign/{mouse}/classifier.pt",
+    "baseline": "Experiment 36 v5: (z(MLP logits) + z(full-window ridge prototype MSE scores) + z(continuous image cosine)) / 3",
+    "candidate": "Replace only the prototype MSE term with diagonal inverse-variance weighted MSE. For each mouse, estimate each feature variance from the three public train_trials repeats per glyph on the log1p response scale within each block, then shrink 50% toward that block's mean variance.",
+    "candidates": [
+      "v5",
+      "noise_weighted"
+    ],
+    "maximize_tune_overall_lexicographically": [
+      "true_recall_at_32",
+      "oracle32_ocf",
+      "final_ocf"
+    ],
+    "lock_gate": "noise_weighted final_ocf must be strictly greater than v5 final_ocf on tune256",
+    "picture_split": "Public train, task3 seed 42. Sort default_rng(123).permutation(2748): tune [0:256]. If and only if the strict gate passes, evaluate fixed [1280:1792].",
+    "assignment": "Tune uses rectangular Hungarian on 256 rows per block. Fixed 512 evaluation assigns all 2748 rows per block before retaining [1280:1792].",
+    "data_use": "Public train_trials only for variance, session normalizers, and ridge prototypes. Frozen public checkpoints. No validation residuals or ID matching."
+  },
+  "tune": {
+    "v5": {
+      "overall": {
+        "n": 2048,
+        "true_recall_at_32": 0.20263671875,
+        "true_inside_32_count": 415,
+        "true_outside_32_count": 1633,
+        "true_inside_32_not_selected_count": 376,
+        "final_correct_count": 39,
+        "final_accuracy": 0.01904296875,
+        "oracle32_ocf": 43.1631997432075,
+        "final_ocf": 17.930809343195143
+      },
+      "by_mouse": {
+        "mice1": {
+          "n": 1024,
+          "true_recall_at_32": 0.22265625,
+          "true_inside_32_count": 228,
+          "true_outside_32_count": 796,
+          "true_inside_32_not_selected_count": 206,
+          "final_correct_count": 22,
+          "final_accuracy": 0.021484375,
+          "oracle32_ocf": 44.89198573717625,
+          "final_ocf": 18.465564850369805
+        },
+        "mice2": {
+          "n": 1024,
+          "true_recall_at_32": 0.1826171875,
+          "true_inside_32_count": 187,
+          "true_outside_32_count": 837,
+          "true_inside_32_not_selected_count": 170,
+          "final_correct_count": 17,
+          "final_accuracy": 0.0166015625,
+          "oracle32_ocf": 41.43441374923876,
+          "final_ocf": 17.396053836020478
+        }
+      },
+      "by_block": {
+        "mice1/session1": {
+          "n": 256,
+          "true_recall_at_32": 0.1640625,
+          "true_inside_32_count": 42,
+          "true_outside_32_count": 214,
+          "true_inside_32_not_selected_count": 38,
+          "final_correct_count": 4,
+          "final_accuracy": 0.015625,
+          "oracle32_ocf": 40.57623864184587,
+          "final_ocf": 17.503819947220236
+        },
+        "mice1/session2": {
+          "n": 256,
+          "true_recall_at_32": 0.28515625,
+          "true_inside_32_count": 73,
+          "true_outside_32_count": 183,
+          "true_inside_32_not_selected_count": 67,
+          "final_correct_count": 6,
+          "final_accuracy": 0.0234375,
+          "oracle32_ocf": 50.45066235039674,
+          "final_ocf": 19.19915018376769
+        },
+        "mice1/session3": {
+          "n": 256,
+          "true_recall_at_32": 0.16015625,
+          "true_inside_32_count": 41,
+          "true_outside_32_count": 215,
+          "true_inside_32_not_selected_count": 39,
+          "final_correct_count": 2,
+          "final_accuracy": 0.0078125,
+          "oracle32_ocf": 39.42047476387469,
+          "final_ocf": 16.217526937065724
+        },
+        "mice1/session4": {
+          "n": 256,
+          "true_recall_at_32": 0.28125,
+          "true_inside_32_count": 72,
+          "true_outside_32_count": 184,
+          "true_inside_32_not_selected_count": 62,
+          "final_correct_count": 10,
+          "final_accuracy": 0.0390625,
+          "oracle32_ocf": 49.1205671925877,
+          "final_ocf": 20.941762333425572
+        },
+        "mice2/session1": {
+          "n": 256,
+          "true_recall_at_32": 0.203125,
+          "true_inside_32_count": 52,
+          "true_outside_32_count": 204,
+          "true_inside_32_not_selected_count": 48,
+          "final_correct_count": 4,
+          "final_accuracy": 0.015625,
+          "oracle32_ocf": 42.71925591025646,
+          "final_ocf": 18.15976088035471
+        },
+        "mice2/session2": {
+          "n": 256,
+          "true_recall_at_32": 0.1484375,
+          "true_inside_32_count": 38,
+          "true_outside_32_count": 218,
+          "true_inside_32_not_selected_count": 35,
+          "final_correct_count": 3,
+          "final_accuracy": 0.01171875,
+          "oracle32_ocf": 38.98006880707127,
+          "final_ocf": 16.45666817248891
+        },
+        "mice2/session3": {
+          "n": 256,
+          "true_recall_at_32": 0.203125,
+          "true_inside_32_count": 52,
+          "true_outside_32_count": 204,
+          "true_inside_32_not_selected_count": 46,
+          "final_correct_count": 6,
+          "final_accuracy": 0.0234375,
+          "oracle32_ocf": 43.45543724521528,
+          "final_ocf": 17.692869436056007
+        },
+        "mice2/session4": {
+          "n": 256,
+          "true_recall_at_32": 0.17578125,
+          "true_inside_32_count": 45,
+          "true_outside_32_count": 211,
+          "true_inside_32_not_selected_count": 41,
+          "final_correct_count": 4,
+          "final_accuracy": 0.015625,
+          "oracle32_ocf": 40.58289303441203,
+          "final_ocf": 17.274916855182283
+        }
+      }
+    },
+    "noise_weighted": {
+      "overall": {
+        "n": 2048,
+        "true_recall_at_32": 0.205078125,
+        "true_inside_32_count": 420,
+        "true_outside_32_count": 1628,
+        "true_inside_32_not_selected_count": 380,
+        "final_correct_count": 40,
+        "final_accuracy": 0.01953125,
+        "oracle32_ocf": 43.287966380315936,
+        "final_ocf": 17.978164395436202
+      },
+      "by_mouse": {
+        "mice1": {
+          "n": 1024,
+          "true_recall_at_32": 0.2236328125,
+          "true_inside_32_count": 229,
+          "true_outside_32_count": 795,
+          "true_inside_32_not_selected_count": 207,
+          "final_correct_count": 22,
+          "final_accuracy": 0.021484375,
+          "oracle32_ocf": 44.83314292081114,
+          "final_ocf": 18.509831532615504
+        },
+        "mice2": {
+          "n": 1024,
+          "true_recall_at_32": 0.1865234375,
+          "true_inside_32_count": 191,
+          "true_outside_32_count": 833,
+          "true_inside_32_not_selected_count": 173,
+          "final_correct_count": 18,
+          "final_accuracy": 0.017578125,
+          "oracle32_ocf": 41.74278983982073,
+          "final_ocf": 17.4464972582569
+        }
+      },
+      "by_block": {
+        "mice1/session1": {
+          "n": 256,
+          "true_recall_at_32": 0.1640625,
+          "true_inside_32_count": 42,
+          "true_outside_32_count": 214,
+          "true_inside_32_not_selected_count": 38,
+          "final_correct_count": 4,
+          "final_accuracy": 0.015625,
+          "oracle32_ocf": 40.276101373504396,
+          "final_ocf": 17.53063628073787
+        },
+        "mice1/session2": {
+          "n": 256,
+          "true_recall_at_32": 0.2890625,
+          "true_inside_32_count": 74,
+          "true_outside_32_count": 182,
+          "true_inside_32_not_selected_count": 68,
+          "final_correct_count": 6,
+          "final_accuracy": 0.0234375,
+          "oracle32_ocf": 50.66772957336411,
+          "final_ocf": 19.13249346594617
+        },
+        "mice1/session3": {
+          "n": 256,
+          "true_recall_at_32": 0.16796875,
+          "true_inside_32_count": 43,
+          "true_outside_32_count": 213,
+          "true_inside_32_not_selected_count": 41,
+          "final_correct_count": 2,
+          "final_accuracy": 0.0078125,
+          "oracle32_ocf": 39.62122767763593,
+          "final_ocf": 16.298878229331528
+        },
+        "mice1/session4": {
+          "n": 256,
+          "true_recall_at_32": 0.2734375,
+          "true_inside_32_count": 70,
+          "true_outside_32_count": 186,
+          "true_inside_32_not_selected_count": 60,
+          "final_correct_count": 10,
+          "final_accuracy": 0.0390625,
+          "oracle32_ocf": 48.76751305874013,
+          "final_ocf": 21.077318154446452
+        },
+        "mice2/session1": {
+          "n": 256,
+          "true_recall_at_32": 0.203125,
+          "true_inside_32_count": 52,
+          "true_outside_32_count": 204,
+          "true_inside_32_not_selected_count": 49,
+          "final_correct_count": 3,
+          "final_accuracy": 0.01171875,
+          "oracle32_ocf": 42.65309471782257,
+          "final_ocf": 17.867962165380042
+        },
+        "mice2/session2": {
+          "n": 256,
+          "true_recall_at_32": 0.15234375,
+          "true_inside_32_count": 39,
+          "true_outside_32_count": 217,
+          "true_inside_32_not_selected_count": 34,
+          "final_correct_count": 5,
+          "final_accuracy": 0.01953125,
+          "oracle32_ocf": 39.40502649330735,
+          "final_ocf": 17.025135763579932
+        },
+        "mice2/session3": {
+          "n": 256,
+          "true_recall_at_32": 0.20703125,
+          "true_inside_32_count": 53,
+          "true_outside_32_count": 203,
+          "true_inside_32_not_selected_count": 47,
+          "final_correct_count": 6,
+          "final_accuracy": 0.0234375,
+          "oracle32_ocf": 43.8800574400162,
+          "final_ocf": 17.792862461343464
+        },
+        "mice2/session4": {
+          "n": 256,
+          "true_recall_at_32": 0.18359375,
+          "true_inside_32_count": 47,
+          "true_outside_32_count": 209,
+          "true_inside_32_not_selected_count": 43,
+          "final_correct_count": 4,
+          "final_accuracy": 0.015625,
+          "oracle32_ocf": 41.0329807081368,
+          "final_ocf": 17.100028642724162
+        }
+      }
+    }
+  },
+  "tune_keys": {
+    "v5": [
+      0.20263671875,
+      43.1631997432075,
+      17.930809343195143
+    ],
+    "noise_weighted": [
+      0.205078125,
+      43.287966380315936,
+      17.978164395436202
+    ]
+  },
+  "gate": {
+    "baseline_v5_final_ocf": 17.930809343195143,
+    "noise_weighted_final_ocf": 17.978164395436202,
+    "strict_final_ocf_improvement": true
+  },
+  "locked_selection": {
+    "selected": "noise_weighted",
+    "selected_tune_key": [
+      0.205078125,
+      43.287966380315936,
+      17.978164395436202
+    ]
+  }
+}
