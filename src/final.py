@@ -56,11 +56,17 @@ def build_classifier(config, n_features, n_units, n_bins):
     return SpikeClassifier(n_features, **common)
 
 
+def checkpoint_path(output, task, mouse, seed):
+    stem = "regressor" if task == "task1" else "classifier"
+    suffix = "" if seed == 42 else f"_seed{seed}"
+    return output / task / mouse / f"{stem}{suffix}.pt"
+
+
 def fit_full(model, features, targets, output, *, epochs, regression, learning_rate=3e-4,
-             weight_decay=1e-3, batch_size=256, device="cuda"):
+             weight_decay=1e-3, batch_size=256, device="cuda", seed=42):
     """Fit all permitted data for a fixed CV-selected number of epochs."""
-    torch.manual_seed(42)
-    np.random.seed(42)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
     model.set_normalization(features)
     model.to(device)
     target_array = np.asarray(targets, dtype=np.float32 if regression else np.int64)
@@ -114,11 +120,12 @@ def fit_full(model, features, targets, output, *, epochs, regression, learning_r
     temporary = output.with_suffix(".tmp")
     torch.save(checkpoint, temporary)
     temporary.replace(output)
-    (output.parent / "history.json").write_text(json.dumps(history, indent=2), encoding="utf-8")
+    history_name = "history.json" if seed == 42 else f"history_seed{seed}.json"
+    (output.parent / history_name).write_text(json.dumps(history, indent=2), encoding="utf-8")
     return history
 
 
-def train_final(config, output):
+def train_final(config, output, skip_existing=False):
     output.mkdir(parents=True, exist_ok=True)
     images = (load_images(DATA) >= 128).astype(np.float32)
     bank_coefficients = dct_encode(images, 16)
@@ -159,43 +166,70 @@ def train_final(config, output):
             train_x = np.concatenate(train_x_parts)
             train_targets = np.concatenate(train_target_parts)
             key = f"{task}/{mouse}"
+            mouse_output = output / task / mouse
             if task == "task1":
                 train_y = dct_encode(images[train_targets], 32)
-                model = SpikeRegressor(
-                    train_x.shape[1], train_y.shape[1], task_config["hidden"], task_config["dropout"]
-                )
-                checkpoint = output / task / mouse / "regressor.pt"
             else:
                 train_y = train_targets
-                model = build_classifier(
-                    task_config, train_x.shape[1], mouse_blocks[0].n_units, round(250 / task_config["bin_ms"])
-                )
-                checkpoint = output / task / mouse / "classifier.pt"
-                checkpoint.parent.mkdir(parents=True, exist_ok=True)
+                mouse_output.mkdir(parents=True, exist_ok=True)
                 for session, normalizer in normalizers.items():
-                    np.savez(output / task / mouse / f"{session}_normalizer.npz", mean=normalizer[0], scale=normalizer[1])
+                    np.savez(mouse_output / f"{session}_normalizer.npz", mean=normalizer[0], scale=normalizer[1])
                 encoding_path = RidgePath().fit(
                     bank_coefficients[np.concatenate(encoding_target_parts)], np.concatenate(encoding_neural_parts)
                 )
                 prototypes = encoding_path.predict(bank_coefficients, task_config["encoding_alpha"])
-                np.save(output / task / mouse / "encoding_prototypes.npy", prototypes)
-            history = fit_full(
-                model,
-                train_x,
-                train_y,
-                checkpoint,
-                epochs=task_config["epochs"][mouse],
-                regression=task == "task1",
-                weight_decay=task_config["weight_decay"],
-                device=device,
-            )
-            summary["models"][key] = {
-                "samples": len(train_x),
-                "epochs": task_config["epochs"][mouse],
-                "final_train_loss": history[-1]["train_loss"],
-                "checkpoint": str(checkpoint),
-            }
-            del model, train_x, train_targets, train_y
+                np.save(mouse_output / "encoding_prototypes.npy", prototypes)
+            for seed in task_config.get("seeds", [42]):
+                checkpoint = checkpoint_path(output, task, mouse, seed)
+                model_key = key if seed == 42 else f"{key}/seed{seed}"
+                if skip_existing and checkpoint.exists():
+                    try:
+                        load = load_regressor if task == "task1" else load_classifier
+                        model = load(checkpoint, "cpu")
+                    except Exception as error:
+                        print(f"retraining {model_key}: checkpoint could not be loaded: {error}", flush=True)
+                    else:
+                        summary["models"][model_key] = {
+                            "samples": len(train_x),
+                            "epochs": task_config["epochs"][mouse],
+                            "seed": seed,
+                            "status": "skipped",
+                            "checkpoint": str(checkpoint),
+                        }
+                        del model
+                        print(f"skipped {model_key}: existing checkpoint loaded", flush=True)
+                        continue
+                torch.manual_seed(seed)
+                np.random.seed(seed)
+                if task == "task1":
+                    model = SpikeRegressor(
+                        train_x.shape[1], train_y.shape[1], task_config["hidden"], task_config["dropout"]
+                    )
+                else:
+                    model = build_classifier(
+                        task_config, train_x.shape[1], mouse_blocks[0].n_units, round(250 / task_config["bin_ms"])
+                    )
+                history = fit_full(
+                    model,
+                    train_x,
+                    train_y,
+                    checkpoint,
+                    epochs=task_config["epochs"][mouse],
+                    regression=task == "task1",
+                    weight_decay=task_config["weight_decay"],
+                    device=device,
+                    seed=seed,
+                )
+                summary["models"][model_key] = {
+                    "samples": len(train_x),
+                    "epochs": task_config["epochs"][mouse],
+                    "seed": seed,
+                    "status": "trained",
+                    "final_train_loss": history[-1]["train_loss"],
+                    "checkpoint": str(checkpoint),
+                }
+                del model
+            del train_x, train_targets, train_y
             if device == "cuda":
                 torch.cuda.empty_cache()
         del blocks
@@ -210,6 +244,7 @@ def predict_final(config, models, output):
     ids_by_task = {}
     for task in ("task1", "task2", "task3"):
         task_config = config[task]
+        seeds = task_config.get("seeds", [42])
         blocks = load_feature_blocks(DATA, "test", task=task, bin_ms=task_config["bin_ms"])
         task_predictions = []
         task_ids = []
@@ -226,14 +261,18 @@ def predict_final(config, models, output):
             retrieval_metric = "directional2"
         for block in blocks:
             if block.mouse not in models_by_mouse:
-                if task == "task1":
-                    models_by_mouse[block.mouse] = load_regressor(models / task / block.mouse / "regressor.pt", device)
-                else:
-                    models_by_mouse[block.mouse] = load_classifier(models / task / block.mouse / "classifier.pt", device)
-            model = models_by_mouse[block.mouse]
+                load = load_regressor if task == "task1" else load_classifier
+                models_by_mouse[block.mouse] = [
+                    load(checkpoint_path(models, task, block.mouse, seed), device) for seed in seeds
+                ]
+            mouse_models = models_by_mouse[block.mouse]
             if task == "task1":
                 counts = block.aggregate()
-                coefficients = predict_logits(model, counts, device=device)
+                coefficients = np.mean(
+                    np.stack([predict_logits(model, counts, device=device) for model in mouse_models]),
+                    axis=0,
+                    dtype=np.float32,
+                )
                 continuous = dct_decode(coefficients, 32)
                 predictions, _ = retrieve_glyphs(
                     continuous, retrieval_bank, metric=retrieval_metric, device=device
@@ -247,7 +286,11 @@ def predict_final(config, models, output):
                     with np.load(models / task / block.mouse / f"{block.session}_normalizer.npz") as data:
                         normalizer = (data["mean"], data["scale"])
                 counts = apply_session_normalizer(raw_counts, normalizer)
-                mlp_scores = predict_logits(model, counts, device=device)
+                mlp_scores = np.mean(
+                    np.stack([predict_logits(model, counts, device=device) for model in mouse_models]),
+                    axis=0,
+                    dtype=np.float32,
+                )
                 prototypes = np.load(models / task / block.mouse / "encoding_prototypes.npy", allow_pickle=False)
                 encoding_scores = response_scores(np.log1p(raw_counts), prototypes, metric="mse", device=device)
                 weight = task_config.get("mlp_weight", 1.0)
@@ -286,16 +329,21 @@ def main():
     parser.add_argument("--config", type=Path, default=ROOT / "src/final_config.json")
     parser.add_argument("--run-name", required=True)
     parser.add_argument("--models-run-name", help="Reuse models from an earlier submission run.")
-    parser.add_argument("--skip-train", action="store_true")
+    parser.add_argument("--skip-train", action="store_true", help="Skip all model training.")
+    parser.add_argument(
+        "--skip-existing", action="store_true", help="Train only missing or unloadable checkpoints."
+    )
     args = parser.parse_args()
+    if args.skip_train and args.skip_existing:
+        parser.error("--skip-existing cannot be used with --skip-train.")
+    if args.models_run_name and not args.skip_train:
+        parser.error("--models-run-name requires --skip-train.")
     config = json.loads(args.config.read_text(encoding="utf-8"))
     run_output = ROOT / "test/90_submission/artifacts" / args.run_name
     models_run_name = args.models_run_name or args.run_name
     models = ROOT / "test/90_submission/artifacts" / models_run_name / "models"
     if not args.skip_train:
-        if args.models_run_name:
-            parser.error("--models-run-name requires --skip-train.")
-        train_final(config, models)
+        train_final(config, models, skip_existing=args.skip_existing)
     result = predict_final(config, models, run_output)
     print(json.dumps(result, indent=2), flush=True)
 

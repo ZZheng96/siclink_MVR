@@ -1,5 +1,5 @@
 {
-  "name": "mlp_encoding_font_directional_v3",
+  "name": "mlp_encoding_task2_seed_ensemble_v4",
   "task1": {
     "bin_ms": 25,
     "basis": "dct32",
@@ -13,6 +13,7 @@
     "font_variation": "Regular"
   },
   "task2": {
+    "seeds": [42, 202, 777],
     "bin_ms": 50,
     "architecture": "mlp",
     "hidden": 512,
