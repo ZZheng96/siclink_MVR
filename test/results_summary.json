@@ -84,6 +84,16 @@
     },
     {
       "task": "task1",
+      "experiment": "21_task1_directional_loss",
+      "name": "task1_seed42_decoded_directional2_cosine_loss",
+      "variant": "independent",
+      "ocf_mean": 17.969791091163867,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\21_task1_directional_loss\\results_task1_directional_loss.json"
+    },
+    {
+      "task": "task1",
       "experiment": "11_retrieval_ablation",
       "name": "task1_directional_pooling",
       "variant": "independent",
