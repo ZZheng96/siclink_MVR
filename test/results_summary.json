@@ -79,6 +79,16 @@
     },
     {
       "task": "task1",
+      "experiment": "14_task1_consensus",
+      "name": "task1_four_session_consensus_soft_fusion",
+      "variant": "independent",
+      "ocf_mean": 18.142648530957352,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\14_task1_consensus\\results_task1_consensus.json"
+    },
+    {
+      "task": "task1",
       "experiment": "05_task1_pooled",
       "name": "task1_pooled_mlp_bin25_pca256_singles",
       "variant": "retrieval",
@@ -276,6 +286,16 @@
       "top1_accuracy": null,
       "n": 844,
       "source": "test\\07_ddpm\\results_software_smoke.json"
+    },
+    {
+      "task": "task2",
+      "experiment": "13_iterative_alignment",
+      "name": "task2_iterative_diagonal_coral",
+      "variant": "independent",
+      "ocf_mean": 23.329312169146995,
+      "top1_accuracy": 0.072265625,
+      "n": 1024,
+      "source": "test\\13_iterative_alignment\\results_task2_alignment.json"
     },
     {
       "task": "task2",
@@ -516,6 +536,16 @@
       "top1_accuracy": null,
       "n": 1024,
       "source": "test\\03_seen_ridge\\results_task2_ridge_log.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "13_iterative_alignment",
+      "name": "task3_iterative_diagonal_coral",
+      "variant": "independent",
+      "ocf_mean": 16.57463190021421,
+      "top1_accuracy": 0.015625,
+      "n": 4096,
+      "source": "test\\13_iterative_alignment\\results_task3_alignment.json"
     },
     {
       "task": "task3",
