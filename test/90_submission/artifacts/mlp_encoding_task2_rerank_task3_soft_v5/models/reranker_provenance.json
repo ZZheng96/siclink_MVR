@@ -1,0 +1,13 @@
+{
+  "checkpoint": "listwise_cnn.pt",
+  "sha256": "6f1f39366682945470ad4f1aa4f639631a697944eabd4148550b4955e212c515",
+  "reused_for_this_build": true,
+  "source_checkpoint": "test/31_task2_rerank/artifacts/listwise_cnn.pt",
+  "source_results": "test/31_task2_rerank/results.json",
+  "source_selection": "cnn_k8_global_assignment",
+  "source_training_labels": "public train session1-3 OOF only",
+  "base_models_run_name": "mlp_encoding_task2_seed_ensemble_v4",
+  "full_training_entrypoint": "src.final.train_task2_oof_reranker",
+  "full_training_path": "Run src/final.py without --skip-train; public session1-3 folds fit fixed-epoch base MLPs and encoding prototypes, then fit_listwise_reranker writes this checkpoint.",
+  "note": "Checkpoint reuse is only an acceleration for this v5 build. No test hidden labels are read by the formal training or inference code."
+}

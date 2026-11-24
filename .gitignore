@@ -6,9 +6,16 @@ siclink-mouse-visual-reconstruction-bci-challenge-publicleaderboard-2026-11-23T1
 # 本地缓存与生成产物（体积大或可重建，不纳入版本控制）
 
 
-# 实验中间产物：保留脚本和小型 JSON 结果，排除缓存与大文件
+# 实验中间产物：保留脚本、结果与轻量复现清单，排除缓存和大文件
 test/.cache/
-test/**/artifacts/
+test/**/artifacts/**
+!test/**/artifacts/**/
+!test/**/artifacts/**/selection.json
+!test/**/artifacts/**/preregistration.json
+!test/**/artifacts/**/run_summary.json
+!test/**/artifacts/**/training_summary.json
+!test/**/artifacts/**/artifact_manifest.json
+!test/**/artifacts/**/reranker_provenance.json
 test/**/predictions/
 test/**/logs/
 test/**/*.npy

@@ -1,0 +1,41 @@
+{
+  "name": "mlp_encoding_directional_v2",
+  "models": {
+    "task1/mice1": {
+      "samples": 54960,
+      "epochs": 8,
+      "final_train_loss": 0.3673205692261414,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_directional_v2\\models\\task1\\mice1\\regressor.pt"
+    },
+    "task1/mice2": {
+      "samples": 54960,
+      "epochs": 11,
+      "final_train_loss": 0.37269639738956045,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_directional_v2\\models\\task1\\mice2\\regressor.pt"
+    },
+    "task2/mice1": {
+      "samples": 54960,
+      "epochs": 7,
+      "final_train_loss": 3.1832687987337294,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_directional_v2\\models\\task2\\mice1\\classifier.pt"
+    },
+    "task2/mice2": {
+      "samples": 54960,
+      "epochs": 4,
+      "final_train_loss": 5.3243850379010995,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_directional_v2\\models\\task2\\mice2\\classifier.pt"
+    },
+    "task3/mice1": {
+      "samples": 43968,
+      "epochs": 7,
+      "final_train_loss": 4.496500524023908,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_directional_v2\\models\\task3\\mice1\\classifier.pt"
+    },
+    "task3/mice2": {
+      "samples": 43968,
+      "epochs": 7,
+      "final_train_loss": 5.110377361680743,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_directional_v2\\models\\task3\\mice2\\classifier.pt"
+    }
+  }
+}

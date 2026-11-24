@@ -1,0 +1,79 @@
+{
+  "name": "mlp_encoding_task2_seed_ensemble_v4",
+  "models": {
+    "task1/mice2": {
+      "samples": 54960,
+      "epochs": 11,
+      "seed": 42,
+      "status": "skipped",
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task1\\mice2\\regressor.pt"
+    },
+    "task1/mice1": {
+      "samples": 54960,
+      "epochs": 8,
+      "seed": 42,
+      "status": "skipped",
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task1\\mice1\\regressor.pt"
+    },
+    "task2/mice2": {
+      "samples": 54960,
+      "epochs": 4,
+      "seed": 42,
+      "status": "skipped",
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task2\\mice2\\classifier.pt"
+    },
+    "task2/mice2/seed202": {
+      "samples": 54960,
+      "epochs": 4,
+      "seed": 202,
+      "status": "trained",
+      "final_train_loss": 5.332182016053401,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task2\\mice2\\classifier_seed202.pt"
+    },
+    "task2/mice2/seed777": {
+      "samples": 54960,
+      "epochs": 4,
+      "seed": 777,
+      "status": "trained",
+      "final_train_loss": 5.337850011800574,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task2\\mice2\\classifier_seed777.pt"
+    },
+    "task2/mice1": {
+      "samples": 54960,
+      "epochs": 7,
+      "seed": 42,
+      "status": "skipped",
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task2\\mice1\\classifier.pt"
+    },
+    "task2/mice1/seed202": {
+      "samples": 54960,
+      "epochs": 7,
+      "seed": 202,
+      "status": "trained",
+      "final_train_loss": 3.1732950066895462,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task2\\mice1\\classifier_seed202.pt"
+    },
+    "task2/mice1/seed777": {
+      "samples": 54960,
+      "epochs": 7,
+      "seed": 777,
+      "status": "trained",
+      "final_train_loss": 3.1771508543078384,
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task2\\mice1\\classifier_seed777.pt"
+    },
+    "task3/mice2": {
+      "samples": 43968,
+      "epochs": 7,
+      "seed": 42,
+      "status": "skipped",
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task3\\mice2\\classifier.pt"
+    },
+    "task3/mice1": {
+      "samples": 43968,
+      "epochs": 7,
+      "seed": 42,
+      "status": "skipped",
+      "checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_seed_ensemble_v4\\models\\task3\\mice1\\classifier.pt"
+    }
+  }
+}

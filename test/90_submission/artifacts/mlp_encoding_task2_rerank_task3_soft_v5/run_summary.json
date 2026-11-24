@@ -1,0 +1,21 @@
+{
+  "png_archive": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_rerank_task3_soft_v5\\submission_png.zip",
+  "kaggle_archive": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_rerank_task3_soft_v5\\kaggle_submission.zip",
+  "kaggle_sha256": "2311a23d3423fc77ab6814d121a06df280dfc480e59b695a47d4d05e406e03c9",
+  "png_sha256": "e099ac24769373e1f5c39ce58eb1064fb08c32271bc5b51db0f250248c39a706",
+  "samples": 30200,
+  "verification": {
+    "status": "PASS",
+    "content_sha256": "798e1d65a73d3d7e93b04d10ef8c1263c81c6e39f6ca60095fdfdff4b009fa0c",
+    "task1_v4_identical": 2720,
+    "task1_changed": 0,
+    "task2_changed": 2662,
+    "task2_total": 5496,
+    "task3_changed": 14412,
+    "task3_total": 21984,
+    "v4_kaggle_sha256_unchanged": "d321c16c1e343aef1554c499ee1b10dce33c69a2d6a6ff5a72df7b7cfb261ebf"
+  },
+  "name": "mlp_encoding_task2_rerank_task3_soft_v5",
+  "models_run_name": "mlp_encoding_task2_seed_ensemble_v4",
+  "task2_reranker_checkpoint": "D:\\WORK\\siclink\\test\\90_submission\\artifacts\\mlp_encoding_task2_rerank_task3_soft_v5\\models\\listwise_cnn.pt"
+}
