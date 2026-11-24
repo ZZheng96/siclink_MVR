@@ -5,13 +5,13 @@
   "best_by_task": {
     "task1": {
       "task": "task1",
-      "experiment": "11_retrieval_ablation",
-      "name": "task1_directional_pooling",
+      "experiment": "15_font_calibration",
+      "name": "task1_full_gb2312_font_bank_directional2",
       "variant": "independent",
-      "ocf_mean": 18.483120787328367,
+      "ocf_mean": 18.624308986308705,
       "top1_accuracy": null,
       "n": 1688,
-      "source": "test\\11_retrieval_ablation\\results_task1_retrieval.json"
+      "source": "test\\15_font_calibration\\results_task1_font.json"
     },
     "task2": {
       "task": "task2",
@@ -34,9 +34,19 @@
       "source": "test\\09_ensemble\\results_task3_ensemble.json"
     }
   },
-  "equal_task_composite": 19.46235495222986,
-  "gap_to_rank_1_snapshot": 34.55250504777014,
+  "equal_task_composite": 19.5094176852233,
+  "gap_to_rank_1_snapshot": 34.5054423147767,
   "candidates": [
+    {
+      "task": "task1",
+      "experiment": "15_font_calibration",
+      "name": "task1_full_gb2312_font_bank_directional2",
+      "variant": "independent",
+      "ocf_mean": 18.624308986308705,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\15_font_calibration\\results_task1_font.json"
+    },
     {
       "task": "task1",
       "experiment": "11_retrieval_ablation",
