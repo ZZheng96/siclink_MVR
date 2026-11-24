@@ -64,6 +64,16 @@
     },
     {
       "task": "task1",
+      "experiment": "20_task1_ocf_rerank",
+      "name": "task1_official_ocf_top16_rerank",
+      "variant": "independent",
+      "ocf_mean": 18.624308986308705,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\20_task1_ocf_rerank\\results_task1_ocf_rerank.json"
+    },
+    {
+      "task": "task1",
       "experiment": "18_seed_ensemble",
       "name": "task1_seed_only_prefix_ensemble",
       "variant": "independent",
