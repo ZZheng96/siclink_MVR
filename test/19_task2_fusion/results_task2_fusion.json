@@ -1,0 +1,172 @@
+{
+  "experiment": "19_task2_fusion",
+  "name": "task2_training_free_mlp_fusion_weight_calibration",
+  "config": {
+    "task": "task2",
+    "seeds": [
+      42,
+      202,
+      777
+    ],
+    "weights": [
+      0.4,
+      0.5,
+      0.6,
+      0.7
+    ],
+    "training": "none; all existing checkpoints reused",
+    "checkpoints": {
+      "42": {
+        "mice1": "test\\04_neural_seen\\artifacts\\task2_mlp_bin50_sessionnorm_assign\\mice1\\classifier.pt",
+        "mice2": "test\\04_neural_seen\\artifacts\\task2_mlp_bin50_sessionnorm_assign\\mice2\\classifier.pt"
+      },
+      "202": {
+        "mice1": "test\\18_seed_ensemble\\artifacts\\models\\task2\\seed_202\\mice1\\classifier.pt",
+        "mice2": "test\\18_seed_ensemble\\artifacts\\models\\task2\\seed_202\\mice2\\classifier.pt"
+      },
+      "777": {
+        "mice1": "test\\18_seed_ensemble\\artifacts\\models\\task2\\seed_777\\mice1\\classifier.pt",
+        "mice2": "test\\18_seed_ensemble\\artifacts\\models\\task2\\seed_777\\mice2\\classifier.pt"
+      }
+    },
+    "bin_ms": 50,
+    "encoding_alpha": 1.0,
+    "logits_ensemble": "equal-weight mean of raw logits from seeds 42, 202, 777, then row_zscore",
+    "fusion": "weight * MLP ensemble row_zscore + (1 - weight) * fixed encoding row_zscore",
+    "post_fusion_zscore": false,
+    "assignment": "unique_assignment",
+    "selection_metric": "tune official OCF mean only"
+  },
+  "protocol": {
+    "split_seed": 42,
+    "picture_seed": 123,
+    "tune_picture_count": 256,
+    "held_out_picture_count": 512,
+    "evaluation_picture_count": 512,
+    "assignment_scope": "unique_assignment over every complete 2748-picture validation block before tune/held-out subsetting",
+    "held_out_rule": "weight=0.5 baseline plus only the tune-selected weight; reuse the baseline evaluation when the selected weight is 0.5",
+    "held_out_evaluation_weights": [
+      0.5,
+      0.6
+    ],
+    "selected_npz_scope": "held-out rows for the tune-selected weight"
+  },
+  "baseline": {
+    "weight": 0.5,
+    "expected_ocf": 24.33936155396989,
+    "actual_ocf": 24.33936155396989,
+    "absolute_error": 0.0,
+    "absolute_tolerance": 1e-05,
+    "passed": true,
+    "evaluation": {
+      "n": 1024,
+      "ocf_mean": 24.33936155396989,
+      "ocf_std": 24.2857401904959,
+      "groups": {
+        "mice1/session4": {
+          "n": 512,
+          "ocf_mean": 27.66816987251785
+        },
+        "mice2/session4": {
+          "n": 512,
+          "ocf_mean": 21.01055323542193
+        }
+      },
+      "group_macro_mean": 24.33936155396989,
+      "top1_accuracy": 0.08203125
+    }
+  },
+  "tuning": [
+    {
+      "weight": 0.4,
+      "seeds": [
+        42,
+        202,
+        777
+      ],
+      "n": 512,
+      "ocf_mean": 24.665770198840146,
+      "ocf_std": 23.908150968696262,
+      "top1_accuracy": 0.078125
+    },
+    {
+      "weight": 0.5,
+      "seeds": [
+        42,
+        202,
+        777
+      ],
+      "n": 512,
+      "ocf_mean": 25.831461860596946,
+      "ocf_std": 25.610969039391595,
+      "top1_accuracy": 0.095703125
+    },
+    {
+      "weight": 0.6,
+      "seeds": [
+        42,
+        202,
+        777
+      ],
+      "n": 512,
+      "ocf_mean": 26.745531383868336,
+      "ocf_std": 26.809001615145057,
+      "top1_accuracy": 0.107421875
+    },
+    {
+      "weight": 0.7,
+      "seeds": [
+        42,
+        202,
+        777
+      ],
+      "n": 512,
+      "ocf_mean": 25.902228611104068,
+      "ocf_std": 26.329504291329478,
+      "top1_accuracy": 0.1015625
+    }
+  ],
+  "selected": {
+    "weight": 0.6,
+    "seeds": [
+      42,
+      202,
+      777
+    ],
+    "n": 512,
+    "ocf_mean": 26.745531383868336,
+    "ocf_std": 26.809001615145057,
+    "top1_accuracy": 0.107421875
+  },
+  "evaluation": {
+    "n": 1024,
+    "ocf_mean": 24.12243195365742,
+    "ocf_std": 23.924615196428235,
+    "groups": {
+      "mice1/session4": {
+        "n": 512,
+        "ocf_mean": 27.530587139044485
+      },
+      "mice2/session4": {
+        "n": 512,
+        "ocf_mean": 20.714276768270356
+      }
+    },
+    "group_macro_mean": 24.12243195365742,
+    "top1_accuracy": 0.078125
+  },
+  "delta": -0.2169296003124721,
+  "top1": {
+    "baseline": 0.08203125,
+    "selected": 0.078125,
+    "delta": -0.00390625
+  },
+  "selected_npz": "test\\19_task2_fusion\\artifacts\\task2_fusion_selected.npz",
+  "leaderboard_reference": {
+    "rank_1": 54.01486,
+    "comparable": false
+  },
+  "Kaggle_baseline": 21.0959,
+  "score_scope": "fixed local validation protocol only; not a Kaggle score",
+  "elapsed_seconds": 72.34607520001009
+}

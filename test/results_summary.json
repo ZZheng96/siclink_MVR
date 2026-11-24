@@ -354,6 +354,16 @@
     },
     {
       "task": "task2",
+      "experiment": "19_task2_fusion",
+      "name": "task2_training_free_mlp_fusion_weight_calibration",
+      "variant": "independent",
+      "ocf_mean": 24.12243195365742,
+      "top1_accuracy": 0.078125,
+      "n": 1024,
+      "source": "test\\19_task2_fusion\\results_task2_fusion.json"
+    },
+    {
+      "task": "task2",
       "experiment": "16_topk_vote",
       "name": "task2_assignment_aware_topk_pixel_vote",
       "variant": "independent",
