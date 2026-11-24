@@ -48,6 +48,9 @@ def main():
         if task_rows:
             best[task] = max(task_rows, key=lambda row: row["ocf_mean"])
     composite = sum(row["ocf_mean"] for row in best.values()) / len(best) if best else None
+    scores_path = ROOT / "test/90_submission/kaggle_scores.json"
+    kaggle_scores = json.loads(scores_path.read_text(encoding="utf-8")) if scores_path.exists() else []
+    best_kaggle = max((row["score"] for row in kaggle_scores), default=None)
     output = {
         "metric": "official OCF on fixed local validation subsets; not a Kaggle score",
         "leaderboard_rank_1_snapshot": 54.01486,
@@ -55,6 +58,9 @@ def main():
         "best_by_task": best,
         "equal_task_composite": composite,
         "gap_to_rank_1_snapshot": None if composite is None else 54.01486 - composite,
+        "kaggle_observations": kaggle_scores,
+        "best_kaggle_score": best_kaggle,
+        "gap_to_rank_1_actual": None if best_kaggle is None else 54.01486 - best_kaggle,
         "candidates": sorted(rows, key=lambda row: (row["task"], -row["ocf_mean"], row["name"])),
     }
     path = ROOT / "test/results_summary.json"

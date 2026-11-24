@@ -1,0 +1,13 @@
+[
+  {
+    "run_name": "mlp_encoding_font_directional_v3",
+    "score": 21.09590,
+    "metric": "Kaggle Public OCF",
+    "source": "user_reported",
+    "reported_at": "2026-11-24",
+    "verified_online": false,
+    "archive": "test/90_submission/artifacts/mlp_encoding_font_directional_v3/kaggle_submission.zip",
+    "archive_sha256": "977923be462b9692eb60c3f60ae55789bc0c416b0eb4551d02d84dcc092c453a",
+    "content_sha256": "b8a603c179464de70d10f31ab9a6edc3e9213631ba232d4127118306cd4174df"
+  }
+]
