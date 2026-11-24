@@ -1,9 +1,53 @@
 """Crisp seen-character retrieval and neural prototype classification."""
 
+from pathlib import Path
+
 import numpy as np
 import torch
+from PIL import Image, ImageDraw, ImageFont
 from scipy.optimize import linear_sum_assignment
 from torch.nn import functional as F
+
+
+def gb2312_characters():
+    """Return the 6,763 defined Han characters in the GB2312 B0-F7 grid."""
+    characters = []
+    for lead in range(0xB0, 0xF8):
+        for trail in range(0xA1, 0xFF):
+            try:
+                characters.append(bytes((lead, trail)).decode("gb2312"))
+            except UnicodeDecodeError:
+                pass
+    if len(characters) != 6763:
+        raise RuntimeError("Unexpected GB2312 character count.")
+    return characters
+
+
+def render_gb2312_bank(font_path, font_size=52, variation="Regular"):
+    """Render a binary 64x64 GB2312 candidate bank without copying the font."""
+    font_path = Path(font_path)
+    if not font_path.is_file():
+        raise FileNotFoundError(f"Font not found: {font_path}")
+    font = ImageFont.truetype(str(font_path), font_size)
+    if variation:
+        font.set_variation_by_name(variation)
+    characters = gb2312_characters()
+    bank = np.zeros((len(characters), 64, 64), dtype=np.float32)
+    for index, character in enumerate(characters):
+        side = max(128, 3 * font_size)
+        canvas = Image.new("L", (side, side), 0)
+        ImageDraw.Draw(canvas).text((font_size, font_size), character, font=font, fill=255)
+        binary = np.asarray(canvas, dtype=np.uint8) >= 128
+        ys, xs = np.nonzero(binary)
+        if not len(xs):
+            continue
+        glyph = binary[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+        if glyph.shape[0] > 64 or glyph.shape[1] > 64:
+            raise ValueError(f"Glyph does not fit 64x64 at font size {font_size}: {glyph.shape}")
+        y = (64 - glyph.shape[0]) // 2
+        x = (64 - glyph.shape[1]) // 2
+        bank[index, y:y + glyph.shape[0], x:x + glyph.shape[1]] = glyph
+    return bank
 
 
 def unique_assignment(scores):

@@ -20,7 +20,7 @@ from src.neural import (
     load_regressor,
     predict_logits,
 )
-from src.retrieval import retrieve_glyphs, unique_assignment
+from src.retrieval import render_gb2312_bank, retrieve_glyphs, unique_assignment
 from src.ridge import RidgePath, dct_decode, dct_encode
 from src.submission import pack_submission, save_images
 
@@ -214,6 +214,16 @@ def predict_final(config, models, output):
         task_predictions = []
         task_ids = []
         models_by_mouse = {}
+        retrieval_bank = images
+        retrieval_metric = task_config.get("retrieval")
+        if task == "task1" and retrieval_metric == "font_directional2":
+            font_path = Path(r"C:\Windows\Fonts") / task_config["font_file"]
+            retrieval_bank = render_gb2312_bank(
+                font_path,
+                font_size=task_config["font_size"],
+                variation=task_config["font_variation"],
+            )
+            retrieval_metric = "directional2"
         for block in blocks:
             if block.mouse not in models_by_mouse:
                 if task == "task1":
@@ -226,7 +236,7 @@ def predict_final(config, models, output):
                 coefficients = predict_logits(model, counts, device=device)
                 continuous = dct_decode(coefficients, 32)
                 predictions, _ = retrieve_glyphs(
-                    continuous, images, metric=task_config["retrieval"], device=device
+                    continuous, retrieval_bank, metric=retrieval_metric, device=device
                 )
             else:
                 if task == "task2":
@@ -275,12 +285,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=ROOT / "src/final_config.json")
     parser.add_argument("--run-name", required=True)
+    parser.add_argument("--models-run-name", help="Reuse models from an earlier submission run.")
     parser.add_argument("--skip-train", action="store_true")
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8"))
     run_output = ROOT / "test/90_submission/artifacts" / args.run_name
-    models = run_output / "models"
+    models_run_name = args.models_run_name or args.run_name
+    models = ROOT / "test/90_submission/artifacts" / models_run_name / "models"
     if not args.skip_train:
+        if args.models_run_name:
+            parser.error("--models-run-name requires --skip-train.")
         train_final(config, models)
     result = predict_final(config, models, run_output)
     print(json.dumps(result, indent=2), flush=True)

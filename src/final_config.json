@@ -1,5 +1,5 @@
 {
-  "name": "mlp_encoding_directional_v2",
+  "name": "mlp_encoding_font_directional_v3",
   "task1": {
     "bin_ms": 25,
     "basis": "dct32",
@@ -7,7 +7,10 @@
     "dropout": 0.4,
     "weight_decay": 0.01,
     "epochs": {"mice1": 8, "mice2": 11},
-    "retrieval": "directional2"
+    "retrieval": "font_directional2",
+    "font_file": "NotoSansSC-VF.ttf",
+    "font_size": 52,
+    "font_variation": "Regular"
   },
   "task2": {
     "bin_ms": 50,
