@@ -299,6 +299,16 @@
     },
     {
       "task": "task2",
+      "experiment": "16_topk_vote",
+      "name": "task2_assignment_aware_topk_pixel_vote",
+      "variant": "independent",
+      "ocf_mean": 23.329312169146995,
+      "top1_accuracy": 0.072265625,
+      "n": 1024,
+      "source": "test\\16_topk_vote\\results_task2_topk.json"
+    },
+    {
+      "task": "task2",
       "experiment": "13_iterative_alignment",
       "name": "task2_iterative_diagonal_coral",
       "variant": "independent",
@@ -546,6 +556,16 @@
       "top1_accuracy": null,
       "n": 1024,
       "source": "test\\03_seen_ridge\\results_task2_ridge_log.json"
+    },
+    {
+      "task": "task3",
+      "experiment": "16_topk_vote",
+      "name": "task3_assignment_aware_topk_pixel_vote",
+      "variant": "independent",
+      "ocf_mean": 16.57463190021421,
+      "top1_accuracy": 0.015625,
+      "n": 4096,
+      "source": "test\\16_topk_vote\\results_task3_topk.json"
     },
     {
       "task": "task3",
