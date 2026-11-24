@@ -1,6 +1,7 @@
 """Train the selected full-data models and build a complete Kaggle submission."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -16,11 +17,18 @@ from src.neural import (
     SpikeClassifier,
     SpikeRegressor,
     SpikeTemporalClassifier,
+    fit_classifier_fixed_epochs,
     load_classifier,
     load_regressor,
     predict_logits,
 )
-from src.retrieval import render_gb2312_bank, retrieve_glyphs, unique_assignment
+from src.reranker import (
+    apply_listwise_reranker,
+    build_candidate_features,
+    fit_listwise_reranker,
+    load_listwise_reranker,
+)
+from src.retrieval import render_gb2312_bank, retrieve_glyphs, softmax_dct_similarity, unique_assignment
 from src.ridge import RidgePath, dct_decode, dct_encode
 from src.submission import pack_submission, save_images
 
@@ -42,6 +50,11 @@ def apply_session_normalizer(features, normalizer):
 
 def row_zscore(scores):
     return (scores - scores.mean(axis=1, keepdims=True)) / np.maximum(scores.std(axis=1, keepdims=True), 1e-6)
+
+
+def release_memory(device):
+    if torch.device(device).type == "cuda":
+        torch.cuda.empty_cache()
 
 
 def build_classifier(config, n_features, n_units, n_bins):
@@ -123,6 +136,127 @@ def fit_full(model, features, targets, output, *, epochs, regression, learning_r
     history_name = "history.json" if seed == 42 else f"history_seed{seed}.json"
     (output.parent / history_name).write_text(json.dumps(history, indent=2), encoding="utf-8")
     return history
+
+
+def train_task2_oof_reranker(blocks, config, images, output, device):
+    """Train from public session1-3 OOF predictions; no test or session4 labels are used."""
+    reranker_config = config["task2"]["reranker"]
+    sessions = tuple(reranker_config["oof_sessions"])
+    if len(sessions) < 2:
+        raise ValueError("OOF reranker training requires at least two public sessions.")
+    coefficients = dct_encode(images, 16)
+    rows = []
+    records = []
+    for mouse in sorted({block.mouse for block in blocks}):
+        group = [block for block in blocks if block.mouse == mouse]
+        if not set(sessions).issubset({block.session for block in group}):
+            raise ValueError(f"Missing public OOF sessions for {mouse}.")
+        for score_session in sessions:
+            train_sessions = tuple(session for session in sessions if session != score_session)
+            train_x_parts, train_y_parts = [], []
+            encoding_x_parts, encoding_target_parts = [], []
+            target_counts = target_x = None
+            for block in group:
+                if block.session not in train_sessions and block.session != score_session:
+                    continue
+                raw = block.features
+                labels = block.trial_targets
+                targets, counts = aggregate_by_target(raw, labels)
+                np.testing.assert_array_equal(targets, np.arange(len(images)))
+                normalizer = fit_session_normalizer(raw)
+                if block.session in train_sessions:
+                    encoding_x_parts.append(np.log1p(counts))
+                    encoding_target_parts.append(targets)
+                    train_x_parts.extend((
+                        apply_session_normalizer(raw, normalizer),
+                        apply_session_normalizer(counts, normalizer),
+                    ))
+                    train_y_parts.extend((labels, targets))
+                if block.session == score_session:
+                    target_counts = counts
+                    target_x = apply_session_normalizer(counts, normalizer)
+            if target_counts is None or len(encoding_x_parts) != len(train_sessions):
+                raise ValueError(f"Invalid OOF fold for {mouse}/{score_session}.")
+
+            ridge = RidgePath().fit(
+                coefficients[np.concatenate(encoding_target_parts)], np.concatenate(encoding_x_parts)
+            ).predict(coefficients, config["task2"]["encoding_alpha"])
+            encoding_z = row_zscore(
+                response_scores(np.log1p(target_counts), ridge, metric="mse", device=device)
+            ).astype(np.float32)
+            del ridge
+            train_x = np.concatenate(train_x_parts).astype(np.float32, copy=False)
+            train_y = np.concatenate(train_y_parts).astype(np.int64, copy=False)
+            logits = []
+            final_losses = {}
+            for seed in config["task2"].get("seeds", [42]):
+                torch.manual_seed(seed)
+                np.random.seed(seed)
+                model = SpikeClassifier(
+                    train_x.shape[1], len(images), hidden=config["task2"]["hidden"],
+                    dropout=config["task2"]["dropout"], apply_log=False
+                )
+                model, history = fit_classifier_fixed_epochs(
+                    model,
+                    (train_x, train_y),
+                    epochs=config["task2"]["epochs"][mouse],
+                    weight_decay=config["task2"]["weight_decay"],
+                    device=device,
+                    seed=seed,
+                )
+                logits.append(predict_logits(model, target_x, device=device))
+                final_losses[str(seed)] = history[-1]
+                del model
+                release_memory(device)
+            mlp_z = row_zscore(np.mean(np.stack(logits), axis=0, dtype=np.float32)).astype(np.float32)
+            weight = config["task2"].get("mlp_weight", 1.0)
+            base = (weight * mlp_z + (1 - weight) * encoding_z).astype(np.float32)
+            top, numeric = build_candidate_features(
+                base, mlp_z, encoding_z, mouse, top_n=reranker_config["top_n"]
+            )
+            targets = np.arange(len(images), dtype=np.int64)
+            inside = np.any(top == targets[:, None], axis=1)
+            rows.append({
+                "block": f"{mouse}/{score_session}",
+                "targets": targets,
+                "top": top,
+                "numeric": numeric,
+            })
+            records.append({
+                "mouse": mouse,
+                "score_session": score_session,
+                "train_sessions": list(train_sessions),
+                "train_rows_including_trial_and_mean_rows": len(train_x),
+                "mlp_epochs_per_seed": config["task2"]["epochs"][mouse],
+                "mlp_final_train_loss": final_losses,
+                "oof_raw_top1_all_glyphs": float(np.mean(base.argmax(axis=1) == targets)),
+                "oof_base_recall32_all_glyphs": float(inside.mean()),
+            })
+            print(f"OOF RERANKER FEATURES {mouse}/{score_session}: eligible={inside.sum()}", flush=True)
+            del train_x, train_y, logits, mlp_z, encoding_z, base, target_counts, target_x
+            release_memory(device)
+    checkpoint = output / "listwise_cnn.pt"
+    model, training = fit_listwise_reranker(
+        rows,
+        images,
+        checkpoint,
+        seed=reranker_config["seed"],
+        epochs=reranker_config["epochs"],
+        batch_size=reranker_config["batch_size"],
+        learning_rate=reranker_config["learning_rate"],
+        weight_decay=reranker_config["weight_decay"],
+        top_n=reranker_config["top_n"],
+        device=device,
+    )
+    del model, rows
+    release_memory(device)
+    return {
+        "status": "trained",
+        "checkpoint": str(checkpoint),
+        "label_source": "public train session1-3 OOF only",
+        "oof_base_training": records,
+        **training,
+    }
 
 
 def train_final(config, output, skip_existing=False):
@@ -230,8 +364,25 @@ def train_final(config, output, skip_existing=False):
                 }
                 del model
             del train_x, train_targets, train_y
-            if device == "cuda":
-                torch.cuda.empty_cache()
+            release_memory(device)
+        if task == "task2" and task_config.get("reranker", {}).get("enabled", False):
+            checkpoint = output / "listwise_cnn.pt"
+            if skip_existing and checkpoint.is_file():
+                try:
+                    reranker = load_listwise_reranker(checkpoint, "cpu")
+                except Exception as error:
+                    print(f"retraining task2/reranker: checkpoint could not be loaded: {error}", flush=True)
+                else:
+                    del reranker
+                    summary["models"]["task2/reranker"] = {
+                        "status": "skipped", "checkpoint": str(checkpoint)
+                    }
+                    print("skipped task2/reranker: existing checkpoint loaded", flush=True)
+                    checkpoint = None
+            if checkpoint is not None:
+                summary["models"]["task2/reranker"] = train_task2_oof_reranker(
+                    blocks, config, images, output, device
+                )
         del blocks
     (output / "training_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
@@ -249,6 +400,16 @@ def predict_final(config, models, output):
         task_predictions = []
         task_ids = []
         models_by_mouse = {}
+        reranker = None
+        reranker_config = task_config.get("reranker", {})
+        if task == "task2" and reranker_config.get("enabled", False):
+            reranker = load_listwise_reranker(output / "models/listwise_cnn.pt", device)
+        centered_coefficients = None
+        if task == "task3" and task_config.get("prototype_continuous", {}).get("enabled", False):
+            if task_config["prototype_continuous"].get("temperature", 1.0) != 1.0:
+                raise ValueError("The verified Task3 continuous branch requires temperature=1.")
+            coefficients = dct_encode(images, 16)
+            centered_coefficients = coefficients - coefficients.mean(axis=0, keepdims=True)
         retrieval_bank = images
         retrieval_metric = task_config.get("retrieval")
         if task == "task1" and retrieval_metric == "font_directional2":
@@ -293,8 +454,27 @@ def predict_final(config, models, output):
                 )
                 prototypes = np.load(models / task / block.mouse / "encoding_prototypes.npy", allow_pickle=False)
                 encoding_scores = response_scores(np.log1p(raw_counts), prototypes, metric="mse", device=device)
-                weight = task_config.get("mlp_weight", 1.0)
-                scores = weight * row_zscore(mlp_scores) + (1 - weight) * row_zscore(encoding_scores)
+                mlp_z = row_zscore(mlp_scores)
+                encoding_z = row_zscore(encoding_scores)
+                if task == "task3" and centered_coefficients is not None:
+                    continuous_scores = softmax_dct_similarity(mlp_scores, centered_coefficients, device=device)
+                    scores = (mlp_z + encoding_z + row_zscore(continuous_scores)) / 3.0
+                else:
+                    weight = task_config.get("mlp_weight", 1.0)
+                    scores = weight * mlp_z + (1 - weight) * encoding_z
+                if reranker is not None:
+                    scores = apply_listwise_reranker(
+                        reranker,
+                        scores,
+                        mlp_z,
+                        encoding_z,
+                        block.mouse,
+                        images,
+                        device,
+                        top_n=reranker_config["top_n"],
+                        k=reranker_config["k"],
+                        batch_size=reranker_config["inference_batch_size"],
+                    )
                 indices = unique_assignment(scores) if task_config["assignment"] else scores.argmax(axis=1)
                 predictions = images[indices]
             task_predictions.append(predictions.astype(np.float32))
@@ -302,9 +482,8 @@ def predict_final(config, models, output):
             print(f"predicted {task}/{block.key}: {len(predictions)}", flush=True)
         predictions_by_task[task] = task_predictions
         ids_by_task[task] = task_ids
-        del models_by_mouse, blocks
-        if device == "cuda":
-            torch.cuda.empty_cache()
+        del models_by_mouse, blocks, reranker
+        release_memory(device)
     if sum(len(ids) for ids in ids_by_task.values()) != 30200:
         raise ValueError("Prediction IDs do not total 30,200.")
     png_folder = output / "png"
@@ -321,7 +500,12 @@ def predict_final(config, models, output):
     pack_submission(png_folder, png_archive, ids_by_task)
     kaggle_archive = output / "kaggle_submission.zip"
     convert(png_archive, kaggle_archive)
-    return {"png_archive": str(png_archive), "kaggle_archive": str(kaggle_archive), "samples": 30200}
+    return {
+        "png_archive": str(png_archive),
+        "kaggle_archive": str(kaggle_archive),
+        "kaggle_sha256": hashlib.sha256(kaggle_archive.read_bytes()).hexdigest(),
+        "samples": 30200,
+    }
 
 
 def main():
@@ -345,6 +529,13 @@ def main():
     if not args.skip_train:
         train_final(config, models, skip_existing=args.skip_existing)
     result = predict_final(config, models, run_output)
+    result.update({
+        "name": config["name"],
+        "models_run_name": models_run_name,
+        "task2_reranker_checkpoint": str(run_output / "models/listwise_cnn.pt")
+            if config["task2"].get("reranker", {}).get("enabled", False) else None,
+    })
+    (run_output / "run_summary.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(json.dumps(result, indent=2), flush=True)
 
 

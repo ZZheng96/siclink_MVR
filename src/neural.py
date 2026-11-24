@@ -179,6 +179,41 @@ def fit_classifier(model, train, validation, output, *, epochs=30, batch_size=25
     return history
 
 
+def fit_classifier_fixed_epochs(model, train, *, epochs, batch_size=256, learning_rate=3e-4,
+                                weight_decay=1e-3, device=None, seed=42):
+    """Fit an OOF base learner for a fixed number of epochs without validation labels."""
+    if device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = torch.device(device)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    train_x, train_y = train
+    model.set_normalization(train_x)
+    model.to(device).train()
+    torch.manual_seed(seed)
+    loader = _loader(train_x, train_y, batch_size, True)
+    optimizer = torch.optim.AdamW(
+        model.parameters(), lr=learning_rate, weight_decay=weight_decay, fused=device.type == "cuda"
+    )
+    history = []
+    for epoch in range(1, epochs + 1):
+        total_loss = 0.0
+        for features, targets in loader:
+            features = features.to(device, non_blocking=True)
+            targets = targets.to(device, non_blocking=True)
+            optimizer.zero_grad(set_to_none=True)
+            with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=device.type == "cuda"):
+                logits = model(features)
+                loss = nn.functional.cross_entropy(logits.float(), targets, label_smoothing=0.05)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
+            optimizer.step()
+            total_loss += loss.item() * len(features)
+        history.append(total_loss / len(train_x))
+        print(f"OOF MLP epoch={epoch}/{epochs} loss={history[-1]:.8f}", flush=True)
+    return model, history
+
+
 @torch.inference_mode()
 def predict_logits(model, features, batch_size=512, device=None):
     if device is None:

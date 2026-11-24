@@ -1,5 +1,5 @@
 {
-  "name": "mlp_encoding_task2_seed_ensemble_v4",
+  "name": "mlp_encoding_task2_rerank_task3_soft_v5",
   "task1": {
     "bin_ms": 25,
     "basis": "dct32",
@@ -23,7 +23,19 @@
     "session_norm": true,
     "assignment": true,
     "mlp_weight": 0.5,
-    "encoding_alpha": 1.0
+    "encoding_alpha": 1.0,
+    "reranker": {
+      "enabled": true,
+      "top_n": 32,
+      "k": 8,
+      "oof_sessions": ["session1", "session2", "session3"],
+      "seed": 31,
+      "epochs": 12,
+      "batch_size": 32,
+      "inference_batch_size": 128,
+      "learning_rate": 0.001,
+      "weight_decay": 0.001
+    }
   },
   "task3": {
     "bin_ms": 50,
@@ -35,6 +47,11 @@
     "session_norm": true,
     "assignment": true,
     "mlp_weight": 0.5,
-    "encoding_alpha": 0.01
+    "encoding_alpha": 0.01,
+    "prototype_continuous": {
+      "enabled": true,
+      "temperature": 1.0,
+      "fusion": "equal_row_zscore_mlp_encoding_continuous"
+    }
   }
 }

@@ -107,6 +107,26 @@ def glyph_similarity(bank, metric="directional2", device=None):
 
 
 @torch.inference_mode()
+def softmax_dct_similarity(logits, centered_coefficients, device=None, batch_size=64):
+    """Return cosine similarity to a fixed T=1 softmax-expected continuous DCT image."""
+    if device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = torch.device(device)
+    logits = np.asarray(logits, dtype=np.float32)
+    centered = torch.as_tensor(centered_coefficients, dtype=torch.float32, device=device)
+    if logits.ndim != 2 or centered.ndim != 2 or logits.shape[1] != centered.shape[0]:
+        raise ValueError("Expected class logits and a matching centered DCT bank.")
+    normalized_bank = F.normalize(centered, dim=1)
+    output = []
+    for start in range(0, len(logits), batch_size):
+        batch = torch.from_numpy(logits[start:start + batch_size]).to(device)
+        probabilities = F.softmax(batch, dim=1)
+        expected = F.normalize(probabilities @ centered, dim=1)
+        output.append((expected @ normalized_bank.T).cpu().numpy())
+    return np.concatenate(output)
+
+
+@torch.inference_mode()
 def retrieve_glyphs(predictions, bank, metric="cosine", blur_sigma=1.0, batch_size=64, device=None):
     """Return the nearest binary bank glyph and its index for every prediction."""
     predictions = np.asarray(predictions, dtype=np.float32)
