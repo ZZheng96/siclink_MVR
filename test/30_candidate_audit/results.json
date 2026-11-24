@@ -1,0 +1,91 @@
+{
+  "scope": "Public training data only; local diagnostic, not blind test.",
+  "sampling": "exp18 split 42, partition 123; RNG 23 permutes evaluation_pictures; first 64 split evenly in sorted block order, one row per picture.",
+  "candidates": "exp23 unchanged: task1 seed42 directional2 GB2312; task2 seeds42/202/777, task3 seed42; 50:50 standardized logits/encoding, full-block Hungarian.",
+  "metrics": "oracle32 and membership use pre-assign ranks; final_top1 uses actual output. Task1 identity unavailable. Official PNG-parity CUDA OCF, sample means.",
+  "tasks": {
+    "task1": {
+      "n": 64,
+      "block_counts": {
+        "mice1/session1": 8,
+        "mice1/session2": 8,
+        "mice1/session3": 8,
+        "mice1/session4": 8,
+        "mice2/session1": 8,
+        "mice2/session2": 8,
+        "mice2/session3": 8,
+        "mice2/session4": 8
+      },
+      "row_top1_ocf": 19.83984031883078,
+      "final_top1_ocf": 19.83984031883078,
+      "oracle32_ocf": 31.34558822328783,
+      "pair_requests": 2112,
+      "newly_scored_pairs": 2048,
+      "identity": null
+    },
+    "task2": {
+      "n": 64,
+      "block_counts": {
+        "mice1/session4": 32,
+        "mice2/session4": 32
+      },
+      "row_top1_ocf": 23.63219109009797,
+      "final_top1_ocf": 27.935794995936668,
+      "oracle32_ocf": 62.8050528944961,
+      "pair_requests": 2112,
+      "newly_scored_pairs": 2052,
+      "identity": {
+        "true_outside32": 34,
+        "before_assign": {
+          "correct": 4,
+          "accuracy": 0.0625,
+          "outside32_wrong": 34,
+          "inside32_wrong": 26,
+          "outside32_correct": 0
+        },
+        "after_assign": {
+          "correct": 8,
+          "accuracy": 0.125,
+          "outside32_wrong": 33,
+          "inside32_wrong": 23,
+          "outside32_correct": 1
+        }
+      }
+    },
+    "task3": {
+      "n": 64,
+      "block_counts": {
+        "mice1/session1": 8,
+        "mice1/session2": 8,
+        "mice1/session3": 8,
+        "mice1/session4": 8,
+        "mice2/session1": 8,
+        "mice2/session2": 8,
+        "mice2/session3": 8,
+        "mice2/session4": 8
+      },
+      "row_top1_ocf": 20.112832384823946,
+      "final_top1_ocf": 18.852974246051808,
+      "oracle32_ocf": 42.770882125608644,
+      "pair_requests": 2112,
+      "newly_scored_pairs": 1844,
+      "identity": {
+        "true_outside32": 51,
+        "before_assign": {
+          "correct": 3,
+          "accuracy": 0.046875,
+          "outside32_wrong": 51,
+          "inside32_wrong": 10,
+          "outside32_correct": 0
+        },
+        "after_assign": {
+          "correct": 2,
+          "accuracy": 0.03125,
+          "outside32_wrong": 51,
+          "inside32_wrong": 11,
+          "outside32_correct": 0
+        }
+      }
+    }
+  }
+}
