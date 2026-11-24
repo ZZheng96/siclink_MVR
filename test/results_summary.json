@@ -684,6 +684,18 @@
     },
     {
       "task": "task3",
+      "experiment": "22_task3_mean_augmentation",
+      "name": "task3_single_trials_plus_three_repeat_means",
+      "variant": "assignment",
+      "ocf_mean": 16.57463190021421,
+      "top1_accuracy": 0.015625,
+      "n": 4096,
+      "source": "test\\22_task3_mean_augmentation\\results_task3_mean_augmentation.json",
+      "selected_variant": "baseline",
+      "candidate_held_out_excluded": true
+    },
+    {
+      "task": "task3",
       "experiment": "09_ensemble",
       "name": "task3_mlp_encoding_ensemble",
       "variant": "independent",
