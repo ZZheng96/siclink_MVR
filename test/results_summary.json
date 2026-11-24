@@ -159,6 +159,16 @@
     },
     {
       "task": "task1",
+      "experiment": "17_ddpm_long",
+      "name": "task1_ddpm_long",
+      "variant": "retrieval",
+      "ocf_mean": 13.645019431333878,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\17_ddpm_long\\results_task1_ddpm_long.json"
+    },
+    {
+      "task": "task1",
       "experiment": "05_task1_pooled",
       "name": "task1_pooled_mlp_bin25_singles",
       "variant": "direct",
@@ -166,6 +176,16 @@
       "top1_accuracy": null,
       "n": 1688,
       "source": "test\\05_task1_pooled\\results_task1_pooled_mlp_bin25_singles.json"
+    },
+    {
+      "task": "task1",
+      "experiment": "17_ddpm_long",
+      "name": "task1_ddpm_long",
+      "variant": "direct",
+      "ocf_mean": 13.010531637556841,
+      "top1_accuracy": null,
+      "n": 1688,
+      "source": "test\\17_ddpm_long\\results_task1_ddpm_long.json"
     },
     {
       "task": "task1",
