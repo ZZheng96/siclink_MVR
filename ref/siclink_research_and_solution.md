@@ -7,7 +7,38 @@
 
 > 不同物种、脑区、记录模态、刺激与指标之间不能直接比较数值。本文将论文已证实的结论与针对本赛题的设计推论分开；没有把 fMRI、钙成像或视网膜结果当作小鼠 V1 spike 汉字重建的直接证据。
 
-## 摘要
+## 第 22 组实验后的决策：基线已完成，50 分方案未获验证
+
+**已经完成的是训练、三个任务的本地验证和提交链路；尚未完成的是可在 Kaggle Public OCF 达到 50 的模型。** v3 唯一已知公开分为用户实测 **21.09590**，距 50 差 **28.90410**；v4 只改变 Task 2，尚无公开分。下表是固定本地子集，不是 v4 的公开成绩，也不能把本地增益加到 21.09590 上预测提交分。早期摘要与复现章节保留为历史记录，下一步以本节为准。
+
+|任务与验证单位|本地最佳 OCF|决定下一步的实验事实|
+|---|---:|---|
+|Task 1：留字，211 字×8 鼠/会话块|18.62431|直接输出约 13.13，清晰字库检索约 18.39；换字体仅再提高约 0.14（相对原 directional2）。实验 21 换方向余弦训练，tune 从 16.81178 升至 17.00751，held-out 却降至 17.96979。不能把问题归结为“换损失”。|
+|Task 2：整日留出，512 字×2 鼠|24.33936|实验 18 三种子比单种子加 1.01005，但 exact Top1 仍只有 8.203%。实验 19 改融合权重后 held-out 降至 24.12243；尚不能确定瓶颈在跨日漂移还是字形近邻本就不可分。|
+|Task 3：每字留单 trial，512 字×8 块|16.57463|Top1 仅 1.5625%。跨会话 pooled 比逐会话分类更好。实验 22 加三次训练重复的均值，tune 从 17.01181 降至 16.80122；候选未评 held-out。不能把 16.57463 记成增广模型得分。|
+
+证据：[统一结果](../test/results_summary.json) · [实验 21](../test/21_task1_directional_loss/results_task1_directional_loss.json) · [实验 22](../test/22_task3_mean_augmentation/results_task3_mean_augmentation.json)。等权本地综合 **19.84610**。浅层逐神经元时间卷积、自由 DDPM、对角 CORAL、结构 medoid、top-k 投票及重排均未提供所需跃升；这些负结果只约束被测实现，不否定跨神经元交互、生成式似然或笔画的组合泛化。
+
+### 先判断 50 是否在候选集内，再选模型
+
+对已见字的原图检索，令 p 为完全命中的比例、m 为错误样本的平均 OCF；在正确图得 100 的条件下，均分为 `100p+(1−p)m`。用 Task 2、3 的实测 OCF 和 Top1 反推，在 **m 不变** 时，单任务达到 50 分别需要约 **39.3%、41.0%** 的命中率。提高错字的结构得分同样可以提高 OCF，这不是必需的分类准确率。Task 1 的字体为重渲染，像素完全相同率为零不等于汉字身份识别率为零；不能用字体库下标直接对比图片 ID。等权总分 50 也不要求三任务各为 50。
+
+**首个实验不训练。** 在训练内部另设诊断折，保存各模型前 1/8/32/128 个候选。分别算①图完整入库时的覆盖上限，②候选中与参考图官方 OCF 最大值的均值（oracle@k），③实际第一名 OCF，④已知身份时的 recall@k。按字和鼠/日成组报告分布与配对差值，不把同字八条记录当八个独立字符。若 oracle@32 仍低于目标，停止做该候选集的重排；若全库上限高而 oracle@32 低，改候选生成；若 oracle@32 高而实际低，才投入排序。**仅用公开训练标签做诊断；oracle 不作为可提交成绩，不用于测试样本选择。**
+
+### 四条独立路线：各自的最小实验与否决条件
+
+|优先级与假设|训练、推理及对照|什么结果值得继续|
+|---|---|---|
+|**1 · 正向编码 CNN：用字形预测放电**（三任务，尤其 Task 1/2；A03、A06、A15–A19）。如果不同字的局部笔画能可靠预测一组神经元，就不必从稀疏信号直接生成全部像素。|64×64 字图输入共享浅层多尺度 CNN；每鼠独立读出头输出神经元×时间窗的非负计数率，以训练 trial 的 Poisson 负对数似然拟合。候选字逐一预测响应，按观测 spike 的似然检索；重复 trial 累加对数似然而非复制均值。先只替换现有 DCT→ridge encoding，不动字库和分配。|同时检查留字/留日的预测似然、oracle@32 和实际 OCF。若似然优于常数模型却不能提高召回，说明学到的是平均放电而非辨字信息；停止增加 CNN 深度。|
+|**2 · 时间 CNN＋小型 Transformer：学习跨单元证据**（Task 2/3；D 组、E 组）。已试卷积主要提取各单元自身的时间模式，未回答“哪些单元在什么时间共同区分形近字”。|每鼠保留单元身份，先时间卷积，再用少量潜在查询汇聚单元 token；先试仅卷积＋线性混合，再加两层注意力。使用源日单 trial 的遮挡计数预测预训练，微调时同字异重复为正例、形近异字为难负例，对齐固定字图 CNN 原型。无单元匹配证据时绝不假定跨鼠同序。|相同参数预算比较 MLP、混合 CNN、加注意力和打乱 spike 对照；报告已见日、留日及单 trial 的 recall 与 OCF。若注意力只改善训练日，保留简单 CNN；若打乱输入仍有同等收益，则否决“神经表征改善”。|
+|**3 · 笔画和二维布局教师：拆开未见字泛化与字体误差**（Task 1；F02–F07）。结构 medoid 在既有候选中挑字，不会学会组合未见字。|只用规则允许的字表、字体及训练配对，建立字形 CNN 教师，预测四象限笔画方向、前景掩模和部件相对位置；神经学生从 spike 预测同一组局部特征，再在全字库检索。先做无外部部件标签的四象限版本；有合法可信映射才加部件，不把码位顺序当标签。|先测**真字图→教师→字库**的留字 oracle，用来隔离字体库缺失/错误与神经解码失败；再比较**spike→学生**。教师可辨而学生不行，优先改神经端；两者都不行就不训练生成器。边界与骨架度量只诊断断笔、粘连，不替代 OCF。|
+|**4 · 单 trial 潜变量去噪与源日对齐**（Task 3/2；D18、E 组）。向训练集追加平均 trial 没有解决单次观测的不确定性。|用共享低维动态状态预测被遮住的神经元计数，每训练日独立读出；源日内同字不同重复对齐到原型，推理只输入一次 spike。Task 2 在源日模拟整日缺失，以无适配模型为对照；仅在规则允许时单列无标签新日适配，不用新日字标签、trial 顺序或伪造配对。|分别消融潜变量、跨日对齐和适配；报告单 trial 对数似然、按置信度分组的 OCF、每鼠每留出日 OCF。若自监督改善似然却降低形近字辨别，或适配只利于一个日，回退到不适配模型。|
+
+**决策顺序。** 先做候选集诊断，再在训练内部轮换留字、留日和留重复折；模型选择只用 tune。已有 held-out 已被多次查看，不当作新的盲测：预先锁定模型和评价规则，用未参与决策的分组折作确认；若无新折，注明是复用验证而非独立复制。Task 1 另报公开数据 1/2/4 次重复曲线，不外推成测试 20 次的实测分。只有至少两鼠、多个划分上增益方向一致且结构错误确实下降，才讨论全量训练。**近期最值得投入的是路线 1**：可沿用现有训练字图、神经响应和检索流程，一次对照就能区分非线性视觉编码是否优于 ridge。没有证据把这四条路线中的任一条称为“已能得 50 分”。
+
+[113 篇学术证据及检索覆盖说明](#academic-evidence-index)。其中 54 篇在 Scholar 结果页直接匹配题名，其余以出版方、会议或原稿补充。Google Scholar 后续触发验证码，未将补充来源算成 Scholar 命中。
+
+## 早期摘要（复现阶段历史记录）
 
 本赛题不是单一的“神经网络生成图片”问题，而是三个统计分布偏移任务等权组合：未见字形的组合泛化、跨记录日的神经迁移、以及单 trial 低信噪比重建。64×64 输出、OCF 轮廓评分和官方建议的二值化，使“模糊但像素均方误差较低”的输出不一定具有竞争力。
 
@@ -408,3 +439,156 @@ Set-Location 'D:\WORK\siclink\ref\official_ddpm_reproduction'
 - [cite:26] Hang et al. (2023), [Efficient Diffusion Training via Min-SNR Weighting Strategy](https://arxiv.org/abs/2303.09556).
 - [cite:27] [Sensorium-viz — Advanced Science 2026](https://doi.org/10.1002/advs.202520220); [code](https://github.com/GuanLab/sensorium-viz).
 - [cite:28] Bauer et al. (2026), [Movie reconstruction from mouse visual cortical calcium activity](https://doi.org/10.7554/eLife.105081.3); [code](https://github.com/Joel-Bauer/movie_reconstruction_code).
+
+<a id="academic-evidence-index"></a>
+
+## 附录：学术证据索引
+
+**收录 113 篇不同工作，其中 54 篇有直接 Google Scholar 题名匹配记录。** 三份已核验 JSON 分别提供视觉重建 43 条、神经时序 31 条、跨域与度量 34 条，共 108 条。比较时统一题名大小写、空格、连字符及标点，再对照 DOI、作者与版本：A07 的 arXiv 与期刊版合并，D18 的 LFADS 跨表重复合并，剩 106 篇；另列正文主论文和 6 篇字形相关工作。正文简称不另计，如 [cite:16]、[cite:17]、[cite:18]、[cite:23] 分别对应 A06、A09、D10、B11。赛题网页、教程、代码库不计。
+
+**读法：** 题名链接指向出版方、会议论文页或作者原稿。`S`＝输入记录中至少一次在 Scholar 返回结果直接看见题名；`R`＝输入记录有原始来源，但没有直接 Scholar 题名匹配证据；`V`＝本次另查会议、期刊或 DOI 注册记录，未计 Scholar 命中。三表的 S 原始计数为 16、31、8；A07 两表均命中，只计一次，D18 一表命中、一表未确认，仍只计一次。未绕过验证码，不把查询链接当作命中。年份采用所列工作发表年或预印本年；链接至原稿不等于该版本已通过同行评审。
+
+### A｜视觉神经编码与重建（19 篇）
+
+A01–A09 是从群体放电恢复刺激的直接方法证据，但视网膜、外侧膝状体不等于小鼠 V1。A10–A14 涉及视觉皮层或钙信号；A15–A19 研究刺激如何驱动神经元，不是从一次放电还原真实刺激。
+
+- A01 · 1997 · S · [Decoding Visual Information From a Population of Retinal Ganglion Cells](https://doi.org/10.1152/jn.1997.78.5.2336)
+- A02 · 1999 · R · [Reconstruction of Natural Scenes from Ensemble Responses in the Lateral Geniculate Nucleus](https://doi.org/10.1523/JNEUROSCI.19-18-08036.1999)
+- A03 · 2005 · R · [Prediction and Decoding of Retinal Ganglion Cell Responses with a Probabilistic Spiking Model](https://doi.org/10.1523/JNEUROSCI.3305-05.2005)
+- A04 · 2001 · R · [Retinal ganglion cells act largely as independent encoders](https://doi.org/10.1038/35079612)
+- A05 · 2008 · R · [Spatio-temporal correlations and visual signalling in a complete neuronal population](https://doi.org/10.1038/nature07140)
+- A06 · 2017 · S · [Neural Networks for Efficient Bayesian Decoding of Natural Images from Retinal Neurons](https://proceedings.neurips.cc/paper/2017/hash/b0169350cd35566c47ba83c6ec1d6f82-Abstract.html)
+- A07 · 2020 · S · [Reconstruction of natural visual scenes from neural spikes with deep neural networks](https://doi.org/10.1016/j.neunet.2020.01.033)（[同作预印本](https://arxiv.org/abs/1904.13007)）
+- A08 · 2021 · S · [Nonlinear Decoding of Natural Images From Large-Scale Primate Retinal Ganglion Recordings](https://doi.org/10.1162/neco_a_01395)
+- A09 · 2022 · S · [Maximum a posteriori natural scene reconstruction from retinal ganglion cells with deep denoiser priors](https://proceedings.neurips.cc/paper/2022/hash/ae447e9dbfdd1189966e894b85bea062-Abstract-Conference.html)
+- A10 · 2019 · R · [High-dimensional geometry of population responses in visual cortex](https://doi.org/10.1038/s41586-019-1346-5)
+- A11 · 2016 · S · [Benchmarking spike rate inference in population calcium imaging](https://doi.org/10.1016/j.neuron.2016.04.014)
+- A12 · 2018 · S · [Community-based benchmarking improves spike rate inference from two-photon calcium imaging data](https://doi.org/10.1371/journal.pcbi.1006157)
+- A13 · 2018 · S · [Robustness of Spike Deconvolution for Neuronal Calcium Imaging](https://doi.org/10.1523/JNEUROSCI.3339-17.2018)
+- A14 · 2018 · R · [Visual reconstruction from 2-photon calcium imaging suggests linear readout properties of neurons in mouse primary visual cortex](https://doi.org/10.1101/300392)（bioRxiv）
+- A15 · 2019 · R · [Deep convolutional models improve predictions of macaque V1 responses to natural images](https://doi.org/10.1371/journal.pcbi.1006897)
+- A16 · 2019 · S · [Inception loops discover what excites neurons most using deep predictive models](https://doi.org/10.1038/s41593-019-0517-x)
+- A17 · 2019 · S · [Evolving Images for Visual Neurons Using a Deep Generative Network Reveals Coding Principles and Neuronal Preferences](https://doi.org/10.1016/j.cell.2019.04.005)
+- A18 · 2020 · S · [XDream: Finding preferred stimuli for visual neurons using generative networks and gradient-free optimization](https://doi.org/10.1371/journal.pcbi.1007973)
+- A19 · 2023 · S · [Energy Guided Diffusion for Generating Neurally Exciting Images](https://proceedings.neurips.cc/paper_files/paper/2023/hash/67226725b09ca9363637f63f85ed4bba-Abstract-Conference.html)
+
+### B｜人脑 fMRI 视觉重建（12 篇）
+
+关联正文 §3.3：比较多尺度读出、贝叶斯图像先验与条件扩散。体素的空间汇聚和血氧响应时间尺度不同于 spike；这些是解码方法的参照，不是本赛题精度的证据。
+
+- B01 · 2008 · R · [Visual Image Reconstruction from Human Brain Activity using a Combination of Multiscale Local Image Decoders](https://doi.org/10.1016/j.neuron.2008.11.004)
+- B02 · 2009 · R · [Bayesian Reconstruction of Natural Images from Human Brain Activity](https://doi.org/10.1016/j.neuron.2009.06.017)
+- B03 · 2011 · R · [Reconstructing Visual Experiences from Brain Activity Evoked by Natural Movies](https://doi.org/10.1016/j.cub.2011.08.031)
+- B04 · 2019 · R · [Deep image reconstruction from human brain activity](https://doi.org/10.1371/journal.pcbi.1006633)
+- B05 · 2019 · R · [From voxels to pixels and back: Self-supervision in natural-image reconstruction from fMRI](https://arxiv.org/abs/1907.02431)
+- B06 · 2018 · R · [Generative adversarial networks for reconstructing natural images from brain activity](https://doi.org/10.1016/j.neuroimage.2018.07.043)
+- B07 · 2022 · R · [Self-supervised natural image reconstruction and large-scale semantic classification from brain activity](https://doi.org/10.1016/j.neuroimage.2022.119121)
+- B08 · 2023 · S · [High-resolution image reconstruction with latent diffusion models from human brain activity](https://doi.org/10.1109/CVPR52729.2023.01389)
+- B09 · 2023 · R · [Seeing Beyond the Brain: Conditional Diffusion Model With Sparse Masked Modeling for Vision Decoding](https://openaccess.thecvf.com/content/CVPR2023/html/Chen_Seeing_Beyond_the_Brain_Conditional_Diffusion_Model_With_Sparse_Masked_CVPR_2023_paper.html)
+- B10 · 2023 · S · [Reconstructing the Mind’s Eye: fMRI-to-Image with Contrastive Learning and Diffusion Priors](https://proceedings.neurips.cc/paper_files/paper/2023/hash/4ddab70bf41ffe5d423840644d3357f4-Abstract-Conference.html)
+- B11 · 2023 · R · [Natural scene reconstruction from fMRI signals using generative latent diffusion](https://doi.org/10.1038/s41598-023-42891-8)
+- B12 · 2023 · S · [MindDiffuser: Controlled Image Reconstruction from Human Brain Activity with Semantic and Structural Diffusion](https://doi.org/10.1145/3581783.3613832)
+
+### C｜图像读出、生成先验与相似度（12 篇）
+
+关联正文 §3.2、§4.2：C01–C05 提供识别或图像映射模型，C06–C08 衡量重建差异，C09–C12 给出扩散建模与采样依据。图像相似度不是汉字身份正确率。
+
+- C01 · 1998 · R · [Gradient-based learning applied to document recognition](https://doi.org/10.1109/5.726791)
+- C02 · 2015 · R · [U-Net: Convolutional Networks for Biomedical Image Segmentation](https://arxiv.org/abs/1505.04597)
+- C03 · 2014 · R · [Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114)
+- C04 · 2014 · R · [Generative Adversarial Nets](https://proceedings.neurips.cc/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html)
+- C05 · 2017 · R · [Image-to-Image Translation with Conditional Adversarial Networks](https://openaccess.thecvf.com/content_cvpr_2017/html/Isola_Image-To-Image_Translation_With_CVPR_2017_paper.html)
+- C06 · 2004 · R · [Image Quality Assessment: From Error Visibility to Structural Similarity](https://doi.org/10.1109/TIP.2003.819861)
+- C07 · 2003 · R · [Multiscale structural similarity for image quality assessment](https://doi.org/10.1109/ACSSC.2003.1292216)
+- C08 · 2017 · R · [Loss Functions for Image Restoration With Neural Networks](https://doi.org/10.1109/TCI.2016.2644865)
+- C09 · 2020 · S · [Denoising Diffusion Probabilistic Models](https://proceedings.neurips.cc/paper/2020/hash/4c5bcfec8584af0d967f1ab10179ca4b-Abstract.html)
+- C10 · 2022 · R · [High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752)
+- C11 · 2021 · R · [Denoising Diffusion Implicit Models](https://arxiv.org/abs/2010.02502)
+- C12 · 2015 · R · [Deep Unsupervised Learning using Nonequilibrium Thermodynamics](https://proceedings.mlr.press/v37/sohl-dickstein15.html)
+
+### D｜神经时序、潜动力学与自监督表征（30 篇）
+
+关联正文 §2.2、§5.6：区分从视觉放电解码图像、预测下一时刻放电、以及从运动皮层预测行为。后两类可用于比较时间表征，但其预测目标不是字形。
+
+- D01 · 2023 · S · [A Unified, Scalable Framework for Neural Population Decoding](https://proceedings.neurips.cc/paper_files/paper/2023/hash/8ca113d122584f12a6727341aaf58887-Abstract-Conference.html)
+- D02 · 2023 · S · [Neural Data Transformer 2: Multi-context Pretraining for Neural Spiking Activity](https://proceedings.neurips.cc/paper_files/paper/2023/hash/fe51de4e7baf52e743b679e3bdba7905-Abstract-Conference.html)
+- D03 · 2021 · S · [Representation Learning for Neural Population Activity with Neural Data Transformers](https://doi.org/10.1101/2021.01.16.426955)（bioRxiv 版本）
+- D04 · 2022 · S · [STNDT: Modeling Neural Population Activity with Spatiotemporal Transformers](https://proceedings.neurips.cc/paper_files/paper/2022/hash/72163d1c3c1726f1c29157d06e9e93c1-Abstract-Conference.html)
+- D05 · 2024 · S · [Towards a ‘Universal Translator’ for Neural Dynamics at Single-Cell, Single-Spike Resolution](https://proceedings.neurips.cc/paper_files/paper/2024/hash/934eb45b99eff8f16b5cb8e4d3cb5641-Abstract-Conference.html)
+- D06 · 2025 · S · [Neural Encoding and Decoding at Scale](https://arxiv.org/abs/2504.08201)（预印本）
+- D07 · 2025 · S · [Population Transformer: Learning Population-level Representations of Neural Activity](https://arxiv.org/abs/2406.03044)
+- D08 · 2023 · S · [Capturing Cross-session Neural Population Variability through Self-supervised Identification of Consistent Neuron Ensembles](https://proceedings.mlr.press/v197/jude23a.html)
+- D09 · 2025 · S · [Simple Temporal Attention Beats Complex Decoders for Neural-to-Visual Mapping from Primate Spiking Data](https://openreview.net/forum?id=zGZ7MjffUR)（研讨会论文）
+- D10 · 2023 · S · [The Brain-inspired Decoder for Natural Visual Image Reconstruction](https://doi.org/10.3389/fnins.2023.1130606)
+- D11 · 2022 · S · [Fusion of ANNs as Decoder of Retinal Spike Trains for Scene Reconstruction](https://doi.org/10.1007/s10489-022-03402-w)
+- D12 · 2024 · S · [Robust Sensory Information Reconstruction and Classification With Augmented Spikes](https://ieeexplore.ieee.org/document/10547380/)
+- D13 · 2025 · S · [Spatio-temporal Transformers for Decoding Neural Movement Control](https://doi.org/10.1088/1741-2552/adaef0)
+- D14 · 2026 · S · [Leveraging Unlabelled Data for Generalizable Neural Population Decoding](https://arxiv.org/abs/2607.14086)（预印本）
+- D15 · 2026 · S · [RPNT: Robust Pre-trained Neural Transformer — A Pathway for Generalized Motor Decoding](https://arxiv.org/abs/2601.17641)（预印本）
+- D16 · 2022 · S · [A Large-scale Neural Network Training Framework for Generalized Estimation of Single-trial Population Dynamics](https://doi.org/10.1038/s41592-022-01675-0)
+- D17 · 2022 · S · [A Deep Learning Framework for Inference of Single-trial Neural Population Dynamics from Calcium Imaging with Subframe Temporal Resolution](https://doi.org/10.1038/s41593-022-01189-0)
+- D18 · 2018 · S · [Inferring Single-trial Neural Population Dynamics Using Sequential Auto-encoders](https://doi.org/10.1038/s41592-018-0109-9)（LFADS，亦关联 E 组）
+- D19 · 2021 · S · [Neural Latents Benchmark ’21: Evaluating Latent Variable Models of Neural Population Activity](https://arxiv.org/abs/2109.04463)
+- D20 · 2022 · S · [Decoding EEG With Spiking Neural Networks on Neuromorphic Hardware](https://openreview.net/forum?id=ZPBJPGX3Bz)
+- D21 · 2010 · S · [A New Look at State-space Models for Neural Data](https://doi.org/10.1007/s10827-009-0179-x)
+- D22 · 2014 · S · [Latent State-space Models for Neural Decoding](https://ieeexplore.ieee.org/document/6944262)
+- D23 · 2019 · S · [End-to-end Hand Kinematic Decoding from LFPs Using Temporal Convolutional Network](https://ieeexplore.ieee.org/document/8919131/)
+- D24 · 2026 · S · [Implicit Behavioral Decoding from Next-Step Spike Forecasts at Population Scale](https://arxiv.org/abs/2605.12999)（预印本）
+- D25 · 2026 · S · [SpikeProphecy: A Large-Scale Benchmark for Autoregressive Neural Population Forecasting](https://arxiv.org/abs/2605.12992)（预印本）
+- D26 · 2025 · S · [Generalizable, Real-time Neural Decoding with Hybrid State-space Models](https://proceedings.neurips.cc/paper_files/paper/2025/hash/4a40f444c3b0e6486586dabd86fbede4-Abstract-Conference.html)
+- D27 · 2025 · S · [SPINT: Spatial Permutation-Invariant Neural Transformer for Consistent Intracortical Motor Decoding](https://proceedings.neurips.cc/paper_files/paper/2025/hash/24c8d2fe8520746f0084174b75b93ebe-Abstract-Conference.html)
+- D28 · 2023 · S · [Towards Robust and Generalizable Representations of Extracellular Data Using Contrastive Learning](https://proceedings.neurips.cc/paper_files/paper/2023/hash/83c637c3bc0ca88eda6cf4f5f45bdced-Abstract-Conference.html)
+- D29 · 2025 · S · [Temporal Spiking Generative Adversarial Networks for Heading Direction Decoding](https://www.sciencedirect.com/science/article/pii/S0893608024009043)
+- D30 · 2025 · S · [Decoding Natural Visual Scenes via Learnable Representations of Neural Spiking Sequences](https://doi.org/10.1016/j.neunet.2025.107863)
+
+### E｜跨日稳健性、原型度量与单试次不确定性（33 篇）
+
+关联正文 §2.4、§5.5–5.6：E01–E07 讨论神经群体稳定性与子空间；E08–E21 区分域适配和域泛化；E22–E25 对应已见字检索；E26–E33 区分单试次噪声、预测不确定性与校准。无标注目标日适配不意味着可以用目标日标签选参。
+
+- E01 · 2020 · S · [Stabilization of a brain–computer interface via the alignment of low-dimensional spaces of neural activity](https://doi.org/10.1038/s41551-020-0542-9)
+- E02 · 2023 · S · [Using adversarial networks to extend brain computer interface decoding accuracy over time](https://elifesciences.org/articles/84296)
+- E03 · 2023 · S · [Extracting Semantic-Dynamic Features for Long-Term Stable Brain Computer Interface](https://ojs.aaai.org/index.php/AAAI/article/view/25738)
+- E04 · 2025 · S · [CRRL: Learning Channel-invariant Neural Representations for High-performance Cross-day Decoding](https://proceedings.neurips.cc/paper_files/paper/2025/hash/7cd4afed8c577d879775f24259f8e261-Abstract-Conference.html)
+- E05 · 2011 · R · [Long-term stability of neural prosthetic control signals from silicon cortical arrays in rhesus macaque motor cortex](https://doi.org/10.1088/1741-2560/8/4/045005)
+- E06 · 2020 · R · [Long-term stability of cortical population dynamics underlying consistent behavior](https://doi.org/10.1038/s41593-019-0555-4)
+- E07 · 2014 · S · [Cortical activity in the null space: permitting preparation without movement](https://doi.org/10.1038/nn.3643)
+- E08 · 2016 · S · [Domain-Adversarial Training of Neural Networks](https://www.jmlr.org/papers/v17/15-239.html)
+- E09 · 2016 · R · [Return of Frustratingly Easy Domain Adaptation](https://ojs.aaai.org/index.php/AAAI/article/view/10306)
+- E10 · 2016 · R · [Deep CORAL: Correlation Alignment for Deep Domain Adaptation](https://doi.org/10.1007/978-3-319-49409-8_35)
+- E11 · 2015 · R · [Learning Transferable Features with Deep Adaptation Networks](https://proceedings.mlr.press/v37/long15.html)
+- E12 · 2018 · R · [Conditional Adversarial Domain Adaptation](https://proceedings.neurips.cc/paper/2018/hash/ab88b15733f543179858600245108dd8-Abstract.html)
+- E13 · 2017 · R · [Revisiting Batch Normalization For Practical Domain Adaptation](https://arxiv.org/abs/1603.04779)（作者稿）
+- E14 · 2020 · R · [Do We Really Need to Access the Source Data? Source Hypothesis Transfer for Unsupervised Domain Adaptation](https://proceedings.mlr.press/v119/liang20a.html)
+- E15 · 2020 · R · [Universal Source-Free Domain Adaptation](https://openaccess.thecvf.com/content_CVPR_2020/html/Kundu_Universal_Source-Free_Domain_Adaptation_CVPR_2020_paper.html)
+- E16 · 2021 · R · [Tent: Fully Test-time Adaptation by Entropy Minimization](https://arxiv.org/abs/2006.10726)（作者稿）
+- E17 · 2020 · R · [Test-Time Training with Self-Supervision for Generalization under Distribution Shifts](https://proceedings.mlr.press/v119/sun20b.html)
+- E18 · 2022 · R · [Continual Test-Time Domain Adaptation](https://openaccess.thecvf.com/content/CVPR2022/html/Wang_Continual_Test-Time_Domain_Adaptation_CVPR_2022_paper.html)
+- E19 · 2022 · R · [Efficient Test-Time Model Adaptation without Forgetting](https://proceedings.mlr.press/v162/niu22a.html)
+- E20 · 2019 · R · [Domain Generalization by Solving Jigsaw Puzzles](https://openaccess.thecvf.com/content_CVPR_2019/html/Carlucci_Domain_Generalization_by_Solving_Jigsaw_Puzzles_CVPR_2019_paper.html)
+- E21 · 2019 · R · [Domain Generalization via Model-Agnostic Learning of Semantic Features](https://arxiv.org/abs/1910.13580)（作者稿）
+- E22 · 2017 · R · [Prototypical Networks for Few-shot Learning](https://proceedings.neurips.cc/paper/2017/hash/cb8da6767461f2812ae4290eac7cbc42-Abstract.html)
+- E23 · 2020 · R · [Supervised Contrastive Learning](https://proceedings.neurips.cc/paper/2020/hash/d89a66c7c80a29b1bdbab0f2a1a94af8-Abstract.html)
+- E24 · 2020 · R · [A Simple Framework for Contrastive Learning of Visual Representations](https://proceedings.mlr.press/v119/chen20j.html)
+- E25 · 2021 · R · [Prototypical Contrastive Learning of Unsupervised Representations](https://arxiv.org/abs/2005.04966)（作者稿）
+- E26 · 2009 · R · [Gaussian-Process Factor Analysis for Low-Dimensional Single-Trial Analysis of Neural Population Activity](https://doi.org/10.1152/jn.90941.2008)
+- E27 · 2022 · S · [Targeted dimensionality reduction enables reliable estimation of neural population coding accuracy from trial-limited data](https://doi.org/10.1371/journal.pone.0271136)
+- E28 · 2018 · S · [Modeling correlated noise is necessary to decode uncertainty](https://arxiv.org/abs/1708.04860)（作者稿）
+- E29 · 2017 · R · [Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles](https://proceedings.neurips.cc/paper/2017/hash/9ef2ed4b7fd2c810847ffa5fa85bce38-Abstract.html)
+- E30 · 2017 · R · [On Calibration of Modern Neural Networks](https://proceedings.mlr.press/v70/guo17a.html)
+- E31 · 2019 · R · [Can you trust your model’s uncertainty? Evaluating predictive uncertainty under dataset shift](https://proceedings.neurips.cc/paper/2019/hash/8558cb408c1d76621371888657d2eb1d-Abstract.html)
+- E32 · 2016 · R · [Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning](https://proceedings.mlr.press/v48/gal16.html)
+- E33 · 2017 · R · [What Uncertainties Do We Need in Bayesian Deep Learning for Computer Vision?](https://proceedings.neurips.cc/paper/2017/hash/2650d6089a6d640c5e85b2b88265dc2b-Abstract.html)
+
+### F｜正文复现对象、汉字笔画与形状评价（7 篇）
+
+F01 是正文 §4.1 的直接复现对象。F02–F04 区分字的笔画组成和字体风格；F05–F07 分别衡量连通性、轮廓偏差与形状对应，可解释两幅字图为何不同，不是官方 OCF 的替代定义。
+
+- F01 · 2024 · V · [Decoding dynamic visual scenes across the brain hierarchy](https://doi.org/10.1371/journal.pcbi.1012297)（PLOS Computational Biology；正文 [cite:14]）
+- F02 · 2021 · V · [Zero-Shot Chinese Character Recognition with Stroke-Level Decomposition](https://www.ijcai.org/proceedings/2021/85)（IJCAI 主会；正文 [cite:20]）
+- F03 · 2021 · V · [DG-Font: Deformable Generative Networks for Unsupervised Font Generation](https://openaccess.thecvf.com/content/CVPR2021/html/Xie_DG-Font_Deformable_Generative_Networks_for_Unsupervised_Font_Generation_CVPR_2021_paper.html)（CVPR）
+- F04 · 2021 · V · [Multiple Heads Are Better Than One: Few-Shot Font Generation With Multiple Localized Experts](https://openaccess.thecvf.com/content/ICCV2021/html/Park_Multiple_Heads_Are_Better_Than_One_Few-Shot_Font_Generation_With_ICCV_2021_paper.html)（ICCV）
+- F05 · 2021 · V · [clDice - A Novel Topology-Preserving Loss Function for Tubular Structure Segmentation](https://openaccess.thecvf.com/content/CVPR2021/html/Shit_clDice_-_A_Novel_Topology-Preserving_Loss_Function_for_Tubular_Structure_CVPR_2021_paper.html)（CVPR）
+- F06 · 2021 · V · [Boundary IoU: Improving Object-Centric Image Segmentation Evaluation](https://openaccess.thecvf.com/content/CVPR2021/html/Cheng_Boundary_IoU_Improving_Object-Centric_Image_Segmentation_Evaluation_CVPR_2021_paper.html)（CVPR）
+- F07 · 2002 · V · [Shape matching and object recognition using shape contexts](https://doi.org/10.1109/34.993558)（IEEE TPAMI；Crossref 核对题名、卷期及页码 509–522）
+
+<a id="academic-evidence-end"></a>

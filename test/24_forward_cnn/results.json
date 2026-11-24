@@ -1,0 +1,232 @@
+{
+  "device": "cuda",
+  "torch": "2.5.1+cu121",
+  "numpy": "1.26.4",
+  "python": "3.10.22 (main, Oct  9 2026, 15:18:58) [MSC v.1944 64 bit (AMD64)]",
+  "config": {
+    "epochs": 12,
+    "batch": 128,
+    "cnn_seed": 42,
+    "train_sessions": [
+      1,
+      2,
+      3
+    ],
+    "validation_session": 4,
+    "bin_ms": 50,
+    "candidates": 2748,
+    "split_seed": 42,
+    "subset_seed": 123,
+    "mlp_seeds": [
+      42,
+      202,
+      777
+    ],
+    "mlp_weight": 0.5,
+    "ridge_alpha": 1,
+    "baseline": "ridge_mse",
+    "selection": "highest pooled CNN tune OCF, MSE wins tie; require strict improvement over ridge_mse on tune and held-out to advance",
+    "recall": "fused score before assignment; ties broken by candidate index",
+    "top1": "after full-block unique_assignment",
+    "ridge": "fit DCT16 to log1p(session-glyph mean); Poisson arm converts via expm1 and floors at 1e-6",
+    "cnn": "Poisson loss on mean counts (equal repeats); log1p rates for MSE; sum log likelihood across repeats for Poisson"
+  },
+  "training": {
+    "mice1": {
+      "loss": [
+        0.6556589754387802,
+        0.6540480059133693,
+        0.6523122694641569,
+        0.6515381314521967,
+        0.6510039954032787,
+        0.650446799210933,
+        0.6498809394357506,
+        0.6492482671918133,
+        0.6486431076537054,
+        0.6481328379292328,
+        0.6477822670943525,
+        0.6474662183674141
+      ],
+      "units": 134,
+      "outputs": 670,
+      "repeats_per_session_glyph": 4
+    },
+    "mice2": {
+      "loss": [
+        0.7313735029582894,
+        0.728695253184095,
+        0.7258915582772079,
+        0.7249888811569547,
+        0.7243231962688451,
+        0.7237571863107807,
+        0.7231277603943449,
+        0.7225248177672752,
+        0.721973951640261,
+        0.7215526556864577,
+        0.7212466457872238,
+        0.7209483568151271
+      ],
+      "units": 78,
+      "outputs": 390,
+      "repeats_per_session_glyph": 4
+    }
+  },
+  "tune": {
+    "ridge_mse": {
+      "pooled": {
+        "ocf": 25.831461860596946,
+        "top1": 0.095703125,
+        "recall1": 0.0546875,
+        "recall32": 0.4453125
+      },
+      "mice": {
+        "mice1": {
+          "n": 256,
+          "ocf": 27.90163318381172,
+          "top1": 0.109375,
+          "recall1": 0.0703125,
+          "recall32": 0.53515625
+        },
+        "mice2": {
+          "n": 256,
+          "ocf": 23.761290537382166,
+          "top1": 0.08203125,
+          "recall1": 0.0390625,
+          "recall32": 0.35546875
+        }
+      }
+    },
+    "ridge_poisson": {
+      "pooled": {
+        "ocf": 24.182991721089707,
+        "top1": 0.080078125,
+        "recall1": 0.0390625,
+        "recall32": 0.345703125
+      },
+      "mice": {
+        "mice1": {
+          "n": 256,
+          "ocf": 26.49836573869208,
+          "top1": 0.09375,
+          "recall1": 0.0546875,
+          "recall32": 0.4609375
+        },
+        "mice2": {
+          "n": 256,
+          "ocf": 21.867617703487337,
+          "top1": 0.06640625,
+          "recall1": 0.0234375,
+          "recall32": 0.23046875
+        }
+      }
+    },
+    "cnn_mse": {
+      "pooled": {
+        "ocf": 25.388549655152058,
+        "top1": 0.087890625,
+        "recall1": 0.078125,
+        "recall32": 0.462890625
+      },
+      "mice": {
+        "mice1": {
+          "n": 256,
+          "ocf": 28.50564093610427,
+          "top1": 0.11328125,
+          "recall1": 0.109375,
+          "recall32": 0.53125
+        },
+        "mice2": {
+          "n": 256,
+          "ocf": 22.271458374199845,
+          "top1": 0.0625,
+          "recall1": 0.046875,
+          "recall32": 0.39453125
+        }
+      }
+    },
+    "cnn_poisson": {
+      "pooled": {
+        "ocf": 26.109386392394548,
+        "top1": 0.099609375,
+        "recall1": 0.0625,
+        "recall32": 0.37109375
+      },
+      "mice": {
+        "mice1": {
+          "n": 256,
+          "ocf": 29.804397107045553,
+          "top1": 0.1328125,
+          "recall1": 0.10546875,
+          "recall32": 0.53515625
+        },
+        "mice2": {
+          "n": 256,
+          "ocf": 22.414375677743543,
+          "top1": 0.06640625,
+          "recall1": 0.01953125,
+          "recall32": 0.20703125
+        }
+      }
+    }
+  },
+  "held_out": {
+    "ridge_mse": {
+      "pooled": {
+        "ocf": 24.33936155396989,
+        "top1": 0.08203125,
+        "recall1": 0.0693359375,
+        "recall32": 0.4365234375
+      },
+      "mice": {
+        "mice1": {
+          "n": 512,
+          "ocf": 27.66816987251785,
+          "top1": 0.115234375,
+          "recall1": 0.09765625,
+          "recall32": 0.5390625
+        },
+        "mice2": {
+          "n": 512,
+          "ocf": 21.01055323542193,
+          "top1": 0.048828125,
+          "recall1": 0.041015625,
+          "recall32": 0.333984375
+        }
+      }
+    },
+    "cnn_poisson": {
+      "pooled": {
+        "ocf": 25.94601065739226,
+        "top1": 0.09765625,
+        "recall1": 0.0673828125,
+        "recall32": 0.38671875
+      },
+      "mice": {
+        "mice1": {
+          "n": 512,
+          "ocf": 31.242089083136108,
+          "top1": 0.154296875,
+          "recall1": 0.115234375,
+          "recall32": 0.572265625
+        },
+        "mice2": {
+          "n": 512,
+          "ocf": 20.649932231648414,
+          "top1": 0.041015625,
+          "recall1": 0.01953125,
+          "recall32": 0.201171875
+        }
+      }
+    }
+  },
+  "reproduction": {
+    "abs_errors_tune_held_out": [
+      0.0,
+      0.0
+    ],
+    "passed": true
+  },
+  "selected": "cnn_poisson",
+  "tune_gate": true,
+  "advance": true
+}
