@@ -1,0 +1,58 @@
+{
+  "experiment": "45_task3_repeat_dropout",
+  "status": "stopped_tune_gate",
+  "seed": 42,
+  "epochs_per_mouse_arm": 7,
+  "training_fits": 4,
+  "total_mouse_arm_epochs": 28,
+  "total_training_updates": 3612,
+  "train_rows_per_mouse_arm_epoch": 32976,
+  "mean_rows_added": 0,
+  "validation_rows_used_for_training": 0,
+  "implementation_errors_or_repairs": [],
+  "heldout_metrics_computed": false,
+  "arms": [
+    {
+      "mouse": "mice1",
+      "arm": "baseline",
+      "final_train_loss": 4.441393411257844,
+      "final_train_accuracy": 0.2851770984958758,
+      "original_row_presentations": 230832,
+      "thinned_row_presentations": 0,
+      "history": "test/45_task3_repeat_dropout/artifacts/models/baseline/mice1/history.json",
+      "checkpoint": "test/45_task3_repeat_dropout/artifacts/models/baseline/mice1/classifier.pt"
+    },
+    {
+      "mouse": "mice1",
+      "arm": "count_dropout",
+      "final_train_loss": 5.686809552982558,
+      "final_train_accuracy": 0.11854075691411936,
+      "original_row_presentations": 114832,
+      "thinned_row_presentations": 116000,
+      "history": "test/45_task3_repeat_dropout/artifacts/models/count_dropout/mice1/history.json",
+      "checkpoint": "test/45_task3_repeat_dropout/artifacts/models/count_dropout/mice1/classifier.pt"
+    },
+    {
+      "mouse": "mice2",
+      "arm": "baseline",
+      "final_train_loss": 5.05600467669854,
+      "final_train_accuracy": 0.18276928675400292,
+      "original_row_presentations": 230832,
+      "thinned_row_presentations": 0,
+      "history": "test/45_task3_repeat_dropout/artifacts/models/baseline/mice2/history.json",
+      "checkpoint": "test/45_task3_repeat_dropout/artifacts/models/baseline/mice2/classifier.pt"
+    },
+    {
+      "mouse": "mice2",
+      "arm": "count_dropout",
+      "final_train_loss": 6.1193824855521255,
+      "final_train_accuracy": 0.06995997088791849,
+      "original_row_presentations": 115636,
+      "thinned_row_presentations": 115196,
+      "history": "test/45_task3_repeat_dropout/artifacts/models/count_dropout/mice2/history.json",
+      "checkpoint": "test/45_task3_repeat_dropout/artifacts/models/count_dropout/mice2/classifier.pt"
+    }
+  ],
+  "tune_result": "mice1 passed both noninferiority conditions; mice2 failed recall@32 and final OCF noninferiority; heldout was not evaluated",
+  "full_log": "test/45_task3_repeat_dropout/run.log"
+}

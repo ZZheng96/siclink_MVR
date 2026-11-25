@@ -6231,6 +6231,56 @@
           }
         }
       },
+      "9613625aa17e7703": {
+        "protocol": {
+          "task": "task3",
+          "split_seed": 42,
+          "picture_seed": 123,
+          "protocol_sha256": "b779a80b80c59310ec8eeabde168d81680c4a1dccf5893dc20705040a992d0f1"
+        },
+        "groups": {
+          "overall": {
+            "final": {
+              "methods": {
+                "45_task3_repeat_dropout:baseline": {
+                  "source": "test/45_task3_repeat_dropout/results.json",
+                  "tune": {
+                    "n": 2048,
+                    "local_ocf": 17.272478413437078,
+                    "local_top1": 0.0166015625
+                  },
+                  "heldout": null
+                },
+                "45_task3_repeat_dropout:count_dropout": {
+                  "source": "test/45_task3_repeat_dropout/results.json",
+                  "tune": {
+                    "n": 2048,
+                    "local_ocf": 17.578240074805926,
+                    "local_top1": 0.01708984375
+                  },
+                  "heldout": null
+                }
+              },
+              "best": {
+                "method": "45_task3_repeat_dropout:count_dropout",
+                "selection_split": "tune",
+                "selection_local_ocf": 17.578240074805926,
+                "tune": {
+                  "n": 2048,
+                  "local_ocf": 17.578240074805926,
+                  "local_top1": 0.01708984375
+                },
+                "heldout": null,
+                "source": "test/45_task3_repeat_dropout/results.json"
+              }
+            },
+            "oracle": {
+              "methods": {},
+              "best": null
+            }
+          }
+        }
+      },
       "a92c1df64b7dc0c6": {
         "protocol": {
           "schema": "legacy_evaluation",
@@ -7275,6 +7325,8 @@
     "test/37_task1_quota/results.json :: task1/overall/oracle/37_task1_quota:baseline24_delay50_raw8: heldout not evaluated; null.",
     "test/37_task1_quota/results.json :: task1/overall/oracle/37_task1_quota:baseline: heldout not evaluated; null.",
     "test/42_task2_production_paired/results.json: no supported task-level local OCF metrics; excluded from rankings.",
-    "test/43_task2_within32_rerank/results.json: no supported task-level local OCF metrics; excluded from rankings."
+    "test/43_task2_within32_rerank/results.json: no supported task-level local OCF metrics; excluded from rankings.",
+    "test/45_task3_repeat_dropout/results.json :: task3/overall/final/45_task3_repeat_dropout:baseline: heldout not evaluated; null.",
+    "test/45_task3_repeat_dropout/results.json :: task3/overall/final/45_task3_repeat_dropout:count_dropout: heldout not evaluated; null."
   ]
 }

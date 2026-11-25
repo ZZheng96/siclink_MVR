@@ -1,0 +1,154 @@
+{
+  "experiment": "45_task3_repeat_dropout",
+  "status": "stopped_tune_gate",
+  "preregistration_sha256": "624707d8eeb083640d79f31807a73c7e7dd5e6882f39a948094237c0842d15e3",
+  "reproduce_from_repository_root": ".venv\\Scripts\\python.exe -B -u test\\45_task3_repeat_dropout\\run.py --run",
+  "synthetic_smoke_command": ".venv\\Scripts\\python.exe -B test\\45_task3_repeat_dropout\\run.py --smoke-test",
+  "dependencies": [
+    {
+      "path": "test/45_task3_repeat_dropout/preregistration.json",
+      "bytes": 11938,
+      "sha256": "624707d8eeb083640d79f31807a73c7e7dd5e6882f39a948094237c0842d15e3"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/run.py",
+      "bytes": 34922,
+      "sha256": "6dae4c00624f3a202e63751ec253645f0f6c8d7a8fa8d7f820d6c9220676c8d4"
+    },
+    {
+      "path": "src/dataloader.py",
+      "bytes": 6266,
+      "sha256": "a7c53041eeefcb22ba125106880d16a536c94a40ba8054c3a370f4d2f49e36d9"
+    },
+    {
+      "path": "src/encoding.py",
+      "bytes": 1483,
+      "sha256": "b07d16b562b3511aff62873af1b9ddbbaf38d9d25072cd74a406d644017a5fdb"
+    },
+    {
+      "path": "src/evaluation.py",
+      "bytes": 3270,
+      "sha256": "4ffac3f1c3e20998550e53ff38e0024be0b300cb6ea693d7dfe8c660c257a67b"
+    },
+    {
+      "path": "src/features.py",
+      "bytes": 6359,
+      "sha256": "6e0bf172a73a33cd4a5b7d1fb0d09113774745011d93e800f35f037ce2c65d79"
+    },
+    {
+      "path": "src/final.py",
+      "bytes": 35908,
+      "sha256": "18a8ffb0dfc161ba734a0f4a71dc1e71f565bba6689ff5cba9fceb15a2ccca46"
+    },
+    {
+      "path": "src/neural.py",
+      "bytes": 14881,
+      "sha256": "5c889f1b0689ea7a8aeb48118dc3c7166068e5c1919373dd2801cb5e2be86e53"
+    },
+    {
+      "path": "src/retrieval.py",
+      "bytes": 9881,
+      "sha256": "2d070d4ef9692b840d806b856507c9b209f84708960a9ba1b79b85661413b861"
+    },
+    {
+      "path": "src/ridge.py",
+      "bytes": 6022,
+      "sha256": "13c7d0729116b22d280cb373e265420b95eaa2e2f28ce91c0295fb0771dbd274"
+    },
+    {
+      "path": "src/splits.py",
+      "bytes": 5785,
+      "sha256": "25a80c5b8b6df14c6d6b6aa7501c5736285ac8c8b4f81afe143c5663a98b33fb"
+    }
+  ],
+  "expected_compute_scale": {
+    "real_training_fits": 4,
+    "mouse_arm_epochs": 28,
+    "training_updates": 3612,
+    "calculation": "2 mice x 2 arms x 7 epochs x ceil(32976/256) batches",
+    "unique_real_single_trial_training_rows": 65952,
+    "training_sample_presentations": 923328,
+    "classifier_rows_per_mouse_per_arm_per_epoch": 32976,
+    "full_block_score_matrices": 16,
+    "score_matrix_shape": [
+      2748,
+      2748
+    ],
+    "hungarian_assignments": 16,
+    "tune_rows_per_arm": 2048,
+    "heldout_rows_per_arm_if_tune_passes": 4096,
+    "maximum_assigned_ocf_pair_evaluations_before_deduplication": 12288,
+    "note": "Counts describe computational volume only; no runtime prediction is made."
+  },
+  "environment": {
+    "python": "D:\\WORK\\siclink\\.venv\\Scripts\\python.exe",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU"
+  },
+  "outputs": [
+    {
+      "path": "test/45_task3_repeat_dropout/tune.json",
+      "bytes": 24779,
+      "sha256": "d5a6301abbdc0121cc28f1eb893e6165ea6fc3742c9bbb894c7c2d1f9006f1ec"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/results.json",
+      "bytes": 25189,
+      "sha256": "e9410f677bfd22d4baa54f1c0aceb613f56f23273334ee578d74fa2fcef213b4"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/artifacts/models/baseline/mice1/classifier.pt",
+      "bytes": 8076834,
+      "sha256": "c93f472d8d6bb8d8a28f3a08ee38c2a5a0fd3c7742e86c57affc501efa1d9677"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/artifacts/models/baseline/mice2/classifier.pt",
+      "bytes": 7501218,
+      "sha256": "99c639492e8fcff938704d8939b75ad0f4f84316246b2ed91547472032fa722f"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/artifacts/models/count_dropout/mice1/classifier.pt",
+      "bytes": 8076898,
+      "sha256": "06c93a86cf8ab2478d6df57e8618354d54f5f52101e960e272f9ac7fd7fb7770"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/artifacts/models/count_dropout/mice2/classifier.pt",
+      "bytes": 7501282,
+      "sha256": "dec40c0de9965ae37f673ec9cd135ab0d4ad9b2cec59dbf3346a52778e7fff6e"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/artifacts/models/baseline/mice1/history.json",
+      "bytes": 1144,
+      "sha256": "dcee99aa59885419d90a0c9503cd9862ab6b9684d233a11ce486f4934d6493f8"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/artifacts/models/baseline/mice2/history.json",
+      "bytes": 1143,
+      "sha256": "4f59985d75fa4dc9f7d8b52bc32a47c8597a0fa122c7db18c6d98453d8167cdb"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/artifacts/models/count_dropout/mice1/history.json",
+      "bytes": 1174,
+      "sha256": "492c2ba3b4e59209074740717ba8a04b1ba657ed9182c6dc07231ce29338c9b3"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/artifacts/models/count_dropout/mice2/history.json",
+      "bytes": 1174,
+      "sha256": "8d1cd93e66c9ee751bfa5c9b141ca360b206b772fdaeb735563a73c9c70e855c"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/run.log",
+      "bytes": 4965,
+      "sha256": "5b93e2c01a0091aeb718c79c5aa064343dc61e1b9a03917169b12edc5e5312f3"
+    },
+    {
+      "path": "test/45_task3_repeat_dropout/training_summary.json",
+      "bytes": 2375,
+      "sha256": "455564257b731eaef7eb68192632cdb469fe6c1a47f092e26d12c99a3951153d"
+    }
+  ],
+  "implementation_errors_or_repairs": [],
+  "heldout_metrics_computed": false
+}

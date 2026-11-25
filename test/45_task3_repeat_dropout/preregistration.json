@@ -1,0 +1,132 @@
+{
+  "experiment": "45_task3_repeat_dropout",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_training_or_real_metrics",
+  "date": "2026-11-25",
+  "scope": "Only test/45_task3_repeat_dropout may be created or modified. Experiment 44, production code, other experiments, and existing checkpoints must remain unchanged. This preregistration is frozen before any experiment-45 real-data fit, inference, or metric.",
+  "background": {
+    "classifier": "The v5 Task3 classifier is trained on real public single trials; experiment 22's added three-repeat mean rows did not establish a useful improvement.",
+    "question": "While retaining every permitted real single trial exactly once per epoch, does the one fixed count-dropout candidate improve pre-assignment candidate recall without sacrificing final OCF relative to a freshly paired no-augmentation baseline?",
+    "not_a_repeat_of_mean_augmentation": "No classifier mean rows, duplicated rows, trial averaging, repeat-mean inference, logit ensembling, or new fusion weights are introduced. Existing v5 ridge prototypes remain a shared, unchanged encoding component and are fitted only from permitted train_trials."
+  },
+  "data_and_split": {
+    "root": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset",
+    "data_scope": "public train only; load_feature_blocks(DATA, 'train', bin_ms=50); no competition test file, hidden label, hidden ID, or submission is read",
+    "task": "task3",
+    "split": "make_split(blocks, 'task3', seed=42)",
+    "mice": [
+      "mice1",
+      "mice2"
+    ],
+    "blocks": [
+      "mice1/session1",
+      "mice1/session2",
+      "mice1/session3",
+      "mice1/session4",
+      "mice2/session1",
+      "mice2/session2",
+      "mice2/session3",
+      "mice2/session4"
+    ],
+    "gallery_size": 2748,
+    "expected_trials_per_block": {
+      "train": 8244,
+      "validation": 2748,
+      "train_repeats_per_glyph": 3,
+      "validation_repeats_per_glyph": 1
+    },
+    "normalizer": "For each block independently, fit_session_normalizer uses only its raw train_trials. The identical fitted normalizer is shared by baseline and candidate and applied after any candidate raw-count thinning. Validation responses never affect normalization.",
+    "classifier_feature_normalization": "SpikeClassifier.set_normalization is fitted on the original, session-normalized train_trials matrix, identically for both arms; thinned rows never change these statistics.",
+    "label_use": "Public train labels fit the classifier and shared ridge encoding. Validation target IDs are used only to verify gallery completeness, select the frozen reporting subsets after full-block ranking/assignment, and compute metrics. They never enter scores, thinning, unique_assignment, training, or checkpoint selection.",
+    "integrity_assertions": "Require disjoint train/validation trial indices, exactly three training rows and one validation row per glyph per block, complete validation galleries, in-range labels, finite nonnegative integer raw counts, identical raw train rows/targets/order across arms, and label-independent score ranking and assignment."
+  },
+  "picture_subsets": {
+    "construction": "order = numpy.random.default_rng(123).permutation(2748)",
+    "tune": "sort(order[:256]); 256 glyph IDs per block, 2048 rows across eight blocks",
+    "heldout": "sort(order[256:768]); 512 glyph IDs per block, 4096 rows across eight blocks",
+    "disjoint": true,
+    "historical_reuse_disclosure": "These IDs were used by earlier local experiments and are not pristine confirmatory data. No result-dependent change to p, seeds, epochs, architecture, gates, or subsets is allowed in this experiment."
+  },
+  "fixed_training_contract": {
+    "arms": [
+      "baseline",
+      "count_dropout"
+    ],
+    "training_seeds": [
+      42
+    ],
+    "seed_lock": "Only seed 42 is fitted for each mouse and arm. No seed may be added, removed, replaced, reordered, or selected after seeing results. Deterministic augmentation and row-order streams are derived from seed 42 and epoch number and are not additional training seeds.",
+    "epochs_by_mouse": {
+      "mice1": 7,
+      "mice2": 7
+    },
+    "checkpoint": "fixed final epoch; no early stopping, validation-based checkpointing, or best-epoch selection",
+    "architecture": "src.neural.SpikeClassifier(n_classes=2748, hidden=512, dropout=0.2, apply_log=False)",
+    "batch_size": 256,
+    "optimizer": "AdamW(lr=0.0003, weight_decay=0.001), fused only when device is CUDA",
+    "loss": "cross_entropy(label_smoothing=0.05)",
+    "gradient_clip_norm": 5.0,
+    "row_order": "For each arm and mouse independently, epoch e (1-based) uses numpy.random.default_rng(42 + e).permutation(n_train_rows); baseline and candidate therefore receive exactly the same row order.",
+    "torch_randomness": "Call torch.manual_seed(42) before model construction and again before the first training epoch for each mouse-arm. Model initialization and architectural Dropout use the same seed and call pattern in both arms. Candidate count noise uses NumPy only and cannot advance the Torch RNG.",
+    "paired_training": "Each mouse-arm is constructed and trained independently with the same raw rows, normalized rows, targets, row orders, initial seed, architecture, optimizer, epoch count, and final-epoch rule. The sole training difference is the candidate's frozen raw-count perturbation."
+  },
+  "frozen_count_dropout_candidate": {
+    "baseline": "Every original real single-trial count row is used unchanged once per epoch.",
+    "candidate_row_probability": "For every training row and epoch independently, draw u ~ Bernoulli(0.5). If u=1, preserve the complete original raw count row exactly. If u=0, replace that row for this presentation by independent elementwise Binomial(n=x_ij, p=0.5) thinning.",
+    "preserve_original_probability": 0.5,
+    "binomial_retention_probability": 0.5,
+    "p_frozen_without_search": "Both probabilities are fixed at 0.5 before real training. There is no p grid, internal repeat-fold p selection, tune-based p selection, heldout-based p selection, or post-hoc repair. Testing another value requires a separately preregistered experiment.",
+    "normalization_order": "raw integer counts -> optional frozen thinning -> shared train-only session log1p normalization -> original-train-fitted SpikeClassifier feature normalization",
+    "scaling": "No inverse-p scaling, count restoration, offset, clipping beyond the existing normalizers, or other compensation.",
+    "augmentation_rng": "Within each mouse candidate fit and epoch e, initialize numpy.random.default_rng(1042 + e). Draw the preserve-original mask for each batch in the frozen row order, then draw Binomial counts only for non-preserved rows. Batch size and loop order are fixed, making the stream reproducible.",
+    "row_count": "No extra rows: each real training single trial appears exactly once per epoch in both arms. Across epochs a candidate row may be original or freshly thinned; all original source rows remain available and are never overwritten.",
+    "inference": "No count noise, preserve/drop sampling, mean trial, repeat aggregation, test-time augmentation, or logit averaging. Both classifiers use model.eval() and the original validation single-trial counts. Existing architectural Dropout is disabled by eval mode."
+  },
+  "frozen_v5_scoring": {
+    "shared_encoding": "Per mouse, fit RidgePath on bank_coefficients[train_targets] versus log1p(per-glyph means of the three permitted raw training repeats), pooled over its four blocks; predict all glyph prototypes with alpha=0.01. This is the unchanged v5 encoding control and is identical across arms. No validation trial enters it.",
+    "score": "For each arm and complete validation block: (row_zscore(MLP logits) + row_zscore(response_scores(log1p(raw), prototypes, metric='mse')) + row_zscore(continuous_image_scores)) / 3.",
+    "continuous_image_scores": "The existing v5 fixed T=1 softmax expectation over centered DCT16 gallery coefficients, L2-normalized expected image and gallery, followed by cosine similarity.",
+    "pre_assignment": "Before unique_assignment, rank all 2748 glyph scores per validation row with stable descending argsort and ascending glyph-ID tie breaking. Recall@1 uses the first ranked glyph; recall@32 uses membership in the first min(32, n_glyphs) ranked glyphs.",
+    "final_assignment": "Apply scipy-backed src.retrieval.unique_assignment independently to every complete 2748 x 2748 arm/block score matrix using scores only. Only after full-gallery one-to-one assignment are tune or heldout rows selected.",
+    "final_ocf": "Official src.evaluation.score_predictions OCF for the assigned glyph versus the true public glyph; cache is shared across arms and subsets and keyed only by (assigned_id, target_id).",
+    "reporting": "Report recall@1, recall@32, assigned-ID accuracy, and final OCF overall, separately for mice1 and mice2, and separately for all eight blocks. Candidate-minus-baseline paired deltas use identical rows. Recall@1 and recall@32 remain distinct from final assignment outcomes."
+  },
+  "frozen_gates": {
+    "numeric_tolerance": 0.0,
+    "tune_gate": "Evaluate both arms on tune only. For EACH mouse separately require candidate recall@32 >= baseline recall@32 AND candidate final OCF >= baseline final OCF. Both mice and both conditions must pass. Overall and eight-block values are reported but are not alternative gates.",
+    "tune_failure_stop": "If any tune condition fails, save tune metrics and stop: do not select/evaluate heldout rows or compute heldout OCF. Full-block unlabeled score/assignment matrices needed for tune may contain other rows, but no heldout metric or label-based comparison is produced.",
+    "heldout_gate": "Only after the tune gate passes, evaluate the same two frozen arms on heldout. For EACH mouse separately require candidate recall@32 strictly > baseline recall@32 AND candidate final OCF >= baseline final OCF. All four conditions must pass.",
+    "decision": "advance=true only if both tune and heldout gates pass. Any failure stops with advance=false. No tolerance, post-hoc metric substitution, subset/block omission, p change, seed change, epoch change, or extra candidate is permitted.",
+    "production": "No production integration or hidden-test submission is performed by this experiment even if advance=true; a pass only justifies separate review."
+  },
+  "expected_real_compute_scale": {
+    "real_training_fits": 4,
+    "mouse_arm_epochs": 28,
+    "training_updates": 3612,
+    "calculation": "2 mice x 2 arms x 7 epochs x ceil(32976/256) batches",
+    "unique_real_single_trial_training_rows": 65952,
+    "training_sample_presentations": 923328,
+    "classifier_rows_per_mouse_per_arm_per_epoch": 32976,
+    "full_block_score_matrices": 16,
+    "score_matrix_shape": [
+      2748,
+      2748
+    ],
+    "hungarian_assignments": 16,
+    "tune_rows_per_arm": 2048,
+    "heldout_rows_per_arm_if_tune_passes": 4096,
+    "maximum_assigned_ocf_pair_evaluations_before_deduplication": 12288,
+    "note": "Counts describe computational volume only; no runtime prediction is made."
+  },
+  "outputs": {
+    "implementation": "test/45_task3_repeat_dropout/run.py",
+    "preregistration": "test/45_task3_repeat_dropout/preregistration.json",
+    "manifest": "test/45_task3_repeat_dropout/manifest.json",
+    "tune_lock": "test/45_task3_repeat_dropout/tune.json",
+    "results": "test/45_task3_repeat_dropout/results.json",
+    "models": "test/45_task3_repeat_dropout/artifacts/models/{baseline,count_dropout}/{mice1,mice2}/classifier.pt",
+    "initial_manifest_status": "not_run",
+    "real_run_command": ".venv\\Scripts\\python.exe -B -u test\\45_task3_repeat_dropout\\run.py --run",
+    "synthetic_smoke_command": ".venv\\Scripts\\python.exe -B test\\45_task3_repeat_dropout\\run.py --smoke-test"
+  }
+}
