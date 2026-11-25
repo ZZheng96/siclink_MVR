@@ -1,0 +1,50 @@
+{
+  "historical_ocf": 23.824141005605483,
+  "preregistration_sha256": "33c7174c2939afb533fe863284abf99b85065fcda3ae0325dcf008628d73c101",
+  "ids_sha256": "da62cd42e6609fcc7822499147d3c32f70ce1702548eb73a64a6936b67745342",
+  "per_mouse": {
+    "mice1": {
+      "rows": 2748,
+      "set_mismatch": 0,
+      "order_mismatch": 0,
+      "rows_with_v5_top32_ties": 0,
+      "rows_with_mixed_top32_ties": 1,
+      "changed_order": 2748,
+      "rate_sha256": "bfbe69af1836ba8332eb792d6b8e08480b3b1378ff54267b7e121b3b876b0feb",
+      "v5": {
+        "final_ocf": 26.03009228212808,
+        "recall32": 0.517578125,
+        "hits": 265
+      },
+      "within32": {
+        "final_ocf": 27.762526080160498,
+        "recall32": 0.517578125,
+        "hits": 265
+      },
+      "delta_ocf": 1.7324337980324174
+    },
+    "mice2": {
+      "rows": 2748,
+      "set_mismatch": 0,
+      "order_mismatch": 0,
+      "rows_with_v5_top32_ties": 0,
+      "rows_with_mixed_top32_ties": 0,
+      "changed_order": 2748,
+      "rate_sha256": "a7e0d1217175aa72cecbf5a935108bdbd1427337931e988b1d239667ef677845",
+      "v5": {
+        "final_ocf": 20.98710249936356,
+        "recall32": 0.3515625,
+        "hits": 180
+      },
+      "within32": {
+        "final_ocf": 20.47319163274355,
+        "recall32": 0.3515625,
+        "hits": 180
+      },
+      "delta_ocf": -0.5139108666200087
+    }
+  },
+  "advance": false,
+  "status": "complete",
+  "macro_delta": 0.6092614657062043
+}
