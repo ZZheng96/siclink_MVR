@@ -1,7 +1,7 @@
 [
   {
     "run_name": "mlp_encoding_font_directional_v3",
-    "score": 21.09590,
+    "score": 21.0959,
     "metric": "Kaggle Public OCF",
     "source": "user_reported",
     "reported_at": "2026-11-24",
@@ -9,5 +9,16 @@
     "archive": "test/90_submission/artifacts/mlp_encoding_font_directional_v3/kaggle_submission.zip",
     "archive_sha256": "977923be462b9692eb60c3f60ae55789bc0c416b0eb4551d02d84dcc092c453a",
     "content_sha256": "b8a603c179464de70d10f31ab9a6edc3e9213631ba232d4127118306cd4174df"
+  },
+  {
+    "run_name": "mlp_encoding_task2_rerank_task3_soft_v5",
+    "score": 21.80563,
+    "metric": "Kaggle Public OCF",
+    "source": "user_reported",
+    "reported_at": "2026-11-25",
+    "verified_online": false,
+    "archive": "test/90_submission/artifacts/mlp_encoding_task2_rerank_task3_soft_v5/kaggle_submission.zip",
+    "archive_sha256": "2311a23d3423fc77ab6814d121a06df280dfc480e59b695a47d4d05e406e03c9",
+    "content_sha256": "86efc8dd09561fa3fd29d2856d0cb809954bc9119f2a22797427ca68da3af05e"
   }
 ]

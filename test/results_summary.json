@@ -7078,11 +7078,22 @@
       "archive": "test/90_submission/artifacts/mlp_encoding_font_directional_v3/kaggle_submission.zip",
       "archive_sha256": "977923be462b9692eb60c3f60ae55789bc0c416b0eb4551d02d84dcc092c453a",
       "content_sha256": "b8a603c179464de70d10f31ab9a6edc3e9213631ba232d4127118306cd4174df"
+    },
+    {
+      "run_name": "mlp_encoding_task2_rerank_task3_soft_v5",
+      "score": 21.80563,
+      "metric": "Kaggle Public OCF",
+      "source": "user_reported",
+      "reported_at": "2026-11-25",
+      "verified_online": false,
+      "archive": "test/90_submission/artifacts/mlp_encoding_task2_rerank_task3_soft_v5/kaggle_submission.zip",
+      "archive_sha256": "2311a23d3423fc77ab6814d121a06df280dfc480e59b695a47d4d05e406e03c9",
+      "content_sha256": "86efc8dd09561fa3fd29d2856d0cb809954bc9119f2a22797427ca68da3af05e"
     }
   ],
   "leaderboard_rank_1_snapshot": 54.01486,
-  "best_kaggle_score": 21.0959,
-  "gap_to_rank_1_actual": 32.91896,
+  "best_kaggle_score": 21.80563,
+  "gap_to_rank_1_actual": 32.20923,
   "score_sources": {
     "local": "summary contains only local OCF/top1 on public data; local OCF is not a Kaggle score.",
     "kaggle": "kaggle_scores is copied verbatim from test/90_submission/kaggle_scores.json; no local value is substituted.",
@@ -7262,6 +7273,8 @@
     "test/37_task1_quota/results.json :: task1/overall/final/37_task1_quota:baseline24_delay50_raw8: heldout not evaluated; null.",
     "test/37_task1_quota/results.json :: task1/overall/final/37_task1_quota:baseline: heldout not evaluated; null.",
     "test/37_task1_quota/results.json :: task1/overall/oracle/37_task1_quota:baseline24_delay50_raw8: heldout not evaluated; null.",
-    "test/37_task1_quota/results.json :: task1/overall/oracle/37_task1_quota:baseline: heldout not evaluated; null."
+    "test/37_task1_quota/results.json :: task1/overall/oracle/37_task1_quota:baseline: heldout not evaluated; null.",
+    "test/42_task2_production_paired/results.json: no supported task-level local OCF metrics; excluded from rankings.",
+    "test/43_task2_within32_rerank/results.json: no supported task-level local OCF metrics; excluded from rankings."
   ]
 }
