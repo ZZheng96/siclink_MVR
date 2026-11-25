@@ -1,0 +1,114 @@
+{
+  "experiment": "40_forward_cnn_day_readout",
+  "status": "preregistered_before_training",
+  "date": "2026-11-25",
+  "scope": "Only test/40_forward_cnn_day_readout may be created or modified. No production code, model, checkpoint, or configuration is changed by this experiment, irrespective of the gate result.",
+  "question": "Does a shared image CNN trunk with source-day-specific unit-by-time log-rate gains and biases improve fixed-seed Task2 leave-one-day-out decoding over the existing CNN, and does its full held-out-day Poisson NLL beat a source-trained constant-rate control?",
+  "data": {
+    "root": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset",
+    "split": "public train only",
+    "task": "task2",
+    "mice": ["mice1", "mice2"],
+    "days": ["session1", "session2", "session3", "session4"],
+    "bin_ms": 50,
+    "gallery_size": 2748,
+    "source_repeats_per_glyph_day": 4,
+    "target_repeats_per_glyph": 4,
+    "hidden_test_labels_or_ids": "not accessed",
+    "id_alignment": "none; labels are used only for public source training and post-hoc validation scoring"
+  },
+  "folds": {
+    "design": "four leave-one-day-out folds for each mouse; all eight mouse-fold models are trained afresh",
+    "split_seed": 42,
+    "session4_rule": "session4 is retrained exactly like sessions 1-3; historical session4 checkpoints and metrics are excluded from this experiment's comparisons and gates",
+    "training_data": "only train_trials from the three source days of the current fold",
+    "target_data_before_evaluation": "no target-day response or label enters CNN prototypes/rates, CNN fitting, MLP fitting, or constant-rate fitting. The established unlabeled target-session normalizer for the MLP input may use target-day response marginals without labels; it never enters neural-response prototypes or rates.",
+    "target_labels": "used only after prediction for recall, oracle, final OCF/top1, and true-glyph NLL evaluation"
+  },
+  "picture_subsets": {
+    "subset_seed": 123,
+    "construction": "order = numpy.random.default_rng(123).permutation(2748)",
+    "tune": {
+      "size": 256,
+      "indices": "sort(order[0:256])",
+      "published_existing_list": "test/25_rotating_sessions/results.json:picture_ids.tune",
+      "purpose": "public reporting and comparability only; no arm, epoch, weight, architecture, or hyperparameter selection in this experiment"
+    },
+    "heldout": {
+      "size": 512,
+      "indices": "sort(order[256:768])",
+      "published_existing_list": "test/25_rotating_sessions/results.json:picture_ids.held_out",
+      "purpose": "public fixed reporting subset for the preregistered gate; both fixed arms are evaluated"
+    },
+    "historical_reuse_limitation": "These picture IDs and leave-day protocols were reused in earlier experiments including 18, 24, 25, 26, 28 and 34. Thus tune and heldout are not pristine or independent blind tests. Existing-CNN architecture, epochs, MLP seeds/epochs, fusion weight and subset construction are inherited historical development choices. No new selection is performed here, but results remain reused-development evidence and cannot support an independent-generalization claim."
+  },
+  "fixed_arms": {
+    "existing_cnn": {
+      "source": "test/24_forward_cnn/run.py Encoder and train, used through test/25_rotating_sessions conventions",
+      "training_target": "arithmetic mean of source-day per-glyph mean counts, as in the historical existing CNN",
+      "output": "one unit-by-time rate per gallery glyph",
+      "epochs": 12,
+      "batch_size": 128,
+      "cnn_seed": 42,
+      "optimizer": "AdamW(lr=0.002, weight_decay=0.001)",
+      "training_loss": "historical PyTorch poisson_nll_loss(log_input=False, full=False) on mean counts; no checkpoint selection"
+    },
+    "day_readout": {
+      "shared_trunk": "the same two Conv2d branches with kernels 3 and 7, SiLU/pooling, 384-feature concatenation, and Linear(384, units*5) head as the existing CNN",
+      "base_log_rate": "log(softplus(shared_head(trunk(image))) + 1e-6), shape unit-by-time",
+      "source_readout": "for each of the three training days d: log_rate_d = gain_d * base_log_rate + bias_d; gain_d and bias_d are separate unit-by-time tensors; rate_d = exp(log_rate_d)",
+      "initialization": "CNN seed 42; shared head bias initialized from the pooled source-training mean rate with the historical inverse-softplus transform; every gain=1 and bias=0",
+      "target_rate": "arithmetic_mean_over_the_three_source_days(rate_d(glyph)); no target-day readout is fitted or selected; observed source-day or target-day response rates are never averaged to form the target prototype",
+      "epochs": 12,
+      "batch_size": 128,
+      "cnn_seed": 42,
+      "optimizer": "AdamW(lr=0.002); weight_decay=0.001 for shared trunk/head, weight_decay=0 for gains and biases",
+      "training_sampling": "each source day contributes all 2748 glyphs once per epoch in a seeded permutation; days have equal weight",
+      "training_objective": "exact full Poisson NLL using four-repeat sufficient statistics. For each glyph/day/unit/bin, R=4: R*rate - sum_r(k_r*log(rate)) + sum_r(lgamma(k_r+1)); divide by R and average equally over unit-by-time entries, glyphs and days. No validation response is used.",
+      "checkpoint_selection": "none; final epoch only"
+    }
+  },
+  "shared_mlp_and_fusion": {
+    "implementation": "test/25_rotating_sessions/run.py fit_mlp, retrained separately in every mouse-fold",
+    "seeds": [42, 202, 777],
+    "epochs_by_mouse": {"mice1": 7, "mice2": 4},
+    "batch_size": 256,
+    "architecture": "SpikeClassifier(hidden=512, dropout=0.2, apply_log=False)",
+    "training_rows": "source-day single trials plus per-glyph means, with source-fitted session normalization as in experiment 25",
+    "checkpoint_selection": "none; fixed final epoch, including session4",
+    "ensemble": "equal arithmetic mean of the three raw logit matrices, then row_zscore",
+    "arm_scores": "four-repeat summed Poisson log-likelihood score excluding only candidate-independent constants",
+    "fusion": "0.5 * row_zscore(mean MLP logits) + 0.5 * row_zscore(Poisson scores)",
+    "pairing": "the same MLP score matrix and target observations are used for existing_cnn and day_readout within each mouse-fold"
+  },
+  "metrics": {
+    "nll": {
+      "definition": "full Poisson negative log likelihood in nats per target trial and unit-by-time bin, including lgamma(k+1) (log(k!)); averaged over target trials and all unit-by-time bins, then reported per mouse-fold",
+      "evaluated_rates": "the true public target glyph's predicted target rate; this is evaluation only and not retrieval or training",
+      "arms": ["existing_cnn", "day_readout", "constant_rate"],
+      "constant_rate": "one rate per unit-by-time bin, constant over glyphs, fitted as the mean of all individual source-training trials in the same mouse-fold; no target-day data",
+      "source_rate_aggregation_for_day_readout": "arithmetic mean of predicted source-day rates before evaluating NLL"
+    },
+    "recall_at_1_and_32": "rank of the true glyph in fused pre-assignment scores; larger score wins and exact ties are broken by smaller candidate index; reported separately from assignment outcomes",
+    "oracle32_ocf": "for each row, take the deterministic top 32 candidates from fused pre-assignment scores and compute the maximum official OCF against the true target among those 32; purely diagnostic, uses labels only after ranking, and is not unique assignment or a submittable prediction",
+    "final": "Hungarian unique_assignment independently on every complete 2748-row mouse-day fused score matrix, before tune/heldout subsetting; final_ocf is official OCF of assigned glyphs and final_top1 is exact assigned-ID accuracy",
+    "separation": "oracle32_ocf, pre-assignment recall, and final unique-assignment metrics are separate fields and are never substituted for one another",
+    "aggregation": "within a fold, pooled is the arithmetic mean of the two mouse values; macro is the arithmetic mean of the four fold-pooled values; per-mouse summaries are arithmetic means over that mouse's four folds. Equal subset sizes make fold pooled equivalent to sample pooling."
+  },
+  "preregistered_advancement_gate": {
+    "comparison": "day_readout minus paired newly trained existing_cnn on heldout; historical session4 values are not substituted",
+    "macro_final_ocf": "four-fold heldout macro final_ocf delta must be strictly > 0",
+    "fold_consistency": "at least 3 of 4 fold-pooled heldout final_ocf deltas must be strictly > 0",
+    "each_mouse": "for each mouse separately, the four-fold mean heldout final_ocf delta must be strictly > 0 AND the four-fold mean heldout recall_at_32 delta must be >= 0",
+    "nll_day_conditioning_requirement": "day_readout full NLL must be strictly lower than its same-mouse same-fold constant_rate full NLL in all 8 mouse-folds. Otherwise day-conditioned rate interpretation is rejected and advance is false even if decoding metrics pass.",
+    "decision": "advance is the logical AND of all requirements above; no tolerance, post-hoc metric substitution, threshold revision, or selective fold omission",
+    "production_rule_for_this_run": "no production integration is performed in experiment 40 even if advance=true; a true gate only justifies a separate future review. If the NLL requirement fails, the day-conditioned explanation is rejected and no production follow-up is recommended."
+  },
+  "outputs": {
+    "implementation": "test/40_forward_cnn_day_readout/run.py",
+    "aggregate_results": "test/40_forward_cnn_day_readout/results.json",
+    "training_summary": "test/40_forward_cnn_day_readout/training_summary.json",
+    "manifest": "test/40_forward_cnn_day_readout/artifact_manifest.json",
+    "reproduce_command": ".venv\\Scripts\\python.exe -B -u test\\40_forward_cnn_day_readout\\run.py"
+  }
+}

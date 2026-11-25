@@ -1,0 +1,646 @@
+{
+  "experiment": "40_forward_cnn_day_readout",
+  "status": "complete",
+  "preregistration_sha256": "23c9705918db95d930a07acd6a405f0ca7b590abf139313c73410982504b293e",
+  "environment": {
+    "python": "3.10.22 (main, Oct  9 2026, 15:18:58) [MSC v.1944 64 bit (AMD64)]",
+    "python_executable": "D:\\WORK\\siclink\\.venv\\Scripts\\python.exe",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "device": "cuda",
+    "cuda_device": "NVIDIA GeForce RTX 3080 Laptop GPU"
+  },
+  "configuration": {
+    "cnn_seed": 42,
+    "cnn_epochs": 12,
+    "cnn_batch_size": 128,
+    "mlp_seeds": [
+      42,
+      202,
+      777
+    ],
+    "mlp_epochs_by_mouse": {
+      "mice1": 7,
+      "mice2": 4
+    },
+    "source_repeats": 4,
+    "full_training_nll_includes_log_factorial": true
+  },
+  "completed_mouse_folds": 8,
+  "records": [
+    {
+      "mouse": "mice1",
+      "held_session": "session1",
+      "source_blocks": [
+        "mice1/session2",
+        "mice1/session3",
+        "mice1/session4"
+      ],
+      "target_block": "mice1/session1",
+      "units": 134,
+      "unit_time_outputs": 670,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "existing_cnn_historical_loss_history": [
+        0.6635526613030024,
+        0.6618492543437074,
+        0.6597871352664942,
+        0.6589123095660925,
+        0.6582298244971896,
+        0.6575459896910832,
+        0.6567986786278748,
+        0.6560068877503341,
+        0.6554352805951104,
+        0.6549312179959671,
+        0.6545566018491853,
+        0.6542850523709903
+      ],
+      "day_readout": {
+        "full_nll_history": [
+          0.9181848876340941,
+          0.9161269041532917,
+          0.9144246579951768,
+          0.9115861783555155,
+          0.909323476142874,
+          0.9086710709151222,
+          0.9079974125392919,
+          0.9072073700935849,
+          0.9060687388337277,
+          0.9048143588530676,
+          0.904121901617647,
+          0.9034812442600467
+        ],
+        "gain_mean_absolute_deviation_from_1": 0.08852223306894302,
+        "bias_mean_absolute": 0.09194331616163254,
+        "source_predicted_rate_means": [
+          0.6375625729560852,
+          0.6162964105606079,
+          0.6728819012641907
+        ],
+        "target_rate_is_arithmetic_mean_of_predicted_source_rates": true
+      },
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "target_rate_source": "CNN predictions only; no observed target-day or averaged observed source-day prototype"
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session1",
+      "source_blocks": [
+        "mice2/session2",
+        "mice2/session3",
+        "mice2/session4"
+      ],
+      "target_block": "mice2/session1",
+      "units": 78,
+      "unit_time_outputs": 390,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "existing_cnn_historical_loss_history": [
+        0.707787983715968,
+        0.7057947851337893,
+        0.7032149667476115,
+        0.7022728270144789,
+        0.7015499702534127,
+        0.7009087750658372,
+        0.7002480163671391,
+        0.699604707253552,
+        0.6991631454602426,
+        0.6987870780661637,
+        0.698432429735664,
+        0.6980707873597068
+      ],
+      "day_readout": {
+        "full_nll_history": [
+          1.3677513049910914,
+          1.3647462506713015,
+          1.3384868835489012,
+          1.3226089752859886,
+          1.3088348637733107,
+          1.3003040390185856,
+          1.294982950124042,
+          1.2911339917846931,
+          1.2882138905393332,
+          1.285949062803658,
+          1.2840912353639635,
+          1.282568335186099
+        ],
+        "gain_mean_absolute_deviation_from_1": 0.11824094504117966,
+        "bias_mean_absolute": 0.12506671249866486,
+        "source_predicted_rate_means": [
+          1.0737025737762451,
+          1.1315124034881592,
+          1.2335176467895508
+        ],
+        "target_rate_is_arithmetic_mean_of_predicted_source_rates": true
+      },
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "target_rate_source": "CNN predictions only; no observed target-day or averaged observed source-day prototype"
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session2",
+      "source_blocks": [
+        "mice1/session1",
+        "mice1/session3",
+        "mice1/session4"
+      ],
+      "target_block": "mice1/session2",
+      "units": 134,
+      "unit_time_outputs": 670,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "existing_cnn_historical_loss_history": [
+        0.667548432707613,
+        0.6659560844714291,
+        0.6641598922543477,
+        0.6634187879694254,
+        0.6628701013595604,
+        0.6623519239987868,
+        0.6617448756788495,
+        0.6610674228210116,
+        0.6605037863771641,
+        0.6600072527903483,
+        0.6596367599488693,
+        0.659362174971829
+      ],
+      "day_readout": {
+        "full_nll_history": [
+          0.9108531721467708,
+          0.9099817879277488,
+          0.9082746815473232,
+          0.9042071383708545,
+          0.9040337067561957,
+          0.9015586649197389,
+          0.8998913577839566,
+          0.8989569222620539,
+          0.8981905600967944,
+          0.8975252453590238,
+          0.8967523471005387,
+          0.8957891222170867
+        ],
+        "gain_mean_absolute_deviation_from_1": 0.10302525013685226,
+        "bias_mean_absolute": 0.10485301911830902,
+        "source_predicted_rate_means": [
+          0.5938796997070312,
+          0.6111308336257935,
+          0.6725640892982483
+        ],
+        "target_rate_is_arithmetic_mean_of_predicted_source_rates": true
+      },
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "target_rate_source": "CNN predictions only; no observed target-day or averaged observed source-day prototype"
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session2",
+      "source_blocks": [
+        "mice2/session1",
+        "mice2/session3",
+        "mice2/session4"
+      ],
+      "target_block": "mice2/session2",
+      "units": 78,
+      "unit_time_outputs": 390,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "existing_cnn_historical_loss_history": [
+        0.7116193399158628,
+        0.7090921416726869,
+        0.7061682100552832,
+        0.7051275748179295,
+        0.7044135619285672,
+        0.7037871845250914,
+        0.7031374505166577,
+        0.7025521581523456,
+        0.7020673570501058,
+        0.7016987399763416,
+        0.7013644472827384,
+        0.7010299153897093
+      ],
+      "day_readout": {
+        "full_nll_history": [
+          1.3737423899450214,
+          1.375458243343218,
+          1.33967321570321,
+          1.3243992723116071,
+          1.3109203979033166,
+          1.3019678215561765,
+          1.2964382883647527,
+          1.2926136756163091,
+          1.2897087648503702,
+          1.2875510251736073,
+          1.2857857479278698,
+          1.284354517553571
+        ],
+        "gain_mean_absolute_deviation_from_1": 0.1211186870932579,
+        "bias_mean_absolute": 0.12722381949424744,
+        "source_predicted_rate_means": [
+          1.0848585367202759,
+          1.1309460401535034,
+          1.2322852611541748
+        ],
+        "target_rate_is_arithmetic_mean_of_predicted_source_rates": true
+      },
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "target_rate_source": "CNN predictions only; no observed target-day or averaged observed source-day prototype"
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session3",
+      "source_blocks": [
+        "mice1/session1",
+        "mice1/session2",
+        "mice1/session4"
+      ],
+      "target_block": "mice1/session3",
+      "units": 134,
+      "unit_time_outputs": 670,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "existing_cnn_historical_loss_history": [
+        0.6566939446776888,
+        0.6551331089053092,
+        0.6530061993189428,
+        0.6520394520641588,
+        0.6512353317879866,
+        0.6504438620987938,
+        0.6496183331703341,
+        0.6488497173942332,
+        0.6482817533234841,
+        0.6478334295697608,
+        0.6474954300225215,
+        0.6471621955499551
+      ],
+      "day_readout": {
+        "full_nll_history": [
+          0.9108481592833562,
+          0.9105338671726836,
+          0.9093660501124268,
+          0.9066486624998124,
+          0.9057572929099137,
+          0.90350983757119,
+          0.9021384452570416,
+          0.9004789722133527,
+          0.8993393259393191,
+          0.8985586088586351,
+          0.8980246047149983,
+          0.8975485035772754
+        ],
+        "gain_mean_absolute_deviation_from_1": 0.09302999079227448,
+        "bias_mean_absolute": 0.09004659950733185,
+        "source_predicted_rate_means": [
+          0.6102052330970764,
+          0.6426330208778381,
+          0.6741358637809753
+        ],
+        "target_rate_is_arithmetic_mean_of_predicted_source_rates": true
+      },
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "target_rate_source": "CNN predictions only; no observed target-day or averaged observed source-day prototype"
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session3",
+      "source_blocks": [
+        "mice2/session1",
+        "mice2/session2",
+        "mice2/session4"
+      ],
+      "target_block": "mice2/session3",
+      "units": 78,
+      "unit_time_outputs": 390,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "existing_cnn_historical_loss_history": [
+        0.7038577184232909,
+        0.7017927815299888,
+        0.6991418000565519,
+        0.6982889445241015,
+        0.6976375137354088,
+        0.6970934599768126,
+        0.6965320288180611,
+        0.6959750860539066,
+        0.6955260710771775,
+        0.6951108055170273,
+        0.6948067788820947,
+        0.6945020698737543
+      ],
+      "day_readout": {
+        "full_nll_history": [
+          1.3615005971273713,
+          1.3364630083850377,
+          1.314913272857666,
+          1.303068851568582,
+          1.293286052738099,
+          1.2866353151116887,
+          1.2825894491699124,
+          1.2795804728008717,
+          1.2771436192351946,
+          1.2751505523558555,
+          1.2732238619145926,
+          1.27148152184336
+        ],
+        "gain_mean_absolute_deviation_from_1": 0.10571987926959991,
+        "bias_mean_absolute": 0.10778867453336716,
+        "source_predicted_rate_means": [
+          1.086092233657837,
+          1.0835061073303223,
+          1.2268701791763306
+        ],
+        "target_rate_is_arithmetic_mean_of_predicted_source_rates": true
+      },
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "target_rate_source": "CNN predictions only; no observed target-day or averaged observed source-day prototype"
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session4",
+      "source_blocks": [
+        "mice1/session1",
+        "mice1/session2",
+        "mice1/session3"
+      ],
+      "target_block": "mice1/session4",
+      "units": 134,
+      "unit_time_outputs": 670,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "existing_cnn_historical_loss_history": [
+        0.6556589754387802,
+        0.6540480059133693,
+        0.6523122694641569,
+        0.6515381314521967,
+        0.6510039954032787,
+        0.650446799210933,
+        0.6498809394357506,
+        0.6492482671918133,
+        0.6486431076537054,
+        0.6481328379292328,
+        0.6477822670943525,
+        0.6474662183674141
+      ],
+      "day_readout": {
+        "full_nll_history": [
+          0.8962503998444995,
+          0.8959098296047472,
+          0.8955145652926935,
+          0.8921338171706739,
+          0.8904420573522835,
+          0.8895425456406595,
+          0.8877912677068955,
+          0.8867381461496089,
+          0.8860217413816679,
+          0.8853505542126747,
+          0.8845891821505895,
+          0.8838908341774253
+        ],
+        "gain_mean_absolute_deviation_from_1": 0.09697874635457993,
+        "bias_mean_absolute": 0.09848328679800034,
+        "source_predicted_rate_means": [
+          0.6062323451042175,
+          0.6390171051025391,
+          0.6196317672729492
+        ],
+        "target_rate_is_arithmetic_mean_of_predicted_source_rates": true
+      },
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "target_rate_source": "CNN predictions only; no observed target-day or averaged observed source-day prototype"
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session4",
+      "source_blocks": [
+        "mice2/session1",
+        "mice2/session2",
+        "mice2/session3"
+      ],
+      "target_block": "mice2/session4",
+      "units": 78,
+      "unit_time_outputs": 390,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "existing_cnn_historical_loss_history": [
+        0.7313735029582894,
+        0.728695253184095,
+        0.7258915582772079,
+        0.7249888811569547,
+        0.7243231962688451,
+        0.7237571863107807,
+        0.7231277603943449,
+        0.7225248177672752,
+        0.721973951640261,
+        0.7215526556864577,
+        0.7212466457872238,
+        0.7209483568151271
+      ],
+      "day_readout": {
+        "full_nll_history": [
+          1.258293714354421,
+          1.2575950608098467,
+          1.2553726380337562,
+          1.2528896778315841,
+          1.2501710371621775,
+          1.248258084882989,
+          1.246159121921952,
+          1.2447039472542012,
+          1.2430384149833653,
+          1.2419139470133256,
+          1.2411712430623594,
+          1.240653629733312
+        ],
+        "gain_mean_absolute_deviation_from_1": 0.09280605614185333,
+        "bias_mean_absolute": 0.10162680596113205,
+        "source_predicted_rate_means": [
+          1.0691901445388794,
+          1.070882797241211,
+          1.1233330965042114
+        ],
+        "target_rate_is_arithmetic_mean_of_predicted_source_rates": true
+      },
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "target_rate_source": "CNN predictions only; no observed target-day or averaged observed source-day prototype"
+    }
+  ],
+  "baseline_reproduction_against_experiment25": {
+    "session1": {
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0
+      },
+      "passed": true
+    },
+    "session2": {
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0
+      },
+      "passed": true
+    },
+    "session3": {
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0
+      },
+      "passed": true
+    },
+    "session4": null
+  },
+  "runtime_seconds": 1304.3952851999784
+}

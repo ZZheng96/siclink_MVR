@@ -1,0 +1,1807 @@
+{
+  "experiment": "40_forward_cnn_day_readout",
+  "status": "complete",
+  "preregistration_sha256": "23c9705918db95d930a07acd6a405f0ca7b590abf139313c73410982504b293e",
+  "protocol": {
+    "folds": "four leave-one-day-out folds x two mice; all CNNs and three-seed MLPs retrained",
+    "target_day_responses_in_prototypes_or_rate_fitting": false,
+    "target_day_rate": "arithmetic mean of model-predicted source-day rates for day_readout",
+    "hidden_labels_or_id_alignment": false,
+    "assignment": "full 2748-row Hungarian unique assignment before picture subsetting",
+    "oracle_and_final_are_separate": true,
+    "historical_reuse_limitation": "These picture IDs and leave-day protocols were reused in earlier experiments including 18, 24, 25, 26, 28 and 34. Thus tune and heldout are not pristine or independent blind tests. Existing-CNN architecture, epochs, MLP seeds/epochs, fusion weight and subset construction are inherited historical development choices. No new selection is performed here, but results remain reused-development evidence and cannot support an independent-generalization claim."
+  },
+  "picture_ids": {
+    "tune": [
+      2,
+      9,
+      18,
+      27,
+      45,
+      49,
+      56,
+      58,
+      82,
+      100,
+      110,
+      120,
+      156,
+      157,
+      159,
+      169,
+      180,
+      188,
+      189,
+      191,
+      199,
+      232,
+      252,
+      255,
+      258,
+      263,
+      264,
+      276,
+      283,
+      284,
+      292,
+      299,
+      313,
+      320,
+      324,
+      330,
+      334,
+      348,
+      349,
+      365,
+      378,
+      387,
+      416,
+      436,
+      447,
+      448,
+      453,
+      501,
+      535,
+      538,
+      544,
+      545,
+      546,
+      550,
+      554,
+      576,
+      579,
+      586,
+      602,
+      606,
+      614,
+      617,
+      627,
+      632,
+      643,
+      649,
+      654,
+      657,
+      682,
+      693,
+      715,
+      744,
+      746,
+      750,
+      776,
+      777,
+      780,
+      782,
+      784,
+      805,
+      823,
+      835,
+      848,
+      869,
+      878,
+      885,
+      890,
+      923,
+      926,
+      930,
+      932,
+      938,
+      960,
+      961,
+      975,
+      990,
+      992,
+      993,
+      998,
+      1000,
+      1009,
+      1013,
+      1034,
+      1037,
+      1065,
+      1086,
+      1124,
+      1125,
+      1138,
+      1171,
+      1177,
+      1182,
+      1210,
+      1228,
+      1233,
+      1235,
+      1237,
+      1244,
+      1247,
+      1264,
+      1278,
+      1282,
+      1287,
+      1333,
+      1353,
+      1356,
+      1359,
+      1372,
+      1380,
+      1382,
+      1401,
+      1420,
+      1424,
+      1431,
+      1437,
+      1439,
+      1469,
+      1483,
+      1484,
+      1485,
+      1488,
+      1499,
+      1510,
+      1515,
+      1538,
+      1539,
+      1548,
+      1550,
+      1561,
+      1563,
+      1583,
+      1587,
+      1599,
+      1606,
+      1616,
+      1623,
+      1645,
+      1655,
+      1671,
+      1682,
+      1689,
+      1690,
+      1724,
+      1734,
+      1747,
+      1752,
+      1776,
+      1779,
+      1784,
+      1814,
+      1823,
+      1828,
+      1837,
+      1841,
+      1845,
+      1848,
+      1849,
+      1853,
+      1855,
+      1862,
+      1870,
+      1891,
+      1892,
+      1906,
+      1917,
+      1924,
+      1933,
+      1938,
+      1977,
+      1980,
+      1994,
+      2007,
+      2014,
+      2019,
+      2025,
+      2042,
+      2059,
+      2072,
+      2076,
+      2077,
+      2079,
+      2082,
+      2105,
+      2120,
+      2142,
+      2144,
+      2155,
+      2161,
+      2167,
+      2171,
+      2172,
+      2174,
+      2181,
+      2211,
+      2222,
+      2240,
+      2242,
+      2250,
+      2266,
+      2312,
+      2325,
+      2326,
+      2333,
+      2345,
+      2348,
+      2357,
+      2373,
+      2379,
+      2394,
+      2421,
+      2437,
+      2444,
+      2445,
+      2446,
+      2448,
+      2470,
+      2486,
+      2487,
+      2496,
+      2502,
+      2537,
+      2542,
+      2556,
+      2578,
+      2592,
+      2595,
+      2604,
+      2628,
+      2629,
+      2634,
+      2672,
+      2694,
+      2708,
+      2712,
+      2720,
+      2744
+    ],
+    "heldout": [
+      0,
+      13,
+      17,
+      26,
+      30,
+      43,
+      46,
+      54,
+      55,
+      64,
+      69,
+      73,
+      80,
+      81,
+      84,
+      88,
+      91,
+      94,
+      99,
+      107,
+      119,
+      131,
+      142,
+      161,
+      178,
+      185,
+      192,
+      193,
+      195,
+      198,
+      205,
+      206,
+      207,
+      208,
+      215,
+      220,
+      221,
+      222,
+      224,
+      228,
+      234,
+      237,
+      238,
+      240,
+      245,
+      246,
+      247,
+      261,
+      269,
+      271,
+      274,
+      278,
+      279,
+      288,
+      291,
+      306,
+      307,
+      316,
+      318,
+      321,
+      322,
+      323,
+      325,
+      328,
+      331,
+      350,
+      354,
+      363,
+      368,
+      372,
+      376,
+      379,
+      383,
+      394,
+      399,
+      408,
+      410,
+      413,
+      420,
+      424,
+      425,
+      430,
+      431,
+      437,
+      438,
+      450,
+      452,
+      457,
+      474,
+      476,
+      478,
+      479,
+      489,
+      502,
+      506,
+      513,
+      514,
+      516,
+      520,
+      524,
+      527,
+      528,
+      540,
+      552,
+      553,
+      572,
+      573,
+      574,
+      582,
+      585,
+      589,
+      592,
+      594,
+      605,
+      607,
+      611,
+      613,
+      622,
+      623,
+      624,
+      633,
+      634,
+      640,
+      641,
+      642,
+      644,
+      645,
+      646,
+      648,
+      653,
+      655,
+      672,
+      674,
+      677,
+      680,
+      684,
+      685,
+      697,
+      705,
+      713,
+      716,
+      724,
+      726,
+      733,
+      734,
+      739,
+      745,
+      748,
+      749,
+      752,
+      772,
+      781,
+      788,
+      799,
+      803,
+      807,
+      808,
+      814,
+      816,
+      825,
+      826,
+      837,
+      853,
+      868,
+      881,
+      892,
+      893,
+      908,
+      911,
+      921,
+      922,
+      924,
+      946,
+      952,
+      967,
+      976,
+      989,
+      997,
+      1002,
+      1003,
+      1018,
+      1019,
+      1027,
+      1028,
+      1031,
+      1033,
+      1040,
+      1041,
+      1050,
+      1056,
+      1060,
+      1068,
+      1069,
+      1083,
+      1087,
+      1088,
+      1096,
+      1098,
+      1100,
+      1102,
+      1106,
+      1109,
+      1115,
+      1121,
+      1122,
+      1128,
+      1130,
+      1131,
+      1132,
+      1141,
+      1144,
+      1150,
+      1151,
+      1153,
+      1158,
+      1166,
+      1167,
+      1168,
+      1170,
+      1172,
+      1174,
+      1187,
+      1191,
+      1199,
+      1201,
+      1205,
+      1212,
+      1219,
+      1231,
+      1234,
+      1243,
+      1252,
+      1253,
+      1254,
+      1265,
+      1270,
+      1274,
+      1276,
+      1277,
+      1279,
+      1285,
+      1286,
+      1290,
+      1293,
+      1312,
+      1321,
+      1322,
+      1324,
+      1341,
+      1342,
+      1343,
+      1350,
+      1351,
+      1355,
+      1357,
+      1358,
+      1363,
+      1366,
+      1377,
+      1378,
+      1381,
+      1385,
+      1386,
+      1388,
+      1390,
+      1393,
+      1395,
+      1397,
+      1404,
+      1405,
+      1408,
+      1410,
+      1411,
+      1418,
+      1428,
+      1429,
+      1430,
+      1435,
+      1440,
+      1445,
+      1446,
+      1449,
+      1452,
+      1464,
+      1466,
+      1471,
+      1478,
+      1482,
+      1507,
+      1509,
+      1512,
+      1513,
+      1520,
+      1528,
+      1529,
+      1546,
+      1547,
+      1551,
+      1553,
+      1559,
+      1560,
+      1566,
+      1568,
+      1569,
+      1572,
+      1573,
+      1585,
+      1586,
+      1589,
+      1604,
+      1605,
+      1607,
+      1613,
+      1633,
+      1642,
+      1646,
+      1649,
+      1650,
+      1656,
+      1662,
+      1664,
+      1675,
+      1678,
+      1698,
+      1699,
+      1702,
+      1706,
+      1709,
+      1711,
+      1714,
+      1719,
+      1721,
+      1731,
+      1733,
+      1736,
+      1740,
+      1749,
+      1766,
+      1767,
+      1782,
+      1794,
+      1795,
+      1796,
+      1807,
+      1810,
+      1812,
+      1815,
+      1817,
+      1819,
+      1820,
+      1843,
+      1846,
+      1851,
+      1858,
+      1863,
+      1864,
+      1871,
+      1879,
+      1883,
+      1887,
+      1899,
+      1907,
+      1910,
+      1915,
+      1919,
+      1925,
+      1929,
+      1935,
+      1940,
+      1941,
+      1943,
+      1946,
+      1952,
+      1956,
+      1957,
+      1961,
+      1962,
+      1964,
+      1976,
+      1979,
+      1986,
+      1988,
+      2000,
+      2002,
+      2010,
+      2024,
+      2051,
+      2058,
+      2060,
+      2061,
+      2064,
+      2067,
+      2069,
+      2073,
+      2084,
+      2087,
+      2088,
+      2099,
+      2104,
+      2107,
+      2108,
+      2110,
+      2111,
+      2112,
+      2133,
+      2147,
+      2151,
+      2153,
+      2159,
+      2170,
+      2177,
+      2180,
+      2183,
+      2191,
+      2192,
+      2195,
+      2198,
+      2199,
+      2202,
+      2206,
+      2210,
+      2219,
+      2221,
+      2223,
+      2239,
+      2248,
+      2249,
+      2259,
+      2265,
+      2267,
+      2269,
+      2275,
+      2280,
+      2283,
+      2286,
+      2289,
+      2292,
+      2298,
+      2302,
+      2303,
+      2313,
+      2317,
+      2343,
+      2350,
+      2356,
+      2360,
+      2369,
+      2371,
+      2384,
+      2386,
+      2393,
+      2395,
+      2405,
+      2406,
+      2414,
+      2416,
+      2419,
+      2426,
+      2427,
+      2428,
+      2443,
+      2447,
+      2450,
+      2452,
+      2457,
+      2465,
+      2467,
+      2481,
+      2485,
+      2494,
+      2510,
+      2522,
+      2523,
+      2524,
+      2528,
+      2544,
+      2546,
+      2547,
+      2550,
+      2551,
+      2552,
+      2555,
+      2559,
+      2562,
+      2570,
+      2579,
+      2580,
+      2585,
+      2601,
+      2606,
+      2608,
+      2609,
+      2617,
+      2619,
+      2625,
+      2651,
+      2655,
+      2658,
+      2663,
+      2670,
+      2671,
+      2674,
+      2676,
+      2689,
+      2696,
+      2698,
+      2703,
+      2729,
+      2734,
+      2742,
+      2745,
+      2747
+    ]
+  },
+  "environment": {
+    "python": "3.10.22 (main, Oct  9 2026, 15:18:58) [MSC v.1944 64 bit (AMD64)]",
+    "python_executable": "D:\\WORK\\siclink\\.venv\\Scripts\\python.exe",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "device": "cuda",
+    "cuda_device": "NVIDIA GeForce RTX 3080 Laptop GPU"
+  },
+  "records": [
+    {
+      "mouse": "mice1",
+      "held_session": "session1",
+      "train_sessions": [
+        "session2",
+        "session3",
+        "session4"
+      ],
+      "nll": {
+        "existing_cnn": 0.9044949907247312,
+        "day_readout": 0.9059910033268219,
+        "constant_rate": 0.908419441807946
+      },
+      "nll_delta_day_readout_minus_constant": -0.0024284384811240622,
+      "nll_delta_day_readout_minus_existing_cnn": 0.0014960126020907571,
+      "metrics": {
+        "existing_cnn": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 23.01719488767129,
+            "final_top1": 0.0703125,
+            "recall_at_1": 0.05078125,
+            "recall_at_32": 0.4375,
+            "oracle32_ocf": 62.33039443525168
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 23.519432198494655,
+            "final_top1": 0.08203125,
+            "recall_at_1": 0.0703125,
+            "recall_at_32": 0.435546875,
+            "oracle32_ocf": 61.83682771999287
+          }
+        },
+        "day_readout": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 23.10373602783441,
+            "final_top1": 0.0625,
+            "recall_at_1": 0.04296875,
+            "recall_at_32": 0.421875,
+            "oracle32_ocf": 60.945800900026185
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 22.388021576859146,
+            "final_top1": 0.072265625,
+            "recall_at_1": 0.064453125,
+            "recall_at_32": 0.41015625,
+            "oracle32_ocf": 59.81764347522827
+          }
+        }
+      },
+      "heldout_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -1.13141062163551,
+        "final_top1": -0.009765625,
+        "recall_at_1": -0.005859375,
+        "recall_at_32": -0.025390625,
+        "oracle32_ocf": -2.0191842447645953
+      },
+      "tune_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": 0.08654114016312064,
+        "final_top1": -0.0078125,
+        "recall_at_1": -0.0078125,
+        "recall_at_32": -0.015625,
+        "oracle32_ocf": -1.3845935352254912
+      }
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session1",
+      "train_sessions": [
+        "session2",
+        "session3",
+        "session4"
+      ],
+      "nll": {
+        "existing_cnn": 1.3123136704572524,
+        "day_readout": 1.3242542101757933,
+        "constant_rate": 1.322269120743415
+      },
+      "nll_delta_day_readout_minus_constant": 0.0019850894323782953,
+      "nll_delta_day_readout_minus_existing_cnn": 0.01194053971854081,
+      "metrics": {
+        "existing_cnn": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 23.44205839440529,
+            "final_top1": 0.078125,
+            "recall_at_1": 0.046875,
+            "recall_at_32": 0.4453125,
+            "oracle32_ocf": 62.17458700211213
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 20.957176776219484,
+            "final_top1": 0.0546875,
+            "recall_at_1": 0.04296875,
+            "recall_at_32": 0.3828125,
+            "oracle32_ocf": 57.96498960725586
+          }
+        },
+        "day_readout": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 21.029700471873486,
+            "final_top1": 0.05078125,
+            "recall_at_1": 0.0390625,
+            "recall_at_32": 0.375,
+            "oracle32_ocf": 57.33713540082757
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 19.717644424672343,
+            "final_top1": 0.041015625,
+            "recall_at_1": 0.033203125,
+            "recall_at_32": 0.322265625,
+            "oracle32_ocf": 53.31092055583728
+          }
+        }
+      },
+      "heldout_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -1.2395323515471404,
+        "final_top1": -0.013671875,
+        "recall_at_1": -0.009765625,
+        "recall_at_32": -0.060546875,
+        "oracle32_ocf": -4.654069051418581
+      },
+      "tune_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -2.412357922531804,
+        "final_top1": -0.02734375,
+        "recall_at_1": -0.0078125,
+        "recall_at_32": -0.0703125,
+        "oracle32_ocf": -4.837451601284563
+      }
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session2",
+      "train_sessions": [
+        "session1",
+        "session3",
+        "session4"
+      ],
+      "nll": {
+        "existing_cnn": 0.9128946369394142,
+        "day_readout": 0.9164463491764472,
+        "constant_rate": 0.9203991032857564
+      },
+      "nll_delta_day_readout_minus_constant": -0.003952754109309176,
+      "nll_delta_day_readout_minus_existing_cnn": 0.003551712237032989,
+      "metrics": {
+        "existing_cnn": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 26.6024582508587,
+            "final_top1": 0.1015625,
+            "recall_at_1": 0.08203125,
+            "recall_at_32": 0.53125,
+            "oracle32_ocf": 68.85007004525636
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 27.629348847193345,
+            "final_top1": 0.111328125,
+            "recall_at_1": 0.091796875,
+            "recall_at_32": 0.533203125,
+            "oracle32_ocf": 69.25082503411343
+          }
+        },
+        "day_readout": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 24.7729695075707,
+            "final_top1": 0.0859375,
+            "recall_at_1": 0.05078125,
+            "recall_at_32": 0.453125,
+            "oracle32_ocf": 63.66482266418917
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 26.1864856436026,
+            "final_top1": 0.09765625,
+            "recall_at_1": 0.068359375,
+            "recall_at_32": 0.48046875,
+            "oracle32_ocf": 65.42356588828153
+          }
+        }
+      },
+      "heldout_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -1.4428632035907434,
+        "final_top1": -0.013671875,
+        "recall_at_1": -0.0234375,
+        "recall_at_32": -0.052734375,
+        "oracle32_ocf": -3.8272591458319027
+      },
+      "tune_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -1.8294887432879996,
+        "final_top1": -0.015625,
+        "recall_at_1": -0.03125,
+        "recall_at_32": -0.078125,
+        "oracle32_ocf": -5.185247381067192
+      }
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session2",
+      "train_sessions": [
+        "session1",
+        "session3",
+        "session4"
+      ],
+      "nll": {
+        "existing_cnn": 1.3077800782554654,
+        "day_readout": 1.3195918493911314,
+        "constant_rate": 1.3152555619453496
+      },
+      "nll_delta_day_readout_minus_constant": 0.004336287445781739,
+      "nll_delta_day_readout_minus_existing_cnn": 0.011811771135666005,
+      "metrics": {
+        "existing_cnn": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 23.49978918206604,
+            "final_top1": 0.0703125,
+            "recall_at_1": 0.05078125,
+            "recall_at_32": 0.3828125,
+            "oracle32_ocf": 57.78827978665864
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 19.82687645065593,
+            "final_top1": 0.037109375,
+            "recall_at_1": 0.025390625,
+            "recall_at_32": 0.330078125,
+            "oracle32_ocf": 54.12519231776638
+          }
+        },
+        "day_readout": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 20.34055658343395,
+            "final_top1": 0.046875,
+            "recall_at_1": 0.0546875,
+            "recall_at_32": 0.3359375,
+            "oracle32_ocf": 54.0124461056092
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 17.619535463241093,
+            "final_top1": 0.02734375,
+            "recall_at_1": 0.0234375,
+            "recall_at_32": 0.287109375,
+            "oracle32_ocf": 50.56210488204583
+          }
+        }
+      },
+      "heldout_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -2.207340987414838,
+        "final_top1": -0.009765625,
+        "recall_at_1": -0.001953125,
+        "recall_at_32": -0.04296875,
+        "oracle32_ocf": -3.563087435720547
+      },
+      "tune_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -3.1592325986320873,
+        "final_top1": -0.0234375,
+        "recall_at_1": 0.00390625,
+        "recall_at_32": -0.046875,
+        "oracle32_ocf": -3.7758336810494413
+      }
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session3",
+      "train_sessions": [
+        "session1",
+        "session2",
+        "session4"
+      ],
+      "nll": {
+        "existing_cnn": 0.9166129903546764,
+        "day_readout": 0.915056314590604,
+        "constant_rate": 0.9215082577182991
+      },
+      "nll_delta_day_readout_minus_constant": -0.006451943127695148,
+      "nll_delta_day_readout_minus_existing_cnn": -0.0015566757640723683,
+      "metrics": {
+        "existing_cnn": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 21.16900672130518,
+            "final_top1": 0.05078125,
+            "recall_at_1": 0.03515625,
+            "recall_at_32": 0.37890625,
+            "oracle32_ocf": 56.93538050167621
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 20.930069411749976,
+            "final_top1": 0.05078125,
+            "recall_at_1": 0.052734375,
+            "recall_at_32": 0.40234375,
+            "oracle32_ocf": 58.266025737307565
+          }
+        },
+        "day_readout": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 20.565187225876507,
+            "final_top1": 0.04296875,
+            "recall_at_1": 0.046875,
+            "recall_at_32": 0.38671875,
+            "oracle32_ocf": 57.58532447291945
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 21.715307769433437,
+            "final_top1": 0.060546875,
+            "recall_at_1": 0.048828125,
+            "recall_at_32": 0.400390625,
+            "oracle32_ocf": 58.35500142149391
+          }
+        }
+      },
+      "heldout_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": 0.7852383576834612,
+        "final_top1": 0.009765625,
+        "recall_at_1": -0.00390625,
+        "recall_at_32": -0.001953125,
+        "oracle32_ocf": 0.0889756841863445
+      },
+      "tune_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -0.6038194954286737,
+        "final_top1": -0.0078125,
+        "recall_at_1": 0.01171875,
+        "recall_at_32": 0.0078125,
+        "oracle32_ocf": 0.6499439712432462
+      }
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session3",
+      "train_sessions": [
+        "session1",
+        "session2",
+        "session4"
+      ],
+      "nll": {
+        "existing_cnn": 1.385656440538139,
+        "day_readout": 1.3949004046367866,
+        "constant_rate": 1.397565699538315
+      },
+      "nll_delta_day_readout_minus_constant": -0.0026652949015284477,
+      "nll_delta_day_readout_minus_existing_cnn": 0.009243964098647472,
+      "metrics": {
+        "existing_cnn": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 27.456751319685857,
+            "final_top1": 0.11328125,
+            "recall_at_1": 0.04296875,
+            "recall_at_32": 0.4609375,
+            "oracle32_ocf": 62.79507216139987
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 23.136562543820535,
+            "final_top1": 0.068359375,
+            "recall_at_1": 0.04296875,
+            "recall_at_32": 0.423828125,
+            "oracle32_ocf": 60.746318507821044
+          }
+        },
+        "day_readout": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 23.888589949480934,
+            "final_top1": 0.06640625,
+            "recall_at_1": 0.0390625,
+            "recall_at_32": 0.46484375,
+            "oracle32_ocf": 63.118658658102596
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 23.56949554496376,
+            "final_top1": 0.07421875,
+            "recall_at_1": 0.041015625,
+            "recall_at_32": 0.400390625,
+            "oracle32_ocf": 59.83038131535339
+          }
+        }
+      },
+      "heldout_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": 0.4329330011432262,
+        "final_top1": 0.005859375,
+        "recall_at_1": -0.001953125,
+        "recall_at_32": -0.0234375,
+        "oracle32_ocf": -0.915937192467652
+      },
+      "tune_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -3.5681613702049226,
+        "final_top1": -0.046875,
+        "recall_at_1": -0.00390625,
+        "recall_at_32": 0.00390625,
+        "oracle32_ocf": 0.323586496702724
+      }
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session4",
+      "train_sessions": [
+        "session1",
+        "session2",
+        "session3"
+      ],
+      "nll": {
+        "existing_cnn": 0.9539154561385574,
+        "day_readout": 0.9543741651786862,
+        "constant_rate": 0.9613459869745283
+      },
+      "nll_delta_day_readout_minus_constant": -0.006971821795842104,
+      "nll_delta_day_readout_minus_existing_cnn": 0.00045870904012879077,
+      "metrics": {
+        "existing_cnn": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 28.675850811174488,
+            "final_top1": 0.1171875,
+            "recall_at_1": 0.0859375,
+            "recall_at_32": 0.55859375,
+            "oracle32_ocf": 71.21270101462923
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 29.20178032267572,
+            "final_top1": 0.130859375,
+            "recall_at_1": 0.123046875,
+            "recall_at_32": 0.578125,
+            "oracle32_ocf": 71.92088115532434
+          }
+        },
+        "day_readout": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 27.04693395386004,
+            "final_top1": 0.09375,
+            "recall_at_1": 0.0625,
+            "recall_at_32": 0.53125,
+            "oracle32_ocf": 68.75220461817837
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 27.69148458762536,
+            "final_top1": 0.1171875,
+            "recall_at_1": 0.083984375,
+            "recall_at_32": 0.564453125,
+            "oracle32_ocf": 70.95772078057954
+          }
+        }
+      },
+      "heldout_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -1.5102957350503594,
+        "final_top1": -0.013671875,
+        "recall_at_1": -0.0390625,
+        "recall_at_32": -0.013671875,
+        "oracle32_ocf": -0.9631603747448025
+      },
+      "tune_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -1.6289168573144472,
+        "final_top1": -0.0234375,
+        "recall_at_1": -0.0234375,
+        "recall_at_32": -0.02734375,
+        "oracle32_ocf": -2.460496396450864
+      }
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session4",
+      "train_sessions": [
+        "session1",
+        "session2",
+        "session3"
+      ],
+      "nll": {
+        "existing_cnn": 2.3282431137952364,
+        "day_readout": 2.3241139799682577,
+        "constant_rate": 2.328712501188843
+      },
+      "nll_delta_day_readout_minus_constant": -0.004598521220585461,
+      "nll_delta_day_readout_minus_existing_cnn": -0.004129133826978659,
+      "metrics": {
+        "existing_cnn": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 22.848878859659184,
+            "final_top1": 0.0703125,
+            "recall_at_1": 0.03125,
+            "recall_at_32": 0.234375,
+            "oracle32_ocf": 45.13252864489363
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 19.616725624483063,
+            "final_top1": 0.037109375,
+            "recall_at_1": 0.013671875,
+            "recall_at_32": 0.201171875,
+            "oracle32_ocf": 43.24779835200948
+          }
+        },
+        "day_readout": {
+          "tune": {
+            "n": 256,
+            "final_ocf": 22.1635198456503,
+            "final_top1": 0.05859375,
+            "recall_at_1": 0.02734375,
+            "recall_at_32": 0.26953125,
+            "oracle32_ocf": 47.47499443269312
+          },
+          "heldout": {
+            "n": 512,
+            "final_ocf": 19.4728820968349,
+            "final_top1": 0.037109375,
+            "recall_at_1": 0.021484375,
+            "recall_at_32": 0.232421875,
+            "oracle32_ocf": 45.69065872523555
+          }
+        }
+      },
+      "heldout_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -0.143843527648162,
+        "final_top1": 0.0,
+        "recall_at_1": 0.0078125,
+        "recall_at_32": 0.03125,
+        "oracle32_ocf": 2.4428603732260683
+      },
+      "tune_delta_day_readout_minus_existing_cnn": {
+        "final_ocf": -0.6853590140088848,
+        "final_top1": -0.01171875,
+        "recall_at_1": -0.00390625,
+        "recall_at_32": 0.03515625,
+        "oracle32_ocf": 2.3424657877994903
+      }
+    }
+  ],
+  "fold_pooled": {
+    "session1": {
+      "existing_cnn": {
+        "tune": {
+          "final_ocf": 23.22962664103829,
+          "final_top1": 0.07421875,
+          "recall_at_1": 0.048828125,
+          "recall_at_32": 0.44140625,
+          "oracle32_ocf": 62.252490718681905
+        },
+        "heldout": {
+          "final_ocf": 22.23830448735707,
+          "final_top1": 0.068359375,
+          "recall_at_1": 0.056640625,
+          "recall_at_32": 0.4091796875,
+          "oracle32_ocf": 59.900908663624364
+        }
+      },
+      "day_readout": {
+        "tune": {
+          "final_ocf": 22.06671824985395,
+          "final_top1": 0.056640625,
+          "recall_at_1": 0.041015625,
+          "recall_at_32": 0.3984375,
+          "oracle32_ocf": 59.141468150426874
+        },
+        "heldout": {
+          "final_ocf": 21.052833000765744,
+          "final_top1": 0.056640625,
+          "recall_at_1": 0.048828125,
+          "recall_at_32": 0.3662109375,
+          "oracle32_ocf": 56.564282015532775
+        }
+      },
+      "heldout_delta": {
+        "final_ocf": -1.1854714865913252,
+        "final_top1": -0.01171875,
+        "recall_at_1": -0.0078125,
+        "recall_at_32": -0.04296875,
+        "oracle32_ocf": -3.3366266480915883
+      },
+      "nll": {
+        "existing_cnn": 1.1084043305909919,
+        "day_readout": 1.1151226067513076,
+        "constant_rate": 1.1153442812756804
+      }
+    },
+    "session2": {
+      "existing_cnn": {
+        "tune": {
+          "final_ocf": 25.05112371646237,
+          "final_top1": 0.0859375,
+          "recall_at_1": 0.06640625,
+          "recall_at_32": 0.45703125,
+          "oracle32_ocf": 63.319174915957504
+        },
+        "heldout": {
+          "final_ocf": 23.728112648924636,
+          "final_top1": 0.07421875,
+          "recall_at_1": 0.05859375,
+          "recall_at_32": 0.431640625,
+          "oracle32_ocf": 61.688008675939905
+        }
+      },
+      "day_readout": {
+        "tune": {
+          "final_ocf": 22.556763045502326,
+          "final_top1": 0.06640625,
+          "recall_at_1": 0.052734375,
+          "recall_at_32": 0.39453125,
+          "oracle32_ocf": 58.83863438489918
+        },
+        "heldout": {
+          "final_ocf": 21.903010553421847,
+          "final_top1": 0.0625,
+          "recall_at_1": 0.0458984375,
+          "recall_at_32": 0.3837890625,
+          "oracle32_ocf": 57.99283538516368
+        }
+      },
+      "heldout_delta": {
+        "final_ocf": -1.825102095502789,
+        "final_top1": -0.01171875,
+        "recall_at_1": -0.0126953125,
+        "recall_at_32": -0.0478515625,
+        "oracle32_ocf": -3.695173290776225
+      },
+      "nll": {
+        "existing_cnn": 1.1103373575974398,
+        "day_readout": 1.1180190992837893,
+        "constant_rate": 1.117827332615553
+      }
+    },
+    "session3": {
+      "existing_cnn": {
+        "tune": {
+          "final_ocf": 24.31287902049552,
+          "final_top1": 0.08203125,
+          "recall_at_1": 0.0390625,
+          "recall_at_32": 0.419921875,
+          "oracle32_ocf": 59.86522633153804
+        },
+        "heldout": {
+          "final_ocf": 22.033315977785257,
+          "final_top1": 0.0595703125,
+          "recall_at_1": 0.0478515625,
+          "recall_at_32": 0.4130859375,
+          "oracle32_ocf": 59.50617212256431
+        }
+      },
+      "day_readout": {
+        "tune": {
+          "final_ocf": 22.226888587678722,
+          "final_top1": 0.0546875,
+          "recall_at_1": 0.04296875,
+          "recall_at_32": 0.42578125,
+          "oracle32_ocf": 60.35199156551103
+        },
+        "heldout": {
+          "final_ocf": 22.642401657198597,
+          "final_top1": 0.0673828125,
+          "recall_at_1": 0.044921875,
+          "recall_at_32": 0.400390625,
+          "oracle32_ocf": 59.09269136842365
+        }
+      },
+      "heldout_delta": {
+        "final_ocf": 0.6090856794133401,
+        "final_top1": 0.0078125,
+        "recall_at_1": -0.0029296875,
+        "recall_at_32": -0.0126953125,
+        "oracle32_ocf": -0.4134807541406573
+      },
+      "nll": {
+        "existing_cnn": 1.1511347154464078,
+        "day_readout": 1.1549783596136953,
+        "constant_rate": 1.159536978628307
+      }
+    },
+    "session4": {
+      "existing_cnn": {
+        "tune": {
+          "final_ocf": 25.762364835416836,
+          "final_top1": 0.09375,
+          "recall_at_1": 0.05859375,
+          "recall_at_32": 0.396484375,
+          "oracle32_ocf": 58.17261482976143
+        },
+        "heldout": {
+          "final_ocf": 24.40925297357939,
+          "final_top1": 0.083984375,
+          "recall_at_1": 0.068359375,
+          "recall_at_32": 0.3896484375,
+          "oracle32_ocf": 57.58433975366691
+        }
+      },
+      "day_readout": {
+        "tune": {
+          "final_ocf": 24.60522689975517,
+          "final_top1": 0.076171875,
+          "recall_at_1": 0.044921875,
+          "recall_at_32": 0.400390625,
+          "oracle32_ocf": 58.113599525435745
+        },
+        "heldout": {
+          "final_ocf": 23.58218334223013,
+          "final_top1": 0.0771484375,
+          "recall_at_1": 0.052734375,
+          "recall_at_32": 0.3984375,
+          "oracle32_ocf": 58.32418975290754
+        }
+      },
+      "heldout_delta": {
+        "final_ocf": -0.8270696313492607,
+        "final_top1": -0.0068359375,
+        "recall_at_1": -0.015625,
+        "recall_at_32": 0.0087890625,
+        "oracle32_ocf": 0.7398499992406329
+      },
+      "nll": {
+        "existing_cnn": 1.641079284966897,
+        "day_readout": 1.639244072573472,
+        "constant_rate": 1.6450292440816858
+      }
+    }
+  },
+  "macro_mean_of_four_folds": {
+    "existing_cnn": {
+      "tune": {
+        "final_ocf": 24.588998553353253,
+        "final_top1": 0.083984375,
+        "recall_at_1": 0.05322265625,
+        "recall_at_32": 0.4287109375,
+        "oracle32_ocf": 60.90237669898471
+      },
+      "heldout": {
+        "final_ocf": 23.10224652191159,
+        "final_top1": 0.071533203125,
+        "recall_at_1": 0.057861328125,
+        "recall_at_32": 0.410888671875,
+        "oracle32_ocf": 59.669857303948866
+      }
+    },
+    "day_readout": {
+      "tune": {
+        "final_ocf": 22.86389919569754,
+        "final_top1": 0.0634765625,
+        "recall_at_1": 0.04541015625,
+        "recall_at_32": 0.40478515625,
+        "oracle32_ocf": 59.11142340656821
+      },
+      "heldout": {
+        "final_ocf": 22.295107138404084,
+        "final_top1": 0.06591796875,
+        "recall_at_1": 0.048095703125,
+        "recall_at_32": 0.38720703125,
+        "oracle32_ocf": 57.99349963050692
+      }
+    },
+    "heldout_delta": {
+      "final_ocf": -0.8071393835075042,
+      "final_top1": -0.005615234375,
+      "recall_at_1": -0.009765625,
+      "recall_at_32": -0.023681640625,
+      "oracle32_ocf": -1.6763576734419487
+    },
+    "nll": {
+      "existing_cnn": 1.2527389221504341,
+      "day_readout": 1.256841034555566,
+      "constant_rate": 1.2594344591503066
+    }
+  },
+  "per_mouse_mean_of_four_folds": {
+    "mice1": {
+      "existing_cnn": {
+        "tune": {
+          "final_ocf": 24.866127667752416,
+          "final_top1": 0.0849609375,
+          "recall_at_1": 0.0634765625,
+          "recall_at_32": 0.4765625,
+          "oracle32_ocf": 64.83213649920336
+        },
+        "heldout": {
+          "final_ocf": 25.32015769502842,
+          "final_top1": 0.09375,
+          "recall_at_1": 0.08447265625,
+          "recall_at_32": 0.4873046875,
+          "oracle32_ocf": 65.31863991168456
+        }
+      },
+      "day_readout": {
+        "tune": {
+          "final_ocf": 23.872206678785417,
+          "final_top1": 0.0712890625,
+          "recall_at_1": 0.05078125,
+          "recall_at_32": 0.4482421875,
+          "oracle32_ocf": 62.7370381638283
+        },
+        "heldout": {
+          "final_ocf": 24.495324894380133,
+          "final_top1": 0.0869140625,
+          "recall_at_1": 0.06640625,
+          "recall_at_32": 0.4638671875,
+          "oracle32_ocf": 63.63848289139581
+        }
+      },
+      "heldout_delta": {
+        "final_ocf": -0.8248328006482879,
+        "final_top1": -0.0068359375,
+        "recall_at_1": -0.01806640625,
+        "recall_at_32": -0.0234375,
+        "oracle32_ocf": -1.6801570202887461
+      }
+    },
+    "mice2": {
+      "existing_cnn": {
+        "tune": {
+          "final_ocf": 24.31186943895409,
+          "final_top1": 0.0830078125,
+          "recall_at_1": 0.04296875,
+          "recall_at_32": 0.380859375,
+          "oracle32_ocf": 56.97261689876607
+        },
+        "heldout": {
+          "final_ocf": 20.884335348794753,
+          "final_top1": 0.04931640625,
+          "recall_at_1": 0.03125,
+          "recall_at_32": 0.33447265625,
+          "oracle32_ocf": 54.02107469621319
+        }
+      },
+      "day_readout": {
+        "tune": {
+          "final_ocf": 21.855591712609666,
+          "final_top1": 0.0556640625,
+          "recall_at_1": 0.0400390625,
+          "recall_at_32": 0.361328125,
+          "oracle32_ocf": 55.485808649308126
+        },
+        "heldout": {
+          "final_ocf": 20.094889382428022,
+          "final_top1": 0.044921875,
+          "recall_at_1": 0.02978515625,
+          "recall_at_32": 0.310546875,
+          "oracle32_ocf": 52.34851636961801
+        }
+      },
+      "heldout_delta": {
+        "final_ocf": -0.7894459663667313,
+        "final_top1": -0.00439453125,
+        "recall_at_1": -0.00146484375,
+        "recall_at_32": -0.02392578125,
+        "oracle32_ocf": -1.6725583265951798
+      }
+    }
+  },
+  "baseline_reproduction_against_experiment25": {
+    "session1": {
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0
+      },
+      "passed": true
+    },
+    "session2": {
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0
+      },
+      "passed": true
+    },
+    "session3": {
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0
+      },
+      "passed": true
+    },
+    "session4": null
+  },
+  "advancement_gate": {
+    "macro_final_ocf_delta": -0.8071393835075042,
+    "macro_final_ocf_passed": false,
+    "positive_fold_count": 1,
+    "positive_folds": [
+      "session3"
+    ],
+    "fold_consistency_passed": false,
+    "fold_final_ocf_deltas": {
+      "session1": -1.1854714865913252,
+      "session2": -1.825102095502789,
+      "session3": 0.6090856794133401,
+      "session4": -0.8270696313492607
+    },
+    "per_mouse": {
+      "mice1": {
+        "final_ocf_delta": -0.8248328006482879,
+        "recall_at_32_delta": -0.0234375,
+        "passed": false
+      },
+      "mice2": {
+        "final_ocf_delta": -0.7894459663667313,
+        "recall_at_32_delta": -0.02392578125,
+        "passed": false
+      }
+    },
+    "per_mouse_passed": false,
+    "nll_mouse_folds": [
+      {
+        "mouse": "mice1",
+        "held_session": "session1",
+        "day_readout": 0.9059910033268219,
+        "constant_rate": 0.908419441807946,
+        "delta": -0.0024284384811240622,
+        "passed": true
+      },
+      {
+        "mouse": "mice2",
+        "held_session": "session1",
+        "day_readout": 1.3242542101757933,
+        "constant_rate": 1.322269120743415,
+        "delta": 0.0019850894323782953,
+        "passed": false
+      },
+      {
+        "mouse": "mice1",
+        "held_session": "session2",
+        "day_readout": 0.9164463491764472,
+        "constant_rate": 0.9203991032857564,
+        "delta": -0.003952754109309176,
+        "passed": true
+      },
+      {
+        "mouse": "mice2",
+        "held_session": "session2",
+        "day_readout": 1.3195918493911314,
+        "constant_rate": 1.3152555619453496,
+        "delta": 0.004336287445781739,
+        "passed": false
+      },
+      {
+        "mouse": "mice1",
+        "held_session": "session3",
+        "day_readout": 0.915056314590604,
+        "constant_rate": 0.9215082577182991,
+        "delta": -0.006451943127695148,
+        "passed": true
+      },
+      {
+        "mouse": "mice2",
+        "held_session": "session3",
+        "day_readout": 1.3949004046367866,
+        "constant_rate": 1.397565699538315,
+        "delta": -0.0026652949015284477,
+        "passed": true
+      },
+      {
+        "mouse": "mice1",
+        "held_session": "session4",
+        "day_readout": 0.9543741651786862,
+        "constant_rate": 0.9613459869745283,
+        "delta": -0.006971821795842104,
+        "passed": true
+      },
+      {
+        "mouse": "mice2",
+        "held_session": "session4",
+        "day_readout": 2.3241139799682577,
+        "constant_rate": 2.328712501188843,
+        "delta": -0.004598521220585461,
+        "passed": true
+      }
+    ],
+    "nll_passed_count": 6,
+    "nll_day_conditioning_passed": false,
+    "metric_gate_passed": false,
+    "day_conditioning_supported": false,
+    "advance": false,
+    "production_modified": false
+  },
+  "advance": false,
+  "production_modified": false,
+  "reproduce_command": ".venv\\Scripts\\python.exe -B -u test\\40_forward_cnn_day_readout\\run.py",
+  "runtime_seconds": 1304.3927113000536
+}
