@@ -1,0 +1,961 @@
+{
+  "experiment": "41_forward_cnn_seed_ensemble",
+  "status": "complete",
+  "preregistration_sha256": "acf55a1044249db084aa075348fe7ee1aa1c41d488c5903fb1ef9b4b854bf0d8",
+  "environment": {
+    "python": "3.10.22 (main, Oct  9 2026, 15:18:58) [MSC v.1944 64 bit (AMD64)]",
+    "python_executable": "D:\\WORK\\siclink\\.venv\\Scripts\\python.exe",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "device": "cuda",
+    "cuda_device": "NVIDIA GeForce RTX 3080 Laptop GPU"
+  },
+  "configuration": {
+    "cnn_seeds": [
+      42,
+      202,
+      777
+    ],
+    "cnn_epochs": 12,
+    "cnn_batch_size": 128,
+    "cnn_optimizer": "AdamW(lr=0.002, weight_decay=0.001)",
+    "mlp_seeds": [
+      42,
+      202,
+      777
+    ],
+    "mlp_epochs_by_mouse": {
+      "mice1": 7,
+      "mice2": 4
+    },
+    "source_repeats": 4,
+    "full_evaluation_nll_includes_log_factorial": true,
+    "ensemble_rate_aggregation": "arithmetic"
+  },
+  "completed_mouse_folds": 8,
+  "records": [
+    {
+      "mouse": "mice1",
+      "held_session": "session1",
+      "source_blocks": [
+        "mice1/session2",
+        "mice1/session3",
+        "mice1/session4"
+      ],
+      "target_block": "mice1/session1",
+      "units": 134,
+      "unit_time_outputs": 670,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "cnn_training_order": [
+        42,
+        202,
+        777
+      ],
+      "cnn_loss_history_by_seed": {
+        "42": [
+          0.6635526613030024,
+          0.6618492543437074,
+          0.6597871352664942,
+          0.6589123095660925,
+          0.6582298244971896,
+          0.6575459896910832,
+          0.6567986786278748,
+          0.6560068877503341,
+          0.6554352805951104,
+          0.6549312179959671,
+          0.6545566018491853,
+          0.6542850523709903
+        ],
+        "202": [
+          0.6634900917826435,
+          0.6616778227092571,
+          0.6593717845940347,
+          0.6581209152720033,
+          0.657075021030948,
+          0.656270679861871,
+          0.6556636415194216,
+          0.6551742727232466,
+          0.6548279281786956,
+          0.6545429392846565,
+          0.6542423810847808,
+          0.6539979010516727
+        ],
+        "777": [
+          0.6635595951364898,
+          0.6621586076557376,
+          0.660079999955634,
+          0.6593640739914285,
+          0.6586109066634199,
+          0.6578188510787886,
+          0.6567409520933548,
+          0.6560054667825435,
+          0.6554054577104216,
+          0.6549551600625595,
+          0.6545899293481696,
+          0.6542661986496772
+        ]
+      },
+      "cnn_rate_sha256_by_seed": {
+        "42": "abf9a0e0d416d7ad5530d0f3f2a10d680b8ed7e82d24a928ec66d390b077ee81",
+        "202": "8b7a69eef204f056ca13e6052c36f67fa93f52202df870a87873fc22d5e9f210",
+        "777": "57a9b023ba1915fa3ca1934e7d418ea42fefab7f055154392074a43014966959"
+      },
+      "arm_rate_sha256": {
+        "existing_cnn": "abf9a0e0d416d7ad5530d0f3f2a10d680b8ed7e82d24a928ec66d390b077ee81",
+        "cnn_seed_ensemble": "7e646c103e264f88cb98cfca3e39f8d02d2a25bd516eaeb75b9ac9a1a53690dd"
+      },
+      "seed42_training_count": 1,
+      "seed42_same_array_used_by_both_arms": true,
+      "ensemble_aggregation": "arithmetic mean of independent unit-by-time predicted rates before Poisson scoring",
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "mlp_shared_by_cnn_arms": true
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session1",
+      "source_blocks": [
+        "mice2/session2",
+        "mice2/session3",
+        "mice2/session4"
+      ],
+      "target_block": "mice2/session1",
+      "units": 78,
+      "unit_time_outputs": 390,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "cnn_training_order": [
+        42,
+        202,
+        777
+      ],
+      "cnn_loss_history_by_seed": {
+        "42": [
+          0.707787983715968,
+          0.7057947851337893,
+          0.7032149667476115,
+          0.7022728270144789,
+          0.7015499702534127,
+          0.7009087750658372,
+          0.7002480163671391,
+          0.699604707253552,
+          0.6991631454602426,
+          0.6987870780661637,
+          0.698432429735664,
+          0.6980707873597068
+        ],
+        "202": [
+          0.7076788902109193,
+          0.7052499780314805,
+          0.7030110855463464,
+          0.7019901006676398,
+          0.7010311801013641,
+          0.700194239616394,
+          0.6996108252755766,
+          0.6991588900182966,
+          0.6988307150864358,
+          0.6985656668525596,
+          0.6982499177105389,
+          0.6980184436364986
+        ],
+        "777": [
+          0.7077319117959757,
+          0.7055132265868319,
+          0.7032730753765356,
+          0.7023522104238319,
+          0.7017426024010782,
+          0.7011349381664781,
+          0.7003113237877947,
+          0.6996018901315492,
+          0.6991066719246743,
+          0.6987268157747982,
+          0.6983967562256248,
+          0.6981818429594304
+        ]
+      },
+      "cnn_rate_sha256_by_seed": {
+        "42": "ed1596690eb994c3a23c50bc28836037d204056053b0eb1a264a15468e1cb1f2",
+        "202": "5d25aa2c7382731b656a551db3c2bf3523b31039f99397e0cd8d6b7254d692e7",
+        "777": "62f611b68be618329d0574b5ccf8652c057a92de8726c6bf2e08c579377717b0"
+      },
+      "arm_rate_sha256": {
+        "existing_cnn": "ed1596690eb994c3a23c50bc28836037d204056053b0eb1a264a15468e1cb1f2",
+        "cnn_seed_ensemble": "bdda87bfba0e642ceb159c42eec5c814fa05eaf43ea74943160af9d56087f9a5"
+      },
+      "seed42_training_count": 1,
+      "seed42_same_array_used_by_both_arms": true,
+      "ensemble_aggregation": "arithmetic mean of independent unit-by-time predicted rates before Poisson scoring",
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "mlp_shared_by_cnn_arms": true
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session2",
+      "source_blocks": [
+        "mice1/session1",
+        "mice1/session3",
+        "mice1/session4"
+      ],
+      "target_block": "mice1/session2",
+      "units": 134,
+      "unit_time_outputs": 670,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "cnn_training_order": [
+        42,
+        202,
+        777
+      ],
+      "cnn_loss_history_by_seed": {
+        "42": [
+          0.667548432707613,
+          0.6659560844714291,
+          0.6641598922543477,
+          0.6634187879694254,
+          0.6628701013595604,
+          0.6623519239987868,
+          0.6617448756788495,
+          0.6610674228210116,
+          0.6605037863771641,
+          0.6600072527903483,
+          0.6596367599488693,
+          0.659362174971829
+        ],
+        "202": [
+          0.6674903017811726,
+          0.6658063143101322,
+          0.6638004223679177,
+          0.6627788861245567,
+          0.6618846556852305,
+          0.6611498243770572,
+          0.6605661350046182,
+          0.6600790910498717,
+          0.6597215880299586,
+          0.6594686387581249,
+          0.6591893509138793,
+          0.6589809732492661
+        ],
+        "777": [
+          0.6675465665703431,
+          0.6661005152885571,
+          0.6643349197754173,
+          0.663603095768841,
+          0.6629093134073538,
+          0.6621110792416846,
+          0.661153014743866,
+          0.6605711674759656,
+          0.6601539434650926,
+          0.6597696217387004,
+          0.6594650032218367,
+          0.6592223034328422
+        ]
+      },
+      "cnn_rate_sha256_by_seed": {
+        "42": "41074674bdfb2ec19a46a4ac8a88a55c6c32b64c2aaf7059ae0b962ca133bed6",
+        "202": "d09c5ba312b489dc0f9b2c5f1eb6b8a927857709476a5b3c906dd950aa025fba",
+        "777": "131f61ac142c0d1e2daff18b7317188fe4bee0afcdb4194ab01b0641842cdb05"
+      },
+      "arm_rate_sha256": {
+        "existing_cnn": "41074674bdfb2ec19a46a4ac8a88a55c6c32b64c2aaf7059ae0b962ca133bed6",
+        "cnn_seed_ensemble": "97c879b488769fafddba6f115198bff566ed0cc882d6747ece8169bdf182fe65"
+      },
+      "seed42_training_count": 1,
+      "seed42_same_array_used_by_both_arms": true,
+      "ensemble_aggregation": "arithmetic mean of independent unit-by-time predicted rates before Poisson scoring",
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "mlp_shared_by_cnn_arms": true
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session2",
+      "source_blocks": [
+        "mice2/session1",
+        "mice2/session3",
+        "mice2/session4"
+      ],
+      "target_block": "mice2/session2",
+      "units": 78,
+      "unit_time_outputs": 390,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "cnn_training_order": [
+        42,
+        202,
+        777
+      ],
+      "cnn_loss_history_by_seed": {
+        "42": [
+          0.7116193399158628,
+          0.7090921416726869,
+          0.7061682100552832,
+          0.7051275748179295,
+          0.7044135619285672,
+          0.7037871845250914,
+          0.7031374505166577,
+          0.7025521581523456,
+          0.7020673570501058,
+          0.7016987399763416,
+          0.7013644472827384,
+          0.7010299153897093
+        ],
+        "202": [
+          0.7114930839170709,
+          0.7084724772097936,
+          0.7059892695370026,
+          0.7049799236147685,
+          0.7040975625685035,
+          0.7032495656388296,
+          0.7026062707540076,
+          0.7020967122942773,
+          0.7016773472880345,
+          0.7013439513536867,
+          0.7010676723727319,
+          0.7008271990384597
+        ],
+        "777": [
+          0.7115688554758242,
+          0.7088886819552126,
+          0.7063008172022723,
+          0.7052799705334626,
+          0.7046922408857721,
+          0.7041252839339699,
+          0.703459213741308,
+          0.7028441907189993,
+          0.7023426851330886,
+          0.7018981498748802,
+          0.7015121908861129,
+          0.7012992942003531
+        ]
+      },
+      "cnn_rate_sha256_by_seed": {
+        "42": "6e114976eff98364ef2b86efbcc99c4f591a16f3e4e27faa83cb8fcc50f20ff5",
+        "202": "2639a7f3cf958c74a0245a7607b03b6a0ef457e96de89945eaaa9196ea18e03a",
+        "777": "f1341ee111d371c8f8b1371b15026cf3f4d51c7c8cd27d28d493b23ba01c1476"
+      },
+      "arm_rate_sha256": {
+        "existing_cnn": "6e114976eff98364ef2b86efbcc99c4f591a16f3e4e27faa83cb8fcc50f20ff5",
+        "cnn_seed_ensemble": "647791c3dca54648137534eaadcaffae25b84a07d50c53518fa070efbe0b2c72"
+      },
+      "seed42_training_count": 1,
+      "seed42_same_array_used_by_both_arms": true,
+      "ensemble_aggregation": "arithmetic mean of independent unit-by-time predicted rates before Poisson scoring",
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "mlp_shared_by_cnn_arms": true
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session3",
+      "source_blocks": [
+        "mice1/session1",
+        "mice1/session2",
+        "mice1/session4"
+      ],
+      "target_block": "mice1/session3",
+      "units": 134,
+      "unit_time_outputs": 670,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "cnn_training_order": [
+        42,
+        202,
+        777
+      ],
+      "cnn_loss_history_by_seed": {
+        "42": [
+          0.6566939446776888,
+          0.6551331089053092,
+          0.6530061993189428,
+          0.6520394520641588,
+          0.6512353317879866,
+          0.6504438620987938,
+          0.6496183331703341,
+          0.6488497173942332,
+          0.6482817533234841,
+          0.6478334295697608,
+          0.6474954300225215,
+          0.6471621955499551
+        ],
+        "202": [
+          0.6566698117374159,
+          0.6550670221035831,
+          0.6528637281671882,
+          0.6517161680100787,
+          0.6506719041772978,
+          0.6498449731948941,
+          0.649150422133039,
+          0.6485542886642389,
+          0.6481605084528916,
+          0.6478582701308238,
+          0.6475657784262079,
+          0.6473116724598703
+        ],
+        "777": [
+          0.6567055846752905,
+          0.6553539599046609,
+          0.6533831381381339,
+          0.6525761931917726,
+          0.6516550174620127,
+          0.6506163865718259,
+          0.6496285582733987,
+          0.6489713386330195,
+          0.648470526699416,
+          0.6480952152518726,
+          0.6477466478965515,
+          0.6474580447226113
+        ]
+      },
+      "cnn_rate_sha256_by_seed": {
+        "42": "3363f4c42a445972808886bb1787bb3e319d20c778bb1c3a2d09d62a281b175b",
+        "202": "03eba67fc24c83369dae7318267c9ce0f1cd2214c4dafa085b35d2385d98e714",
+        "777": "21ea3fb8f0304963e0617a870994598849795dd4b8b4fedb1982ba6bc0febea1"
+      },
+      "arm_rate_sha256": {
+        "existing_cnn": "3363f4c42a445972808886bb1787bb3e319d20c778bb1c3a2d09d62a281b175b",
+        "cnn_seed_ensemble": "cb3284ebd34e9904267d1faa4c8729c822d93ee17d47a6f721c87d1cd08bc381"
+      },
+      "seed42_training_count": 1,
+      "seed42_same_array_used_by_both_arms": true,
+      "ensemble_aggregation": "arithmetic mean of independent unit-by-time predicted rates before Poisson scoring",
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "mlp_shared_by_cnn_arms": true
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session3",
+      "source_blocks": [
+        "mice2/session1",
+        "mice2/session2",
+        "mice2/session4"
+      ],
+      "target_block": "mice2/session3",
+      "units": 78,
+      "unit_time_outputs": 390,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "cnn_training_order": [
+        42,
+        202,
+        777
+      ],
+      "cnn_loss_history_by_seed": {
+        "42": [
+          0.7038577184232909,
+          0.7017927815299888,
+          0.6991418000565519,
+          0.6982889445241015,
+          0.6976375137354088,
+          0.6970934599768126,
+          0.6965320288180611,
+          0.6959750860539066,
+          0.6955260710771775,
+          0.6951108055170273,
+          0.6948067788820947,
+          0.6945020698737543
+        ],
+        "202": [
+          0.7038143082824163,
+          0.7016233018392039,
+          0.699169652344011,
+          0.6983694735225805,
+          0.6975832852213664,
+          0.6966940712894067,
+          0.6960282842838782,
+          0.6955432747822835,
+          0.6951887670909821,
+          0.694927645041953,
+          0.6946107525665861,
+          0.6943724911979886
+        ],
+        "777": [
+          0.7037814511135329,
+          0.701414639252242,
+          0.699264194767548,
+          0.6984359014676301,
+          0.6979870102117502,
+          0.6975637348111193,
+          0.6970679058084669,
+          0.6966318195737259,
+          0.6960823048323697,
+          0.6955833420309264,
+          0.6951588741903569,
+          0.6948543028713488
+        ]
+      },
+      "cnn_rate_sha256_by_seed": {
+        "42": "71a373f83e20f248ab2ee9ea2095329e9f84ba7f94d3fe0cba9f8afe529d7f0e",
+        "202": "2073cd434447d8e17c9c72a479369a0f18d481a9f1f3ec3fffcc22174c6fa82c",
+        "777": "8c8721600cc1cb40a5dc9f4c0fd04275efbada9ec0a25c5b033c4fab04550633"
+      },
+      "arm_rate_sha256": {
+        "existing_cnn": "71a373f83e20f248ab2ee9ea2095329e9f84ba7f94d3fe0cba9f8afe529d7f0e",
+        "cnn_seed_ensemble": "4d9680b3796892690b89fd8463fce74de3b290a36ac73cc203aab698495c6065"
+      },
+      "seed42_training_count": 1,
+      "seed42_same_array_used_by_both_arms": true,
+      "ensemble_aggregation": "arithmetic mean of independent unit-by-time predicted rates before Poisson scoring",
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "mlp_shared_by_cnn_arms": true
+    },
+    {
+      "mouse": "mice1",
+      "held_session": "session4",
+      "source_blocks": [
+        "mice1/session1",
+        "mice1/session2",
+        "mice1/session3"
+      ],
+      "target_block": "mice1/session4",
+      "units": 134,
+      "unit_time_outputs": 670,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "cnn_training_order": [
+        42,
+        202,
+        777
+      ],
+      "cnn_loss_history_by_seed": {
+        "42": [
+          0.6556589754387802,
+          0.6540480059133693,
+          0.6523122694641569,
+          0.6515381314521967,
+          0.6510039954032787,
+          0.650446799210933,
+          0.6498809394357506,
+          0.6492482671918133,
+          0.6486431076537054,
+          0.6481328379292328,
+          0.6477822670943525,
+          0.6474662183674141
+        ],
+        "202": [
+          0.6556150643412549,
+          0.6539996543131888,
+          0.652024537628568,
+          0.6510095833170362,
+          0.6500494513102147,
+          0.6492276024263152,
+          0.6486005384849148,
+          0.6481523242232754,
+          0.6478177696856869,
+          0.6475620957788248,
+          0.6472750412845195,
+          0.647094977908433
+        ],
+        "777": [
+          0.6556685713527851,
+          0.654261980341338,
+          0.6525458748163615,
+          0.6518255167652947,
+          0.6513060962962965,
+          0.6507537759721193,
+          0.6498253154615822,
+          0.6489689569632906,
+          0.6483886617586949,
+          0.6479552157407591,
+          0.6476343804224783,
+          0.6473008829780368
+        ]
+      },
+      "cnn_rate_sha256_by_seed": {
+        "42": "8eaa36a362ae68fcd793a2dfba2ad8b594add47aab99e588dffada1575e9248f",
+        "202": "6507bffbe337b067465a0c56a934451eb9c03a75e9bc98aa7aa5aaf444065729",
+        "777": "ee2515d5374ec9244c585e61c0b006e63cccdc4e5019b7f3b53be6129b91636f"
+      },
+      "arm_rate_sha256": {
+        "existing_cnn": "8eaa36a362ae68fcd793a2dfba2ad8b594add47aab99e588dffada1575e9248f",
+        "cnn_seed_ensemble": "bfbe69af1836ba8332eb792d6b8e08480b3b1378ff54267b7e121b3b876b0feb"
+      },
+      "seed42_training_count": 1,
+      "seed42_same_array_used_by_both_arms": true,
+      "ensemble_aggregation": "arithmetic mean of independent unit-by-time predicted rates before Poisson scoring",
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 7,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "mlp_shared_by_cnn_arms": true
+    },
+    {
+      "mouse": "mice2",
+      "held_session": "session4",
+      "source_blocks": [
+        "mice2/session1",
+        "mice2/session2",
+        "mice2/session3"
+      ],
+      "target_block": "mice2/session4",
+      "units": 78,
+      "unit_time_outputs": 390,
+      "source_glyphs_per_day": 2748,
+      "source_repeats_per_glyph": 4,
+      "target_repeats_per_glyph": 4,
+      "cnn_training_order": [
+        42,
+        202,
+        777
+      ],
+      "cnn_loss_history_by_seed": {
+        "42": [
+          0.7313735029582894,
+          0.728695253184095,
+          0.7258915582772079,
+          0.7249888811569547,
+          0.7243231962688451,
+          0.7237571863107807,
+          0.7231277603943449,
+          0.7225248177672752,
+          0.721973951640261,
+          0.7215526556864577,
+          0.7212466457872238,
+          0.7209483568151271
+        ],
+        "202": [
+          0.7312597720904122,
+          0.728238183945374,
+          0.725763935102299,
+          0.724855907879542,
+          0.7240283629779732,
+          0.7231302004540678,
+          0.7225071574402688,
+          0.7220196001220825,
+          0.7216454953432431,
+          0.7213353316856784,
+          0.721024330960264,
+          0.7208029900228786
+        ],
+        "777": [
+          0.7313284102659211,
+          0.7286139191324881,
+          0.7260465257553034,
+          0.7251489949365196,
+          0.7245718772581398,
+          0.7240367766030491,
+          0.7234096755280418,
+          0.7228781818649481,
+          0.7222979846132548,
+          0.7219164152853353,
+          0.7215005969723586,
+          0.7213289033204013
+        ]
+      },
+      "cnn_rate_sha256_by_seed": {
+        "42": "a9d300cfa1b02b85f035038457d4a8a246a860181aff1137d59e0294c86001ad",
+        "202": "75d6c0648cba0f6ece68995ab32d9d86a7745d30f1b6851d9b3d515946b3994a",
+        "777": "f65ed67d37ba62f0e251bae641ad1af3dffe9a2cfff7e56ab48b20339dde7d46"
+      },
+      "arm_rate_sha256": {
+        "existing_cnn": "a9d300cfa1b02b85f035038457d4a8a246a860181aff1137d59e0294c86001ad",
+        "cnn_seed_ensemble": "a7e0d1217175aa72cecbf5a935108bdbd1427337931e988b1d239667ef677845"
+      },
+      "seed42_training_count": 1,
+      "seed42_same_array_used_by_both_arms": true,
+      "ensemble_aggregation": "arithmetic mean of independent unit-by-time predicted rates before Poisson scoring",
+      "mlp": [
+        {
+          "seed": 42,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 202,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        },
+        {
+          "seed": 777,
+          "epochs_run": 4,
+          "checkpoint_selection": "none"
+        }
+      ],
+      "mlp_shared_by_cnn_arms": true
+    }
+  ],
+  "historical_seed42_reproduction_against_experiment40": {
+    "mice1/session1": {
+      "mouse": "mice1",
+      "held_session": "session1",
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "tune.oracle32_ocf": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0,
+        "heldout.oracle32_ocf": 0.0,
+        "nll": 0.0
+      },
+      "tolerance": 1e-05,
+      "passed": true,
+      "historical_values_substituted": false
+    },
+    "mice2/session1": {
+      "mouse": "mice2",
+      "held_session": "session1",
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "tune.oracle32_ocf": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0,
+        "heldout.oracle32_ocf": 0.0,
+        "nll": 0.0
+      },
+      "tolerance": 1e-05,
+      "passed": true,
+      "historical_values_substituted": false
+    },
+    "mice1/session2": {
+      "mouse": "mice1",
+      "held_session": "session2",
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "tune.oracle32_ocf": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0,
+        "heldout.oracle32_ocf": 0.0,
+        "nll": 0.0
+      },
+      "tolerance": 1e-05,
+      "passed": true,
+      "historical_values_substituted": false
+    },
+    "mice2/session2": {
+      "mouse": "mice2",
+      "held_session": "session2",
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "tune.oracle32_ocf": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0,
+        "heldout.oracle32_ocf": 0.0,
+        "nll": 0.0
+      },
+      "tolerance": 1e-05,
+      "passed": true,
+      "historical_values_substituted": false
+    },
+    "mice1/session3": {
+      "mouse": "mice1",
+      "held_session": "session3",
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "tune.oracle32_ocf": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0,
+        "heldout.oracle32_ocf": 0.0,
+        "nll": 0.0
+      },
+      "tolerance": 1e-05,
+      "passed": true,
+      "historical_values_substituted": false
+    },
+    "mice2/session3": {
+      "mouse": "mice2",
+      "held_session": "session3",
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "tune.oracle32_ocf": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0,
+        "heldout.oracle32_ocf": 0.0,
+        "nll": 0.0
+      },
+      "tolerance": 1e-05,
+      "passed": true,
+      "historical_values_substituted": false
+    },
+    "mice1/session4": {
+      "mouse": "mice1",
+      "held_session": "session4",
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "tune.oracle32_ocf": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0,
+        "heldout.oracle32_ocf": 0.0,
+        "nll": 0.0
+      },
+      "tolerance": 1e-05,
+      "passed": true,
+      "historical_values_substituted": false
+    },
+    "mice2/session4": {
+      "mouse": "mice2",
+      "held_session": "session4",
+      "maximum_absolute_error": 0.0,
+      "absolute_errors": {
+        "tune.final_ocf": 0.0,
+        "tune.final_top1": 0.0,
+        "tune.recall_at_1": 0.0,
+        "tune.recall_at_32": 0.0,
+        "tune.oracle32_ocf": 0.0,
+        "heldout.final_ocf": 0.0,
+        "heldout.final_top1": 0.0,
+        "heldout.recall_at_1": 0.0,
+        "heldout.recall_at_32": 0.0,
+        "heldout.oracle32_ocf": 0.0,
+        "nll": 0.0
+      },
+      "tolerance": 1e-05,
+      "passed": true,
+      "historical_values_substituted": false
+    }
+  },
+  "runtime_seconds": 1178.3446806999855
+}

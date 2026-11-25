@@ -1,79 +1,79 @@
 {
   "experiment": "41_forward_cnn_seed_ensemble",
-  "status": "not_run",
+  "status": "complete",
   "reproduce_from_repository_root": ".venv\\Scripts\\python.exe -B -u test\\41_forward_cnn_seed_ensemble\\run.py",
-  "synthetic_smoke_command": ".venv\\Scripts\\python.exe -B test\\41_forward_cnn_seed_ensemble\\run.py --smoke-test",
   "preregistration_sha256": "acf55a1044249db084aa075348fe7ee1aa1c41d488c5903fb1ef9b4b854bf0d8",
-  "git_commit_at_run": null,
-  "environment": null,
+  "git_commit_at_run": "b86d332f98f43c9bcb79146e757372070cd120f9",
+  "environment": {
+    "python": "3.10.22 (main, Oct  9 2026, 15:18:58) [MSC v.1944 64 bit (AMD64)]",
+    "python_executable": "D:\\WORK\\siclink\\.venv\\Scripts\\python.exe",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "device": "cuda",
+    "cuda_device": "NVIDIA GeForce RTX 3080 Laptop GPU"
+  },
   "dependencies": [
     {
-      "path": "test/41_forward_cnn_seed_ensemble/preregistration.json",
+      "path": "test\\41_forward_cnn_seed_ensemble\\preregistration.json",
       "bytes": 12751,
       "sha256": "acf55a1044249db084aa075348fe7ee1aa1c41d488c5903fb1ef9b4b854bf0d8"
     },
     {
-      "path": "test/41_forward_cnn_seed_ensemble/run.py",
+      "path": "test\\41_forward_cnn_seed_ensemble\\run.py",
       "bytes": 31069,
       "sha256": "1961c8be7004b2f22c7195c997303dc177342afd8c291bed9c903a2816504c68"
     },
     {
-      "path": "test/40_forward_cnn_day_readout/run.py",
+      "path": "test\\40_forward_cnn_day_readout\\run.py",
       "bytes": 26904,
       "sha256": "f67ea3b8157f7e389b62f246aa7fe6d5fd612efc12b3d012b5c81d066ed976d0"
     },
     {
-      "path": "test/40_forward_cnn_day_readout/results.json",
+      "path": "test\\40_forward_cnn_day_readout\\results.json",
       "bytes": 42909,
       "sha256": "4ddc46fedd316ab814664e9790ae2b2825bfe36e3260a2ba7e36eaa305e39c44"
     },
     {
-      "path": "test/25_rotating_sessions/run.py",
+      "path": "test\\25_rotating_sessions\\run.py",
       "bytes": 7897,
       "sha256": "9940dd73910b0334f59e7a600727a8c230e293f4e8c7d33f44b0a0e01fc55a43"
     },
     {
-      "path": "test/24_forward_cnn/run.py",
+      "path": "test\\24_forward_cnn\\run.py",
       "bytes": 7728,
       "sha256": "c4aeb445b941a44f17db3f471d384d27fd41b297dea610e9630bbc9297cb4358"
     },
     {
-      "path": "test/18_seed_ensemble/run.py",
+      "path": "test\\18_seed_ensemble\\run.py",
       "bytes": 28704,
       "sha256": "84b167ffb6fbc8435a026c5247d2b0bb867a5ed5c38bf4ca2e2b07ab4073d554"
     }
   ],
   "outputs": [
     {
-      "path": "test/41_forward_cnn_seed_ensemble/results.json",
-      "status": "pending_full_run",
-      "bytes": null,
-      "sha256": null
+      "path": "test\\41_forward_cnn_seed_ensemble\\results.json",
+      "bytes": 50005,
+      "sha256": "07897b7d8c046a40408ef96c0a2e74eb5bc3145a368c17d48d4d70c5d9759a54"
     },
     {
-      "path": "test/41_forward_cnn_seed_ensemble/training_summary.json",
-      "status": "pending_full_run",
-      "bytes": null,
-      "sha256": null
+      "path": "test\\41_forward_cnn_seed_ensemble\\training_summary.json",
+      "bytes": 29154,
+      "sha256": "6b1ecac1073de1e15a2519d9d431c25ade3f8cc087225fc87fc92d776ab80134"
     }
   ],
-  "expected_mouse_fold_count": 8,
-  "mouse_fold_count": 0,
-  "cnn_seeds": [42, 202, 777],
-  "protocol_seed42_training_count_per_mouse_fold": 1,
+  "mouse_fold_count": 8,
+  "cnn_seeds": [
+    42,
+    202,
+    777
+  ],
+  "seed42_training_count_per_mouse_fold": 1,
   "cnn_rates_or_checkpoints_saved": false,
   "ocf_cache": {
     "implementation": "test/40_forward_cnn_day_readout/run.py cached_ocf",
     "scope": "current process, shared across arms and folds",
     "historical_persistent_cache_reused": false,
-    "entries_at_manifest": 0
+    "entries_at_manifest": 178464
   },
-  "full_gpu_experiment_started": false,
-  "validation": {
-    "py_compile": "passed",
-    "synthetic_smoke": "passed",
-    "dataset_loaded": false,
-    "models_trained": false
-  },
-  "runtime_seconds": null
+  "runtime_seconds": 1178.434446600033
 }
