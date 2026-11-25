@@ -7326,6 +7326,7 @@
     "test/37_task1_quota/results.json :: task1/overall/oracle/37_task1_quota:baseline: heldout not evaluated; null.",
     "test/42_task2_production_paired/results.json: no supported task-level local OCF metrics; excluded from rankings.",
     "test/43_task2_within32_rerank/results.json: no supported task-level local OCF metrics; excluded from rankings.",
+    "test/44_task3_score_mixtures/results.json: no supported task-level local OCF metrics; excluded from rankings.",
     "test/45_task3_repeat_dropout/results.json :: task3/overall/final/45_task3_repeat_dropout:baseline: heldout not evaluated; null.",
     "test/45_task3_repeat_dropout/results.json :: task3/overall/final/45_task3_repeat_dropout:count_dropout: heldout not evaluated; null."
   ]

@@ -1,0 +1,240 @@
+{
+  "experiment": "task3_v5_score_topk_weighted_structure_mixtures",
+  "preregistration_sha256": "0171e2fdbf66e00a0125333a912129f6b717b2998c60ba5a944094c1a0e2fe92",
+  "selection_sha256_at_lock": "ba14dbe5aad60f28f40367f05b08970747ea2676c250e42161d9190fd34e061f",
+  "command": ".venv/Scripts/python.exe test/44_task3_score_mixtures/run.py",
+  "pre_run_checks": [
+    "python -m py_compile test/44_task3_score_mixtures/run.py test/44_task3_score_mixtures/smoke_test.py",
+    ".venv/Scripts/python.exe test/44_task3_score_mixtures/smoke_test.py"
+  ],
+  "working_directory": "D:\\WORK\\siclink",
+  "environment": {
+    "python": "3.10.22 (main, Oct  9 2026, 15:18:58) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "numpy": "1.26.4",
+    "scipy": "1.13.1",
+    "torch": "2.5.1+cu121",
+    "torch_cuda": "12.1"
+  },
+  "code_and_config_inputs": [
+    {
+      "path": "test/44_task3_score_mixtures/preregistration.json",
+      "sha256": "0171e2fdbf66e00a0125333a912129f6b717b2998c60ba5a944094c1a0e2fe92",
+      "size_bytes": 9849
+    },
+    {
+      "path": "test/44_task3_score_mixtures/run.py",
+      "sha256": "fa50e1a66ecf8b93690f1c22e43a67f2e44f0dd5e9688f7a277a860aae275962",
+      "size_bytes": 28024
+    },
+    {
+      "path": "test/44_task3_score_mixtures/smoke_test.py",
+      "sha256": "4b5568f44240dc50c12aa918cc24d79859d98121f780e77190f50f4e9f9bbf0a",
+      "size_bytes": 2270
+    },
+    {
+      "path": "src/final_config.json",
+      "sha256": "5e7ad90509bee5ef8852aeade371083fb597c8ad82d118aff7ccf55950bdcf83",
+      "size_bytes": 1356
+    },
+    {
+      "path": "src/final.py",
+      "sha256": "18a8ffb0dfc161ba734a0f4a71dc1e71f565bba6689ff5cba9fceb15a2ccca46",
+      "size_bytes": 35908
+    },
+    {
+      "path": "src/evaluation.py",
+      "sha256": "4ffac3f1c3e20998550e53ff38e0024be0b300cb6ea693d7dfe8c660c257a67b",
+      "size_bytes": 3270
+    },
+    {
+      "path": "src/retrieval.py",
+      "sha256": "2d070d4ef9692b840d806b856507c9b209f84708960a9ba1b79b85661413b861",
+      "size_bytes": 9881
+    },
+    {
+      "path": "src/splits.py",
+      "sha256": "25a80c5b8b6df14c6d6b6aa7501c5736285ac8c8b4f81afe143c5663a98b33fb",
+      "size_bytes": 5785
+    },
+    {
+      "path": "src/features.py",
+      "sha256": "6e0bf172a73a33cd4a5b7d1fb0d09113774745011d93e800f35f037ce2c65d79",
+      "size_bytes": 6359
+    },
+    {
+      "path": "src/dataloader.py",
+      "sha256": "a7c53041eeefcb22ba125106880d16a536c94a40ba8054c3a370f4d2f49e36d9",
+      "size_bytes": 6266
+    },
+    {
+      "path": "src/encoding.py",
+      "sha256": "b07d16b562b3511aff62873af1b9ddbbaf38d9d25072cd74a406d644017a5fdb",
+      "size_bytes": 1483
+    },
+    {
+      "path": "src/neural.py",
+      "sha256": "5c889f1b0689ea7a8aeb48118dc3c7166068e5c1919373dd2801cb5e2be86e53",
+      "size_bytes": 14881
+    },
+    {
+      "path": "src/ridge.py",
+      "sha256": "13c7d0729116b22d280cb373e265420b95eaa2e2f28ce91c0295fb0771dbd274",
+      "size_bytes": 6022
+    }
+  ],
+  "model_inputs": [
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice1/classifier.pt",
+      "sha256": "f1410e8c9c1f60de3d5192f8b1009ed29f16914cf7c7cb68905f428559296d44",
+      "size_bytes": 8077218
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice1/encoding_prototypes.npy",
+      "sha256": "2ce74bb019c29d2afbd44971ee32547c2744fc8a2518a4918a831e14c7a73eae",
+      "size_bytes": 7364768
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice1/session1_normalizer.npz",
+      "sha256": "b11c44fa1ee6453d65cbe4cc027002a2023380e379e8ab8b908e41d9c9d05e5b",
+      "size_bytes": 5864
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice1/session2_normalizer.npz",
+      "sha256": "3eb4ecd16a8dafc78cf8340ea2e18b7cf3aa85b902b0bcbd359ea5408bb0ea97",
+      "size_bytes": 5864
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice1/session3_normalizer.npz",
+      "sha256": "3f2f8e8162fbac882c0d140c759142614ca3aa8f83f49533c3f3f70794bc2b04",
+      "size_bytes": 5864
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice1/session4_normalizer.npz",
+      "sha256": "f2e1e5c50e8c950196d88165e78bda46f87b3d3112b3cb2bf1c3fa76f803ab76",
+      "size_bytes": 5864
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice2/classifier.pt",
+      "sha256": "278e5dc318041f26b1ebc3d52eb603a5d545f8db0a0b633db68be95180cabf57",
+      "size_bytes": 7501602
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice2/encoding_prototypes.npy",
+      "sha256": "949465ca0db23604482f3bd1dd22f6b399f5d4e93edd784fd6148dc3690eac9a",
+      "size_bytes": 4287008
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice2/session1_normalizer.npz",
+      "sha256": "a535807e69ad7a6325f56f545b78e11adcb1fd5a6a3e86e84fd6f5b2562a9b3c",
+      "size_bytes": 3624
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice2/session2_normalizer.npz",
+      "sha256": "c2a4b03bd7b22b5e03bcb3d1134da269fd30e430c614534f3a6a7a3d4a3300fa",
+      "size_bytes": 3624
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice2/session3_normalizer.npz",
+      "sha256": "cca67f33f91d19d892891f99a3bc337688858169dc31dc58517fbce4587b4db4",
+      "size_bytes": 3624
+    },
+    {
+      "path": "test/.cache/evaluate_final_task23_v1/models/task3/mice2/session4_normalizer.npz",
+      "sha256": "72f9ab58f36dd455fe5ba8dcb9ecf842176f38f0ac6fb5f3c0818948e3a549be",
+      "size_bytes": 3624
+    }
+  ],
+  "public_train_data_inputs": [
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/catalog.json",
+      "sha256": "1e0d16f569fc9483f5fbf22c456f9c5967d651c0f518a1b359a4bb8d522d3ba3",
+      "size_bytes": 5471
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/pictures.npz",
+      "sha256": "1b59a9eaf251a0edf4c1d6ddfb8c312aa67eee7974f75cbbda529941c7bbf3f2",
+      "size_bytes": 2707813
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/mice1/session4.npz",
+      "sha256": "b359ef64da668923be3cf3f500bbf6f7e8afe4d637247ce5214d392d37c331f0",
+      "size_bytes": 15295371
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/mice2/session2.npz",
+      "sha256": "98f091df08bcd13a594d379c3071f306c7696910eac69b53329243e508340770",
+      "size_bytes": 13440074
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/mice2/session4.npz",
+      "sha256": "6d9558e6b80665fc6924f4229b0de2bc8129d175bebfc6c9f899b594676a800d",
+      "size_bytes": 15283336
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/mice1/session2.npz",
+      "sha256": "2092af8f5d59c97c97dae272afdf42a6841c69c8099a042c5f3469b4943a0b3e",
+      "size_bytes": 14707310
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/mice1/session3.npz",
+      "sha256": "0933165d251ff6463cf9fe3a929a98283cbaca64debf033f6447f0bce3f37e46",
+      "size_bytes": 13961842
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/mice2/session3.npz",
+      "sha256": "5d8969a0207f980000127fdaf02ffc300d845011fe8b96dbfbb2532b11440d17",
+      "size_bytes": 14196702
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/mice2/session1.npz",
+      "sha256": "cbbbf6234288692e52e977023949835710e8ec5a41f4b882e2e966b33522e7ef",
+      "size_bytes": 13608039
+    },
+    {
+      "path": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset/train/mice1/session1.npz",
+      "sha256": "062d1dec9e43adec43d56f7bec659b20521818a608e022eeda490d03aacbca16",
+      "size_bytes": 13696261
+    }
+  ],
+  "outputs": [
+    {
+      "path": "test/44_task3_score_mixtures/selection.json",
+      "sha256": "ba14dbe5aad60f28f40367f05b08970747ea2676c250e42161d9190fd34e061f",
+      "size_bytes": 82317
+    },
+    {
+      "path": "test/44_task3_score_mixtures/results.json",
+      "sha256": "6d618d100296d4477cd2a66f92b1d1d700f218fa8f6acbdccec5ce81f31a0a23",
+      "size_bytes": 11927
+    },
+    {
+      "path": "test/44_task3_score_mixtures/tune_candidate_scores.npz",
+      "sha256": "07f4170e7abd08aefaa48ae80f0ac2ecedcc834f208e1ac6e4ba986b3d332e03",
+      "size_bytes": 555749
+    },
+    {
+      "path": "test/44_task3_score_mixtures/baseline_scores.npz",
+      "sha256": "1a8dfe5d29fda86164465790a5f533b4686b33e9f57b18d34ff48a2ea1e2efed",
+      "size_bytes": 50615
+    },
+    {
+      "path": "test/44_task3_score_mixtures/locked_candidate_scores.npz",
+      "sha256": "6561dcbdb3b794610c6c30ede990f8f3e7089550a3fd1cbb8a069951bcd675da",
+      "size_bytes": 50922
+    }
+  ],
+  "elapsed_seconds_including_manifest_inputs": 1225.7378564000828,
+  "scope": [
+    "Create or modify files only under test/44_task3_score_mixtures.",
+    "Do not modify src, other experiments, trained checkpoints, Kaggle submissions, or Git history.",
+    "No Git commit or push.",
+    "This public historical-reuse result does not establish hidden-test generalization or statistical independence."
+  ],
+  "historical_reuse": {
+    "heldout_previously_reused": true,
+    "heldout_used_for_prior_candidate_design": true,
+    "pristine_confirmatory_evaluation": false,
+    "disclosure": "These heldout picture IDs were used in earlier experiments and informed candidate design. No parameter or candidate selection is permitted on heldout in this experiment; results are a historically reused public evaluation, not pristine independent confirmation."
+  }
+}

@@ -1,0 +1,384 @@
+{
+  "experiment": "task3_v5_score_topk_weighted_structure_mixtures",
+  "preregistration_sha256": "0171e2fdbf66e00a0125333a912129f6b717b2998c60ba5a944094c1a0e2fe92",
+  "selection_sha256_at_lock": "ba14dbe5aad60f28f40367f05b08970747ea2676c250e42161d9190fd34e061f",
+  "historical_reuse_disclosure": {
+    "heldout_previously_reused": true,
+    "heldout_used_for_prior_candidate_design": true,
+    "pristine_confirmatory_evaluation": false,
+    "disclosure": "These heldout picture IDs were used in earlier experiments and informed candidate design. No parameter or candidate selection is permitted on heldout in this experiment; results are a historically reused public evaluation, not pristine independent confirmation."
+  },
+  "hypothesis_status": "The weighted pixel mean is a falsifiable structured-combination hypothesis. It is not claimed to be a strict Bayesian posterior, an expected-OCF optimum, or a probabilistically calibrated reconstruction.",
+  "device": "cuda",
+  "production_consistency": {
+    "entrypoint": "src.final.predict_task",
+    "reranker": null,
+    "candidate_top_n": 16,
+    "all_production_predictions_equal_images_at_captured_assignment": true,
+    "all_production_candidates_equal_stable_score_topk": true,
+    "all_independent_assignments_match": true,
+    "score_reconstruction_tolerances": {
+      "rtol": 1e-05,
+      "atol": 1e-06
+    },
+    "blocks": [
+      {
+        "block_key": "mice1/session1",
+        "rows": 2748,
+        "score_max_abs_error": 0.0,
+        "continuous_max_abs_error": 0.0,
+        "independent_assignment_match": true
+      },
+      {
+        "block_key": "mice1/session2",
+        "rows": 2748,
+        "score_max_abs_error": 0.0,
+        "continuous_max_abs_error": 0.0,
+        "independent_assignment_match": true
+      },
+      {
+        "block_key": "mice1/session3",
+        "rows": 2748,
+        "score_max_abs_error": 0.0,
+        "continuous_max_abs_error": 0.0,
+        "independent_assignment_match": true
+      },
+      {
+        "block_key": "mice1/session4",
+        "rows": 2748,
+        "score_max_abs_error": 0.0,
+        "continuous_max_abs_error": 0.0,
+        "independent_assignment_match": true
+      },
+      {
+        "block_key": "mice2/session1",
+        "rows": 2748,
+        "score_max_abs_error": 0.0,
+        "continuous_max_abs_error": 0.0,
+        "independent_assignment_match": true
+      },
+      {
+        "block_key": "mice2/session2",
+        "rows": 2748,
+        "score_max_abs_error": 0.0,
+        "continuous_max_abs_error": 0.0,
+        "independent_assignment_match": true
+      },
+      {
+        "block_key": "mice2/session3",
+        "rows": 2748,
+        "score_max_abs_error": 0.0,
+        "continuous_max_abs_error": 0.0,
+        "independent_assignment_match": true
+      },
+      {
+        "block_key": "mice2/session4",
+        "rows": 2748,
+        "score_max_abs_error": 0.0,
+        "continuous_max_abs_error": 0.0,
+        "independent_assignment_match": true
+      }
+    ]
+  },
+  "locked_configuration": {
+    "grid_index": 1,
+    "k": 2,
+    "temperature": 0.5,
+    "threshold": 0.5
+  },
+  "baseline": {
+    "tune": {
+      "n": 2048,
+      "ocf_mean": 17.555725735517292,
+      "ocf_std": 14.30468762671948,
+      "groups": {
+        "mice1/session1": {
+          "n": 256,
+          "ocf_mean": 17.000793325378176
+        },
+        "mice1/session2": {
+          "n": 256,
+          "ocf_mean": 19.865396593065842
+        },
+        "mice1/session3": {
+          "n": 256,
+          "ocf_mean": 17.50392693015437
+        },
+        "mice1/session4": {
+          "n": 256,
+          "ocf_mean": 19.64530124777319
+        },
+        "mice2/session1": {
+          "n": 256,
+          "ocf_mean": 16.33254682713873
+        },
+        "mice2/session2": {
+          "n": 256,
+          "ocf_mean": 14.831254545086738
+        },
+        "mice2/session3": {
+          "n": 256,
+          "ocf_mean": 17.942133599514506
+        },
+        "mice2/session4": {
+          "n": 256,
+          "ocf_mean": 17.3244528160268
+        }
+      },
+      "group_macro_mean": 17.555725735517292,
+      "per_mouse": {
+        "mice1": {
+          "n": 1024,
+          "ocf_mean": 18.503854524092894,
+          "ocf_std": 15.453146707520128
+        },
+        "mice2": {
+          "n": 1024,
+          "ocf_mean": 16.607596946941694,
+          "ocf_std": 12.986552145679426
+        }
+      },
+      "score_top1_identity_accuracy": 0.0146484375,
+      "assigned_identity_accuracy": 0.01953125,
+      "metric": "official_ocf_png_parity"
+    },
+    "heldout": {
+      "n": 4096,
+      "ocf_mean": 16.7598316835003,
+      "ocf_std": 13.23927831118453,
+      "groups": {
+        "mice1/session1": {
+          "n": 512,
+          "ocf_mean": 17.31325909747927
+        },
+        "mice1/session2": {
+          "n": 512,
+          "ocf_mean": 18.270873026933646
+        },
+        "mice1/session3": {
+          "n": 512,
+          "ocf_mean": 16.461101474455255
+        },
+        "mice1/session4": {
+          "n": 512,
+          "ocf_mean": 17.876191421430523
+        },
+        "mice2/session1": {
+          "n": 512,
+          "ocf_mean": 15.942001895403715
+        },
+        "mice2/session2": {
+          "n": 512,
+          "ocf_mean": 15.672318138241346
+        },
+        "mice2/session3": {
+          "n": 512,
+          "ocf_mean": 16.75119376165816
+        },
+        "mice2/session4": {
+          "n": 512,
+          "ocf_mean": 15.791714652400461
+        }
+      },
+      "group_macro_mean": 16.7598316835003,
+      "per_mouse": {
+        "mice1": {
+          "n": 2048,
+          "ocf_mean": 17.480356255074675,
+          "ocf_std": 14.346075681323798
+        },
+        "mice2": {
+          "n": 2048,
+          "ocf_mean": 16.039307111925922,
+          "ocf_std": 11.987859760242742
+        }
+      },
+      "score_top1_identity_accuracy": 0.01513671875,
+      "assigned_identity_accuracy": 0.017578125,
+      "metric": "official_ocf_png_parity"
+    }
+  },
+  "locked_candidate": {
+    "tune": {
+      "n": 2048,
+      "ocf_mean": 17.928441974589067,
+      "ocf_std": 13.633456666137635,
+      "groups": {
+        "mice1/session1": {
+          "n": 256,
+          "ocf_mean": 17.377817700142316
+        },
+        "mice1/session2": {
+          "n": 256,
+          "ocf_mean": 19.802774496499637
+        },
+        "mice1/session3": {
+          "n": 256,
+          "ocf_mean": 16.734351889306623
+        },
+        "mice1/session4": {
+          "n": 256,
+          "ocf_mean": 20.520514232431843
+        },
+        "mice2/session1": {
+          "n": 256,
+          "ocf_mean": 17.430961554398777
+        },
+        "mice2/session2": {
+          "n": 256,
+          "ocf_mean": 15.995723241414986
+        },
+        "mice2/session3": {
+          "n": 256,
+          "ocf_mean": 19.118581350542616
+        },
+        "mice2/session4": {
+          "n": 256,
+          "ocf_mean": 16.446811331975738
+        }
+      },
+      "group_macro_mean": 17.928441974589067,
+      "per_mouse": {
+        "mice1": {
+          "n": 1024,
+          "ocf_mean": 18.608864579595107,
+          "ocf_std": 14.671307560901624
+        },
+        "mice2": {
+          "n": 1024,
+          "ocf_mean": 17.248019369583027,
+          "ocf_std": 12.472732898027195
+        }
+      },
+      "score_top1_identity_accuracy": 0.0146484375,
+      "final_mixed_image_identity_accuracy": null,
+      "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+      "metric": "official_ocf_png_parity"
+    },
+    "heldout": {
+      "n": 4096,
+      "ocf_mean": 16.81923867693954,
+      "ocf_std": 12.71184069755454,
+      "groups": {
+        "mice1/session1": {
+          "n": 512,
+          "ocf_mean": 18.22548340637277
+        },
+        "mice1/session2": {
+          "n": 512,
+          "ocf_mean": 17.787016686048943
+        },
+        "mice1/session3": {
+          "n": 512,
+          "ocf_mean": 16.826219945168035
+        },
+        "mice1/session4": {
+          "n": 512,
+          "ocf_mean": 17.16984592932692
+        },
+        "mice2/session1": {
+          "n": 512,
+          "ocf_mean": 15.912918945625599
+        },
+        "mice2/session2": {
+          "n": 512,
+          "ocf_mean": 16.145139255399375
+        },
+        "mice2/session3": {
+          "n": 512,
+          "ocf_mean": 16.64440985774153
+        },
+        "mice2/session4": {
+          "n": 512,
+          "ocf_mean": 15.842875389833132
+        }
+      },
+      "group_macro_mean": 16.81923867693954,
+      "per_mouse": {
+        "mice1": {
+          "n": 2048,
+          "ocf_mean": 17.50214149172917,
+          "ocf_std": 14.104159742449811
+        },
+        "mice2": {
+          "n": 2048,
+          "ocf_mean": 16.13633586214991,
+          "ocf_std": 11.105032791062376
+        }
+      },
+      "score_top1_identity_accuracy": 0.01513671875,
+      "final_mixed_image_identity_accuracy": null,
+      "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+      "metric": "official_ocf_png_parity"
+    }
+  },
+  "heldout_comparison": {
+    "overall": {
+      "baseline_ocf": 16.7598316835003,
+      "locked_candidate_ocf": 16.81923867693954,
+      "delta": 0.05940699343924294
+    },
+    "per_mouse": {
+      "mice1": {
+        "baseline_ocf": 17.480356255074675,
+        "locked_candidate_ocf": 17.50214149172917,
+        "delta": 0.02178523665449461
+      },
+      "mice2": {
+        "baseline_ocf": 16.039307111925922,
+        "locked_candidate_ocf": 16.13633586214991,
+        "delta": 0.09702875022398771
+      }
+    },
+    "per_group": {
+      "mice1/session1": {
+        "baseline_ocf": 17.31325909747927,
+        "locked_candidate_ocf": 18.22548340637277,
+        "delta": 0.9122243088934994
+      },
+      "mice1/session2": {
+        "baseline_ocf": 18.270873026933646,
+        "locked_candidate_ocf": 17.787016686048943,
+        "delta": -0.483856340884703
+      },
+      "mice1/session3": {
+        "baseline_ocf": 16.461101474455255,
+        "locked_candidate_ocf": 16.826219945168035,
+        "delta": 0.3651184707127797
+      },
+      "mice1/session4": {
+        "baseline_ocf": 17.876191421430523,
+        "locked_candidate_ocf": 17.16984592932692,
+        "delta": -0.7063454921036012
+      },
+      "mice2/session1": {
+        "baseline_ocf": 15.942001895403715,
+        "locked_candidate_ocf": 15.912918945625599,
+        "delta": -0.02908294977811643
+      },
+      "mice2/session2": {
+        "baseline_ocf": 15.672318138241346,
+        "locked_candidate_ocf": 16.145139255399375,
+        "delta": 0.47282111715802877
+      },
+      "mice2/session3": {
+        "baseline_ocf": 16.75119376165816,
+        "locked_candidate_ocf": 16.64440985774153,
+        "delta": -0.10678390391663228
+      },
+      "mice2/session4": {
+        "baseline_ocf": 15.791714652400461,
+        "locked_candidate_ocf": 15.842875389833132,
+        "delta": 0.0511607374326708
+      }
+    },
+    "both_mice_strictly_positive": true,
+    "positive_group_count": 4,
+    "required_positive_groups": 5,
+    "advance": false,
+    "rule": "advance=true if and only if (1) heldout pooled OCF delta is strictly greater than 0 for mice1 AND mice2, and (2) at least 5 of the 8 block groups have strictly positive heldout OCF delta.",
+    "next_step": "Stop; no further candidate search or heldout retuning under this protocol."
+  },
+  "oracle": null,
+  "elapsed_seconds_before_manifest": 1225.7369840000756
+}

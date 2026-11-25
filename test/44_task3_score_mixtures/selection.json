@@ -1,0 +1,3191 @@
+{
+  "experiment": "task3_v5_score_topk_weighted_structure_mixtures",
+  "preregistration_sha256": "0171e2fdbf66e00a0125333a912129f6b717b2998c60ba5a944094c1a0e2fe92",
+  "selection_rule": "Evaluate baseline and all 36 candidates on tune. Select exactly one candidate by maximum tune overall OCF with the frozen tie-break. Baseline is not a grid candidate and cannot be selected as the mixture winner.",
+  "tie_break": "Nested ascending order: k, then temperature, then threshold. The first configuration attaining the maximum tune overall OCF wins.",
+  "data_scope": {
+    "partition": "public train feature blocks only",
+    "task": "task3",
+    "split": "src.splits.make_split(blocks, 'task3', seed=42)",
+    "model_training_scope": "Only the split train_trials were used by the already-frozen checkpoints; this experiment performs no model fitting.",
+    "prediction_scope": "Only split validation_trials are scored. Hidden test blocks, hidden test targets, and Kaggle submission artifacts are never read or written.",
+    "split_metadata_check": "Every block must have disjoint train_trials and validation_trials.",
+    "picture_partition": "numpy.random.default_rng(123).permutation(2748); sorted first 256 IDs are tune and sorted IDs 256:768 are heldout.",
+    "expected_rows": {
+      "validation_per_block": 2748,
+      "blocks": 8,
+      "tune_per_block": 256,
+      "tune_total": 2048,
+      "heldout_per_block": 512,
+      "heldout_total": 4096
+    },
+    "historical_reuse": {
+      "heldout_previously_reused": true,
+      "heldout_used_for_prior_candidate_design": true,
+      "pristine_confirmatory_evaluation": false,
+      "disclosure": "These heldout picture IDs were used in earlier experiments and informed candidate design. No parameter or candidate selection is permitted on heldout in this experiment; results are a historically reused public evaluation, not pristine independent confirmation."
+    }
+  },
+  "training_scope": {
+    "mice1/session1": {
+      "train_trials": 8244,
+      "validation_trials": 2748
+    },
+    "mice1/session2": {
+      "train_trials": 8244,
+      "validation_trials": 2748
+    },
+    "mice1/session3": {
+      "train_trials": 8244,
+      "validation_trials": 2748
+    },
+    "mice1/session4": {
+      "train_trials": 8244,
+      "validation_trials": 2748
+    },
+    "mice2/session1": {
+      "train_trials": 8244,
+      "validation_trials": 2748
+    },
+    "mice2/session2": {
+      "train_trials": 8244,
+      "validation_trials": 2748
+    },
+    "mice2/session3": {
+      "train_trials": 8244,
+      "validation_trials": 2748
+    },
+    "mice2/session4": {
+      "train_trials": 8244,
+      "validation_trials": 2748
+    }
+  },
+  "picture_ids": {
+    "tune": [
+      2,
+      9,
+      18,
+      27,
+      45,
+      49,
+      56,
+      58,
+      82,
+      100,
+      110,
+      120,
+      156,
+      157,
+      159,
+      169,
+      180,
+      188,
+      189,
+      191,
+      199,
+      232,
+      252,
+      255,
+      258,
+      263,
+      264,
+      276,
+      283,
+      284,
+      292,
+      299,
+      313,
+      320,
+      324,
+      330,
+      334,
+      348,
+      349,
+      365,
+      378,
+      387,
+      416,
+      436,
+      447,
+      448,
+      453,
+      501,
+      535,
+      538,
+      544,
+      545,
+      546,
+      550,
+      554,
+      576,
+      579,
+      586,
+      602,
+      606,
+      614,
+      617,
+      627,
+      632,
+      643,
+      649,
+      654,
+      657,
+      682,
+      693,
+      715,
+      744,
+      746,
+      750,
+      776,
+      777,
+      780,
+      782,
+      784,
+      805,
+      823,
+      835,
+      848,
+      869,
+      878,
+      885,
+      890,
+      923,
+      926,
+      930,
+      932,
+      938,
+      960,
+      961,
+      975,
+      990,
+      992,
+      993,
+      998,
+      1000,
+      1009,
+      1013,
+      1034,
+      1037,
+      1065,
+      1086,
+      1124,
+      1125,
+      1138,
+      1171,
+      1177,
+      1182,
+      1210,
+      1228,
+      1233,
+      1235,
+      1237,
+      1244,
+      1247,
+      1264,
+      1278,
+      1282,
+      1287,
+      1333,
+      1353,
+      1356,
+      1359,
+      1372,
+      1380,
+      1382,
+      1401,
+      1420,
+      1424,
+      1431,
+      1437,
+      1439,
+      1469,
+      1483,
+      1484,
+      1485,
+      1488,
+      1499,
+      1510,
+      1515,
+      1538,
+      1539,
+      1548,
+      1550,
+      1561,
+      1563,
+      1583,
+      1587,
+      1599,
+      1606,
+      1616,
+      1623,
+      1645,
+      1655,
+      1671,
+      1682,
+      1689,
+      1690,
+      1724,
+      1734,
+      1747,
+      1752,
+      1776,
+      1779,
+      1784,
+      1814,
+      1823,
+      1828,
+      1837,
+      1841,
+      1845,
+      1848,
+      1849,
+      1853,
+      1855,
+      1862,
+      1870,
+      1891,
+      1892,
+      1906,
+      1917,
+      1924,
+      1933,
+      1938,
+      1977,
+      1980,
+      1994,
+      2007,
+      2014,
+      2019,
+      2025,
+      2042,
+      2059,
+      2072,
+      2076,
+      2077,
+      2079,
+      2082,
+      2105,
+      2120,
+      2142,
+      2144,
+      2155,
+      2161,
+      2167,
+      2171,
+      2172,
+      2174,
+      2181,
+      2211,
+      2222,
+      2240,
+      2242,
+      2250,
+      2266,
+      2312,
+      2325,
+      2326,
+      2333,
+      2345,
+      2348,
+      2357,
+      2373,
+      2379,
+      2394,
+      2421,
+      2437,
+      2444,
+      2445,
+      2446,
+      2448,
+      2470,
+      2486,
+      2487,
+      2496,
+      2502,
+      2537,
+      2542,
+      2556,
+      2578,
+      2592,
+      2595,
+      2604,
+      2628,
+      2629,
+      2634,
+      2672,
+      2694,
+      2708,
+      2712,
+      2720,
+      2744
+    ],
+    "heldout": [
+      0,
+      13,
+      17,
+      26,
+      30,
+      43,
+      46,
+      54,
+      55,
+      64,
+      69,
+      73,
+      80,
+      81,
+      84,
+      88,
+      91,
+      94,
+      99,
+      107,
+      119,
+      131,
+      142,
+      161,
+      178,
+      185,
+      192,
+      193,
+      195,
+      198,
+      205,
+      206,
+      207,
+      208,
+      215,
+      220,
+      221,
+      222,
+      224,
+      228,
+      234,
+      237,
+      238,
+      240,
+      245,
+      246,
+      247,
+      261,
+      269,
+      271,
+      274,
+      278,
+      279,
+      288,
+      291,
+      306,
+      307,
+      316,
+      318,
+      321,
+      322,
+      323,
+      325,
+      328,
+      331,
+      350,
+      354,
+      363,
+      368,
+      372,
+      376,
+      379,
+      383,
+      394,
+      399,
+      408,
+      410,
+      413,
+      420,
+      424,
+      425,
+      430,
+      431,
+      437,
+      438,
+      450,
+      452,
+      457,
+      474,
+      476,
+      478,
+      479,
+      489,
+      502,
+      506,
+      513,
+      514,
+      516,
+      520,
+      524,
+      527,
+      528,
+      540,
+      552,
+      553,
+      572,
+      573,
+      574,
+      582,
+      585,
+      589,
+      592,
+      594,
+      605,
+      607,
+      611,
+      613,
+      622,
+      623,
+      624,
+      633,
+      634,
+      640,
+      641,
+      642,
+      644,
+      645,
+      646,
+      648,
+      653,
+      655,
+      672,
+      674,
+      677,
+      680,
+      684,
+      685,
+      697,
+      705,
+      713,
+      716,
+      724,
+      726,
+      733,
+      734,
+      739,
+      745,
+      748,
+      749,
+      752,
+      772,
+      781,
+      788,
+      799,
+      803,
+      807,
+      808,
+      814,
+      816,
+      825,
+      826,
+      837,
+      853,
+      868,
+      881,
+      892,
+      893,
+      908,
+      911,
+      921,
+      922,
+      924,
+      946,
+      952,
+      967,
+      976,
+      989,
+      997,
+      1002,
+      1003,
+      1018,
+      1019,
+      1027,
+      1028,
+      1031,
+      1033,
+      1040,
+      1041,
+      1050,
+      1056,
+      1060,
+      1068,
+      1069,
+      1083,
+      1087,
+      1088,
+      1096,
+      1098,
+      1100,
+      1102,
+      1106,
+      1109,
+      1115,
+      1121,
+      1122,
+      1128,
+      1130,
+      1131,
+      1132,
+      1141,
+      1144,
+      1150,
+      1151,
+      1153,
+      1158,
+      1166,
+      1167,
+      1168,
+      1170,
+      1172,
+      1174,
+      1187,
+      1191,
+      1199,
+      1201,
+      1205,
+      1212,
+      1219,
+      1231,
+      1234,
+      1243,
+      1252,
+      1253,
+      1254,
+      1265,
+      1270,
+      1274,
+      1276,
+      1277,
+      1279,
+      1285,
+      1286,
+      1290,
+      1293,
+      1312,
+      1321,
+      1322,
+      1324,
+      1341,
+      1342,
+      1343,
+      1350,
+      1351,
+      1355,
+      1357,
+      1358,
+      1363,
+      1366,
+      1377,
+      1378,
+      1381,
+      1385,
+      1386,
+      1388,
+      1390,
+      1393,
+      1395,
+      1397,
+      1404,
+      1405,
+      1408,
+      1410,
+      1411,
+      1418,
+      1428,
+      1429,
+      1430,
+      1435,
+      1440,
+      1445,
+      1446,
+      1449,
+      1452,
+      1464,
+      1466,
+      1471,
+      1478,
+      1482,
+      1507,
+      1509,
+      1512,
+      1513,
+      1520,
+      1528,
+      1529,
+      1546,
+      1547,
+      1551,
+      1553,
+      1559,
+      1560,
+      1566,
+      1568,
+      1569,
+      1572,
+      1573,
+      1585,
+      1586,
+      1589,
+      1604,
+      1605,
+      1607,
+      1613,
+      1633,
+      1642,
+      1646,
+      1649,
+      1650,
+      1656,
+      1662,
+      1664,
+      1675,
+      1678,
+      1698,
+      1699,
+      1702,
+      1706,
+      1709,
+      1711,
+      1714,
+      1719,
+      1721,
+      1731,
+      1733,
+      1736,
+      1740,
+      1749,
+      1766,
+      1767,
+      1782,
+      1794,
+      1795,
+      1796,
+      1807,
+      1810,
+      1812,
+      1815,
+      1817,
+      1819,
+      1820,
+      1843,
+      1846,
+      1851,
+      1858,
+      1863,
+      1864,
+      1871,
+      1879,
+      1883,
+      1887,
+      1899,
+      1907,
+      1910,
+      1915,
+      1919,
+      1925,
+      1929,
+      1935,
+      1940,
+      1941,
+      1943,
+      1946,
+      1952,
+      1956,
+      1957,
+      1961,
+      1962,
+      1964,
+      1976,
+      1979,
+      1986,
+      1988,
+      2000,
+      2002,
+      2010,
+      2024,
+      2051,
+      2058,
+      2060,
+      2061,
+      2064,
+      2067,
+      2069,
+      2073,
+      2084,
+      2087,
+      2088,
+      2099,
+      2104,
+      2107,
+      2108,
+      2110,
+      2111,
+      2112,
+      2133,
+      2147,
+      2151,
+      2153,
+      2159,
+      2170,
+      2177,
+      2180,
+      2183,
+      2191,
+      2192,
+      2195,
+      2198,
+      2199,
+      2202,
+      2206,
+      2210,
+      2219,
+      2221,
+      2223,
+      2239,
+      2248,
+      2249,
+      2259,
+      2265,
+      2267,
+      2269,
+      2275,
+      2280,
+      2283,
+      2286,
+      2289,
+      2292,
+      2298,
+      2302,
+      2303,
+      2313,
+      2317,
+      2343,
+      2350,
+      2356,
+      2360,
+      2369,
+      2371,
+      2384,
+      2386,
+      2393,
+      2395,
+      2405,
+      2406,
+      2414,
+      2416,
+      2419,
+      2426,
+      2427,
+      2428,
+      2443,
+      2447,
+      2450,
+      2452,
+      2457,
+      2465,
+      2467,
+      2481,
+      2485,
+      2494,
+      2510,
+      2522,
+      2523,
+      2524,
+      2528,
+      2544,
+      2546,
+      2547,
+      2550,
+      2551,
+      2552,
+      2555,
+      2559,
+      2562,
+      2570,
+      2579,
+      2580,
+      2585,
+      2601,
+      2606,
+      2608,
+      2609,
+      2617,
+      2619,
+      2625,
+      2651,
+      2655,
+      2658,
+      2663,
+      2670,
+      2671,
+      2674,
+      2676,
+      2689,
+      2696,
+      2698,
+      2703,
+      2729,
+      2734,
+      2742,
+      2745,
+      2747
+    ]
+  },
+  "device": "cuda",
+  "baseline_tune": {
+    "n": 2048,
+    "ocf_mean": 17.555725735517292,
+    "ocf_std": 14.30468762671948,
+    "groups": {
+      "mice1/session1": {
+        "n": 256,
+        "ocf_mean": 17.000793325378176
+      },
+      "mice1/session2": {
+        "n": 256,
+        "ocf_mean": 19.865396593065842
+      },
+      "mice1/session3": {
+        "n": 256,
+        "ocf_mean": 17.50392693015437
+      },
+      "mice1/session4": {
+        "n": 256,
+        "ocf_mean": 19.64530124777319
+      },
+      "mice2/session1": {
+        "n": 256,
+        "ocf_mean": 16.33254682713873
+      },
+      "mice2/session2": {
+        "n": 256,
+        "ocf_mean": 14.831254545086738
+      },
+      "mice2/session3": {
+        "n": 256,
+        "ocf_mean": 17.942133599514506
+      },
+      "mice2/session4": {
+        "n": 256,
+        "ocf_mean": 17.3244528160268
+      }
+    },
+    "group_macro_mean": 17.555725735517292,
+    "per_mouse": {
+      "mice1": {
+        "n": 1024,
+        "ocf_mean": 18.503854524092894,
+        "ocf_std": 15.453146707520128
+      },
+      "mice2": {
+        "n": 1024,
+        "ocf_mean": 16.607596946941694,
+        "ocf_std": 12.986552145679426
+      }
+    },
+    "score_top1_identity_accuracy": 0.0146484375,
+    "assigned_identity_accuracy": 0.01953125,
+    "metric": "official_ocf_png_parity"
+  },
+  "candidates": [
+    {
+      "grid_index": 0,
+      "k": 2,
+      "temperature": 0.5,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 13.31406979067301,
+        "ocf_std": 8.761541859498038,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 12.60556065847868
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 15.522608336233041
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 12.333282841202081
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 14.295595732757148
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 13.288531294947447
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 11.75573830335246
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 14.169593491738393
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 12.541647666674827
+          }
+        },
+        "group_macro_mean": 13.31406979067301,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 13.689261892167737,
+            "ocf_std": 9.101746830811772
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 12.93887768917828,
+            "ocf_std": 8.390822242976698
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 1,
+      "k": 2,
+      "temperature": 0.5,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 17.928441974589067,
+        "ocf_std": 13.633456666137635,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 17.377817700142316
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 19.802774496499637
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 16.734351889306623
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 20.520514232431843
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 17.430961554398777
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 15.995723241414986
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 19.118581350542616
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 16.446811331975738
+          }
+        },
+        "group_macro_mean": 17.928441974589067,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 18.608864579595107,
+            "ocf_std": 14.671307560901624
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 17.248019369583027,
+            "ocf_std": 12.472732898027195
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 2,
+      "k": 2,
+      "temperature": 0.5,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 12.631144664184788,
+        "ocf_std": 8.842362637675865,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 12.419005035128894
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 14.790827504945998
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 12.046119369654477
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 13.768723801980766
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 12.305027256662726
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 10.75758326156195
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 13.18289280586475
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 11.778978277678753
+          }
+        },
+        "group_macro_mean": 12.631144664184788,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 13.256168927927533,
+            "ocf_std": 9.127212767349599
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 12.006120400442043,
+            "ocf_std": 8.502201507334929
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 3,
+      "k": 2,
+      "temperature": 1.0,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 13.018957320110868,
+        "ocf_std": 8.07950644801953,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 12.46473144246619
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 15.127298874288922
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 12.00979905988238
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 14.143730989069429
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 12.830062556484373
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 11.571038303882606
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 13.575918760299597
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 12.429078574513444
+          }
+        },
+        "group_macro_mean": 13.018957320110868,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 13.43639009142673,
+            "ocf_std": 8.633063224001704
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 12.601524548795005,
+            "ocf_std": 7.461807289151248
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 4,
+      "k": 2,
+      "temperature": 1.0,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 17.928441974589067,
+        "ocf_std": 13.633456666137635,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 17.377817700142316
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 19.802774496499637
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 16.734351889306623
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 20.520514232431843
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 17.430961554398777
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 15.995723241414986
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 19.118581350542616
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 16.446811331975738
+          }
+        },
+        "group_macro_mean": 17.928441974589067,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 18.608864579595107,
+            "ocf_std": 14.671307560901624
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 17.248019369583027,
+            "ocf_std": 12.472732898027195
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 5,
+      "k": 2,
+      "temperature": 1.0,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 12.272161638696941,
+        "ocf_std": 8.140264219611295,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 12.257603598185948
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 14.236020884720112
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 11.767188635938641
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 13.55506696165595
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 11.705578728896768
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 10.564319040281063
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 12.529924488670288
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 11.561590771226761
+          }
+        },
+        "group_macro_mean": 12.272161638696941,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 12.953970020125162,
+            "ocf_std": 8.669976069343587
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 11.59035325726872,
+            "ocf_std": 7.511963308563596
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 6,
+      "k": 2,
+      "temperature": 2.0,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 12.951847301961218,
+        "ocf_std": 7.6707922703058,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 12.46473144246619
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 14.949379793263553
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 11.98394293456122
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 14.143730989069429
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 12.830062556484373
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 11.538267073475074
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 13.543155648058677
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 12.161507978311233
+          }
+        },
+        "group_macro_mean": 12.951847301961218,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 13.385446289840097,
+            "ocf_std": 8.301284294215241
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 12.518248314082339,
+            "ocf_std": 6.956635035015318
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 7,
+      "k": 2,
+      "temperature": 2.0,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 17.928441974589067,
+        "ocf_std": 13.633456666137635,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 17.377817700142316
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 19.802774496499637
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 16.734351889306623
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 20.520514232431843
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 17.430961554398777
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 15.995723241414986
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 19.118581350542616
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 16.446811331975738
+          }
+        },
+        "group_macro_mean": 17.928441974589067,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 18.608864579595107,
+            "ocf_std": 14.671307560901624
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 17.248019369583027,
+            "ocf_std": 12.472732898027195
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 8,
+      "k": 2,
+      "temperature": 2.0,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 12.207799512419594,
+        "ocf_std": 7.757456738859521,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 12.257603598185948
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 14.096193728445247
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 11.736698302641111
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 13.55506696165595
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 11.705578728896768
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 10.53717791482032
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 12.50034876223964
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 11.273728102471775
+          }
+        },
+        "group_macro_mean": 12.207799512419594,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 12.911390647732064,
+            "ocf_std": 8.390435462982618
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 11.504208377107126,
+            "ocf_std": 6.997626874926746
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 9,
+      "k": 4,
+      "temperature": 0.5,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 12.540022339231365,
+        "ocf_std": 7.74660078680923,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 12.074135158047905
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 14.667081430896033
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 11.74610798717675
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 13.345710423178401
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 12.326759610150892
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 11.308876244217137
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 13.192658451745558
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 11.658849408438243
+          }
+        },
+        "group_macro_mean": 12.540022339231365,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 12.958258749824772,
+            "ocf_std": 8.0942538319972
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 12.121785928637959,
+            "ocf_std": 7.35886261682424
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 10,
+      "k": 4,
+      "temperature": 0.5,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 16.065320721759637,
+        "ocf_std": 10.492619786221885,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 15.449071359099243
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 18.360924521852084
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.98346907479634
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 17.64514211310702
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 15.950225986016436
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 14.478076089331395
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 16.646200756195803
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 15.009455873678785
+          }
+        },
+        "group_macro_mean": 16.065320721759637,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 16.60965176721367,
+            "ocf_std": 10.889871906080462
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 15.520989676305604,
+            "ocf_std": 10.050285431344689
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 11,
+      "k": 4,
+      "temperature": 0.5,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 11.246089969781526,
+        "ocf_std": 7.664239012207255,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 11.130663138649027
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 13.141575107540032
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 10.998842091799549
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 12.100179346648849
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 10.830716324610169
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 9.83142525068434
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 11.573024376552421
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 10.362294121767818
+          }
+        },
+        "group_macro_mean": 11.246089969781526,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 11.842814921159363,
+            "ocf_std": 8.207788748004434
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 10.649365018403687,
+            "ocf_std": 7.028596005278531
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 12,
+      "k": 4,
+      "temperature": 1.0,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 12.319229544772464,
+        "ocf_std": 6.9825982349912215,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 11.97388460612209
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 14.048148099764884
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 11.507002415109842
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 13.304710000441275
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 12.17511309281077
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 11.119214031406173
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 12.922899504481979
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 11.5028646080427
+          }
+        },
+        "group_macro_mean": 12.319229544772464,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 12.708436280359521,
+            "ocf_std": 7.2459133213687545
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 11.930022809185406,
+            "ocf_std": 6.686339252218899
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 13,
+      "k": 4,
+      "temperature": 1.0,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 15.923075296661105,
+        "ocf_std": 10.158451310315144,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 15.291007151559437
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 18.320847449948793
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.961245276787754
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 17.233587429115648
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 15.838590485762333
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 14.390231581615962
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 16.445042759685236
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 14.90405023881367
+          }
+        },
+        "group_macro_mean": 15.923075296661105,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 16.45167182685291,
+            "ocf_std": 10.590016525297182
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 15.394478766469302,
+            "ocf_std": 9.678893917104261
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 14,
+      "k": 4,
+      "temperature": 1.0,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 10.979997359322724,
+        "ocf_std": 6.708223840073668,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 11.050087654758038
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 12.515003888667898
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 10.838350968418021
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 11.962799392694013
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 10.42896347901507
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 9.570986337923513
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 11.349448467516154
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 10.124338685589086
+          }
+        },
+        "group_macro_mean": 10.979997359322724,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 11.591560476134493,
+            "ocf_std": 7.269798837469379
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 10.368434242510956,
+            "ocf_std": 6.0334517606512135
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 15,
+      "k": 4,
+      "temperature": 2.0,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 12.241618626755699,
+        "ocf_std": 6.714009979709973,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 11.91593741419649
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 13.855121416734463
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 11.422986992703388
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 13.27919557274895
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 12.16110630004859
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 11.087231466714512
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 12.89295952611715
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 11.31841032478205
+          }
+        },
+        "group_macro_mean": 12.241618626755699,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 12.618310349095823,
+            "ocf_std": 6.993403572721363
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 11.864926904415576,
+            "ocf_std": 6.4003416453326265
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 16,
+      "k": 4,
+      "temperature": 2.0,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 15.865766997223442,
+        "ocf_std": 9.786484459123022,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 15.288575671751724
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 18.09675994613442
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.947327147978855
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 17.243005713849314
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 15.780226027483346
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 14.372906499119452
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 16.432720825461253
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 14.764614146009187
+          }
+        },
+        "group_macro_mean": 15.865766997223442,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 16.393917119928577,
+            "ocf_std": 10.182311948246173
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 15.337616874518309,
+            "ocf_std": 9.344152953675854
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 17,
+      "k": 4,
+      "temperature": 2.0,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 10.9022181051117,
+        "ocf_std": 6.478948987155342,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 10.959276630358321
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 12.387092249876915
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 10.737004845435056
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 11.946488384781295
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 10.348683242670715
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 9.537361742580465
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 11.346739389491608
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 9.955098355699217
+          }
+        },
+        "group_macro_mean": 10.9022181051117,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 11.507465527612897,
+            "ocf_std": 7.04949594387697
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 10.296970682610501,
+            "ocf_std": 5.790122451960402
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 18,
+      "k": 8,
+      "temperature": 0.5,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 11.221132869547837,
+        "ocf_std": 6.66540001025104,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 10.85502418291885
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 13.051086446093159
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 10.512563467391736
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 11.775772737706221
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 11.108913992875074
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 10.420032375884388
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 11.445263177875638
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 10.600406575637631
+          }
+        },
+        "group_macro_mean": 11.221132869547837,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 11.548611708527492,
+            "ocf_std": 6.99360954906928
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 10.893654030568182,
+            "ocf_std": 6.303178189494343
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 19,
+      "k": 8,
+      "temperature": 0.5,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 15.32198859864495,
+        "ocf_std": 9.166168143026887,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 15.029214048883597
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 17.861304452986698
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.601365621475479
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 16.903895187049827
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 14.873761586477986
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 13.435178770467312
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 15.508115961369858
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 14.363073160448845
+          }
+        },
+        "group_macro_mean": 15.32198859864495,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 16.0989448275989,
+            "ocf_std": 9.88312688936387
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 14.545032369691,
+            "ocf_std": 8.31587384330679
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 20,
+      "k": 8,
+      "temperature": 0.5,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 8.803091063434998,
+        "ocf_std": 6.382570451689437,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 9.179214328060706
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 10.723082602500064
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 8.932857993993093
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 9.574158115805938
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 8.039279342416716
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 7.594409727928952
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 8.368316437580607
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 8.013409959193908
+          }
+        },
+        "group_macro_mean": 8.803091063434998,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 9.602328260089951,
+            "ocf_std": 6.829391423122057
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 8.003853866780045,
+            "ocf_std": 5.792776859012554
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 21,
+      "k": 8,
+      "temperature": 1.0,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 10.889490983784025,
+        "ocf_std": 5.393472382374185,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 10.661077032151011
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 12.187141318498814
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 10.311002995781969
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 11.580116597223741
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 10.790352617896179
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 10.257490748271074
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 11.08728430445522
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 10.241462255994197
+          }
+        },
+        "group_macro_mean": 10.889490983784025,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 11.184834485913884,
+            "ocf_std": 5.6121746793772305
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 10.594147481654169,
+            "ocf_std": 5.148604517587513
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 22,
+      "k": 8,
+      "temperature": 1.0,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 15.01289203659855,
+        "ocf_std": 8.383633534863556,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 14.772915751955537
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 17.356977267829883
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.392205143996076
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 16.31993312304948
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 14.633538974275293
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 13.355713602039145
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 15.079737105100087
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 14.192115324542906
+          }
+        },
+        "group_macro_mean": 15.01289203659855,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 15.710507821707743,
+            "ocf_std": 8.995409890278866
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 14.315276251489358,
+            "ocf_std": 7.660279879507257
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 23,
+      "k": 8,
+      "temperature": 1.0,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 8.3280900320729,
+        "ocf_std": 4.94947099619362,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 8.94226644169058
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 9.791818293681468
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 8.53304314498458
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 9.054131654604564
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 7.568320780393817
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 7.272874703075218
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 8.002798960257731
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 7.45946627789524
+          }
+        },
+        "group_macro_mean": 8.3280900320729,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 9.080314883740296,
+            "ocf_std": 5.4534901854685796
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 7.575865180405502,
+            "ocf_std": 4.257027909984796
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 24,
+      "k": 8,
+      "temperature": 2.0,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 10.836821940910134,
+        "ocf_std": 5.244796103449277,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 10.627969652353265
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 12.005620422601732
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 10.325078349075367
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 11.547586849141993
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 10.734362626696875
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 10.232375406026096
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 11.047459797385288
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 10.174122424000448
+          }
+        },
+        "group_macro_mean": 10.836821940910134,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 11.12656381829309,
+            "ocf_std": 5.42444082047311
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 10.547080063527178,
+            "ocf_std": 5.042153647765966
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 25,
+      "k": 8,
+      "temperature": 2.0,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 14.910845271088887,
+        "ocf_std": 7.834467959873557,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 14.748357096969542
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 17.076536063853048
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.393863109661616
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 16.099136447638138
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 14.559377986225767
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 13.333751651188475
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 15.025697284292857
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 14.05004252888165
+          }
+        },
+        "group_macro_mean": 14.910845271088887,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 15.579473179530586,
+            "ocf_std": 8.361724032858513
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 14.242217362647187,
+            "ocf_std": 7.207303314485438
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 26,
+      "k": 8,
+      "temperature": 2.0,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 8.236592469264377,
+        "ocf_std": 4.805006050274997,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 8.870927665366095
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 9.483220959470497
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 8.509741462141706
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 8.968171068525074
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 7.486930541452869
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 7.2517411683380555
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 7.954447093233045
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 7.367559795587674
+          }
+        },
+        "group_macro_mean": 8.236592469264377,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 8.958015288875842,
+            "ocf_std": 5.24865813685794
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 7.515169649652911,
+            "ocf_std": 4.193668117464861
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 27,
+      "k": 16,
+      "temperature": 0.5,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 10.289007380653445,
+        "ocf_std": 5.971509597400357,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 10.044912662904492
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 12.07868057989034
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 9.572354113995445
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 10.970936066601377
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 10.109821818192685
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 9.554119326365804
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 10.273036498786526
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 9.708197978490896
+          }
+        },
+        "group_macro_mean": 10.289007380653445,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 10.666720855847913,
+            "ocf_std": 6.273250402391156
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 9.911293905458978,
+            "ocf_std": 5.628396591739193
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 28,
+      "k": 16,
+      "temperature": 0.5,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 15.01138947205216,
+        "ocf_std": 8.516021299381936,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 15.002733786653536
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 17.448215605897555
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.338532225050919
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 16.514031844657744
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 14.391916919636678
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 13.320920273744946
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 15.01031757142136
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 14.06444754935454
+          }
+        },
+        "group_macro_mean": 15.01138947205216,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 15.82587836556494,
+            "ocf_std": 9.269746837087329
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 14.196900578539381,
+            "ocf_std": 7.601989660875087
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 29,
+      "k": 16,
+      "temperature": 0.5,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 6.686532809398152,
+        "ocf_std": 5.576237832378464,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 7.049663738531358
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 8.62133567612161
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 7.101564120729846
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 7.087666017447667
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 5.901964028997489
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 5.654295321172018
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 6.41372545751729
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 5.662048114667933
+          }
+        },
+        "group_macro_mean": 6.686532809398152,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 7.4650573882076205,
+            "ocf_std": 5.956375209686228
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 5.908008230588683,
+            "ocf_std": 5.0495791951718285
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 30,
+      "k": 16,
+      "temperature": 1.0,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 9.851876502922718,
+        "ocf_std": 4.39974202065349,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 9.75469026427622
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 10.93696135186273
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 9.252078323712214
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 10.617196922778188
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 9.808665384032569
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 9.368678744259405
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 9.909384243348217
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 9.167356789112192
+          }
+        },
+        "group_macro_mean": 9.851876502922718,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 10.140231715657338,
+            "ocf_std": 4.559148372033243
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 9.563521290188095,
+            "ocf_std": 4.214656375195051
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 31,
+      "k": 16,
+      "temperature": 1.0,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 14.586895876607041,
+        "ocf_std": 7.348192079092331,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 14.719053337556968
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 16.657352311015906
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.146035677818414
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 15.819192871390188
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 13.985507388660526
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 13.216502056020182
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 14.45123147355218
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 13.700291896841968
+          }
+        },
+        "group_macro_mean": 14.586895876607041,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 15.335408549445368,
+            "ocf_std": 7.923132417928627
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 13.838383203768714,
+            "ocf_std": 6.640427991299949
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 32,
+      "k": 16,
+      "temperature": 1.0,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 6.045238240469258,
+        "ocf_std": 4.1484742986889,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 6.63886459937634
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 7.20269517322346
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 6.495983647235021
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 6.480061764443857
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 5.38019599365261
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 5.289823484091333
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 5.879260762250716
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 4.995020499480733
+          }
+        },
+        "group_macro_mean": 6.045238240469258,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 6.70440129606967,
+            "ocf_std": 4.565843366428669
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 5.386075184868847,
+            "ocf_std": 3.5642335079603154
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 33,
+      "k": 16,
+      "temperature": 2.0,
+      "threshold": 0.25,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 9.793152274326467,
+        "ocf_std": 4.24992369206411,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 9.732474998049948
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 10.790655121074842
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 9.198363834386049
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 10.529474248016875
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 9.742591788951374
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 9.37003477113273
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 9.864492317851806
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 9.117131115148107
+          }
+        },
+        "group_macro_mean": 9.793152274326467,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 10.062742050381928,
+            "ocf_std": 4.426048655658737
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 9.523562498271003,
+            "ocf_std": 4.04826367468448
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 34,
+      "k": 16,
+      "temperature": 2.0,
+      "threshold": 0.5,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 14.407673865733313,
+        "ocf_std": 6.801515985924138,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 14.664669657639774
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 16.15243075888798
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 14.073714173038365
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 15.58611681106359
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 13.704987226612872
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 13.145363091396291
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 14.412858782229584
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 13.521250424998055
+          }
+        },
+        "group_macro_mean": 14.407673865733313,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 15.119232850157427,
+            "ocf_std": 7.3116953408247465
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 13.6961148813092,
+            "ocf_std": 6.16828325224252
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    },
+    {
+      "grid_index": 35,
+      "k": 16,
+      "temperature": 2.0,
+      "threshold": 0.75,
+      "tune": {
+        "n": 2048,
+        "ocf_mean": 5.968851660282036,
+        "ocf_std": 4.103786884734421,
+        "groups": {
+          "mice1/session1": {
+            "n": 256,
+            "ocf_mean": 6.583055434075151
+          },
+          "mice1/session2": {
+            "n": 256,
+            "ocf_mean": 7.00763187169702
+          },
+          "mice1/session3": {
+            "n": 256,
+            "ocf_mean": 6.406075532119227
+          },
+          "mice1/session4": {
+            "n": 256,
+            "ocf_mean": 6.405826269431357
+          },
+          "mice2/session1": {
+            "n": 256,
+            "ocf_mean": 5.3295490418084075
+          },
+          "mice2/session2": {
+            "n": 256,
+            "ocf_mean": 5.229752397969326
+          },
+          "mice2/session3": {
+            "n": 256,
+            "ocf_mean": 5.826589689220616
+          },
+          "mice2/session4": {
+            "n": 256,
+            "ocf_mean": 4.9623330459351855
+          }
+        },
+        "group_macro_mean": 5.968851660282036,
+        "per_mouse": {
+          "mice1": {
+            "n": 1024,
+            "ocf_mean": 6.6006472768306885,
+            "ocf_std": 4.525714717389256
+          },
+          "mice2": {
+            "n": 1024,
+            "ocf_mean": 5.337056043733384,
+            "ocf_std": 3.5216059525822296
+          }
+        },
+        "score_top1_identity_accuracy": 0.0146484375,
+        "final_mixed_image_identity_accuracy": null,
+        "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+        "metric": "official_ocf_png_parity"
+      }
+    }
+  ],
+  "locked_index": 1,
+  "locked_configuration": {
+    "grid_index": 1,
+    "k": 2,
+    "temperature": 0.5,
+    "threshold": 0.5
+  },
+  "locked_candidate_tune": {
+    "n": 2048,
+    "ocf_mean": 17.928441974589067,
+    "ocf_std": 13.633456666137635,
+    "groups": {
+      "mice1/session1": {
+        "n": 256,
+        "ocf_mean": 17.377817700142316
+      },
+      "mice1/session2": {
+        "n": 256,
+        "ocf_mean": 19.802774496499637
+      },
+      "mice1/session3": {
+        "n": 256,
+        "ocf_mean": 16.734351889306623
+      },
+      "mice1/session4": {
+        "n": 256,
+        "ocf_mean": 20.520514232431843
+      },
+      "mice2/session1": {
+        "n": 256,
+        "ocf_mean": 17.430961554398777
+      },
+      "mice2/session2": {
+        "n": 256,
+        "ocf_mean": 15.995723241414986
+      },
+      "mice2/session3": {
+        "n": 256,
+        "ocf_mean": 19.118581350542616
+      },
+      "mice2/session4": {
+        "n": 256,
+        "ocf_mean": 16.446811331975738
+      }
+    },
+    "group_macro_mean": 17.928441974589067,
+    "per_mouse": {
+      "mice1": {
+        "n": 1024,
+        "ocf_mean": 18.608864579595107,
+        "ocf_std": 14.671307560901624
+      },
+      "mice2": {
+        "n": 1024,
+        "ocf_mean": 17.248019369583027,
+        "ocf_std": 12.472732898027195
+      }
+    },
+    "score_top1_identity_accuracy": 0.0146484375,
+    "final_mixed_image_identity_accuracy": null,
+    "identity_note": "A weighted multi-glyph image has no single final predicted identity; score-top1 is only a common diagnostic of the underlying ranker.",
+    "metric": "official_ocf_png_parity"
+  },
+  "heldout_candidate_scored_before_this_lock": false
+}

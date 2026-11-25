@@ -1,0 +1,127 @@
+{
+  "protocol_version": 1,
+  "name": "task3_v5_score_topk_weighted_structure_mixtures",
+  "registered_date": "2026-11-25",
+  "status": "frozen_before_implementation_and_scoring",
+  "question": "Does a frozen coarse-grid, score-weighted mixture of the v5 fused-score top-k glyph bank images improve official OCF over the v5 single-glyph unique-assignment baseline on the fixed public Task3 heldout partition?",
+  "hypothesis_status": "The weighted pixel mean is a falsifiable structured-combination hypothesis. It is not claimed to be a strict Bayesian posterior, an expected-OCF optimum, or a probabilistically calibrated reconstruction.",
+  "relation_to_prior_work": {
+    "prior_experiment": "test/16_topk_vote/run.py",
+    "increment": "This experiment uses the frozen v5 three-branch scores and production Task3 checkpoints, selects independent per-row top-k candidates without forcing the assigned glyph, performs no second Hungarian assignment, and verifies consistency with the production predict_task path. The earlier experiment used two branches, older checkpoints, and assignment-aware candidates; this is not an identical replication."
+  },
+  "data_scope": {
+    "partition": "public train feature blocks only",
+    "task": "task3",
+    "split": "src.splits.make_split(blocks, 'task3', seed=42)",
+    "model_training_scope": "Only the split train_trials were used by the already-frozen checkpoints; this experiment performs no model fitting.",
+    "prediction_scope": "Only split validation_trials are scored. Hidden test blocks, hidden test targets, and Kaggle submission artifacts are never read or written.",
+    "split_metadata_check": "Every block must have disjoint train_trials and validation_trials.",
+    "picture_partition": "numpy.random.default_rng(123).permutation(2748); sorted first 256 IDs are tune and sorted IDs 256:768 are heldout.",
+    "expected_rows": {
+      "validation_per_block": 2748,
+      "blocks": 8,
+      "tune_per_block": 256,
+      "tune_total": 2048,
+      "heldout_per_block": 512,
+      "heldout_total": 4096
+    },
+    "historical_reuse": {
+      "heldout_previously_reused": true,
+      "heldout_used_for_prior_candidate_design": true,
+      "pristine_confirmatory_evaluation": false,
+      "disclosure": "These heldout picture IDs were used in earlier experiments and informed candidate design. No parameter or candidate selection is permitted on heldout in this experiment; results are a historically reused public evaluation, not pristine independent confirmation."
+    }
+  },
+  "frozen_inputs": {
+    "config": "src/final_config.json",
+    "config_name": "mlp_encoding_task2_rerank_task3_soft_v5",
+    "production_entrypoint": "src.final.predict_task",
+    "models": "test/.cache/evaluate_final_task23_v1/models/task3",
+    "checkpoint_seeds": [42],
+    "required_per_mouse_artifacts": [
+      "classifier.pt",
+      "encoding_prototypes.npy",
+      "session1_normalizer.npz",
+      "session2_normalizer.npz",
+      "session3_normalizer.npz",
+      "session4_normalizer.npz"
+    ],
+    "images": "The public 2748-image bank, binarized as (load_images(DATA) >= 128).astype(float32)."
+  },
+  "production_reproduction": {
+    "score_formula": "(row_zscore(MLP logits) + row_zscore(encoding MSE response scores) + row_zscore(softmax DCT continuous cosine similarity)) / 3",
+    "row_zscore": "Per-row mean subtraction and division by max(per-row population standard deviation, 1e-6).",
+    "continuous_branch": "src.retrieval.softmax_dct_similarity with T=1 over MLP logits and the DCT16 coefficient bank centered across all 2748 images.",
+    "capture_method": "Monkeypatch only src.final.unique_assignment and src.final.softmax_dct_similarity in the experiment process to capture the exact per-block continuous scores, fused scores, and assignments while executing the unmodified production predict_task body.",
+    "required_assertions": [
+      "Task3 config has assignment=true, prototype_continuous enabled with temperature=1, no seeds other than 42, and no enabled Task3 reranker.",
+      "src.final.predict_task returns reranker=null; any invocation of src.final.apply_listwise_reranker fails the run.",
+      "The independently reconstructed three-branch fused scores match every captured fused score with rtol=1e-5 and atol=1e-6.",
+      "The independently computed full-block Hungarian assignment matches every captured production assignment exactly.",
+      "Stable descending top-16 indices match predict_task(candidate_top_n=16) candidate_indices exactly for every row.",
+      "Production top1 means the pre-assignment fused-score argmax; its identity accuracy is reported separately from the assigned identity accuracy."
+    ]
+  },
+  "baseline": {
+    "name": "v5_full_block_unique_assignment",
+    "method": "Apply scipy linear_sum_assignment(maximize=True), through src.retrieval.unique_assignment, independently to each complete 2748-row validation block using the v5 fused scores, then select the corresponding single bank glyph per row.",
+    "subset_rule": "Score tune and heldout only after full-block assignment; never re-run assignment on a picture subset.",
+    "identity_metrics": "Report both pre-assignment fused-score top1 accuracy and post-assignment identity accuracy on tune and heldout."
+  },
+  "candidate_family": {
+    "candidate_order": "For each row independently, stable descending argsort of the full 2748-column v5 fused scores; take the first k IDs. Do not force or exclude the Hungarian-assigned ID.",
+    "k_values": [2, 4, 8, 16],
+    "temperatures": [0.5, 1.0, 2.0],
+    "thresholds": [0.25, 0.5, 0.75],
+    "grid_size": 36,
+    "grid_order_and_tie_break": "Nested ascending order: k, then temperature, then threshold. The first configuration attaining the maximum tune overall OCF wins.",
+    "weights": "For selected fused scores s, compute softmax((s - max(s))/temperature) within each row's top-k. These weights normalize to one over only the selected candidates.",
+    "reconstruction": "Weighted pixel-wise mean of the k binary bank images, then output 1 where the mean is greater than or equal to the threshold and 0 otherwise.",
+    "assignment": "None. Rows are independent and mixed reconstructions may repeat identities or contain no single identity.",
+    "label_use": "Picture labels are used only for official OCF evaluation and identity diagnostics, never for candidate ranking, mixture weights, thresholds, or reconstruction.",
+    "identity_metrics": "The common pre-assignment score-top1 accuracy is reported for context. Final mixed-image identity accuracy is null because a mixture has no single predicted glyph ID.",
+    "oracle": "Not computed."
+  },
+  "metric_and_aggregation": {
+    "metric": "src.evaluation.score_predictions official OCF with PNG parity, without an additional threshold argument because candidates are already binary.",
+    "reporting_scale": "Native score_predictions output (approximately percentage points), with no rescaling.",
+    "overall": "Unweighted mean over all rows in the indicated partition.",
+    "per_mouse": "Unweighted pooled mean over that mouse's four blocks and all rows in the indicated partition.",
+    "per_group": "Unweighted mean within each of the eight mouse/session blocks; also report group macro mean descriptively.",
+    "delta": "Locked mixture candidate OCF minus baseline OCF on identical rows.",
+    "additional_outputs": "Retain per-row OCF for baseline and the locked candidate on both partitions; retain all 36 candidates' tune per-row OCF so tune summaries are reproducible. Loser candidates are never scored on heldout."
+  },
+  "selection_and_advancement": {
+    "tuning": "Evaluate baseline and all 36 candidates on tune. Select exactly one candidate by maximum tune overall OCF with the frozen tie-break. Baseline is not a grid candidate and cannot be selected as the mixture winner.",
+    "lock_before_heldout": "Write selection.json containing all tune results and the single locked configuration before any candidate heldout scoring.",
+    "heldout": "Score baseline and only the locked candidate on heldout. Do not alter the grid, selection rule, thresholds, or advancement rule after seeing heldout results.",
+    "advance_rule": "advance=true if and only if (1) heldout pooled OCF delta is strictly greater than 0 for mice1 AND mice2, and (2) at least 5 of the 8 block groups have strictly positive heldout OCF delta.",
+    "failure_rule": "If advance=false, stop: no further candidate search, grid expansion, heldout retuning, or follow-up selection within this experiment."
+  },
+  "execution": {
+    "interpreter": ".venv/Scripts/python.exe",
+    "device": "cuda when torch.cuda.is_available(), otherwise cpu",
+    "ocf_batch_size": 16,
+    "candidate_top_n_for_consistency_check": 16,
+    "pre_run_checks": [
+      "python -m py_compile test/44_task3_score_mixtures/run.py test/44_task3_score_mixtures/smoke_test.py",
+      ".venv/Scripts/python.exe test/44_task3_score_mixtures/smoke_test.py"
+    ],
+    "full_command": ".venv/Scripts/python.exe test/44_task3_score_mixtures/run.py",
+    "output_files": [
+      "selection.json",
+      "results.json",
+      "manifest.json",
+      "tune_candidate_scores.npz",
+      "baseline_scores.npz",
+      "locked_candidate_scores.npz"
+    ],
+    "reproducibility": "manifest.json records the preregistration and input SHA256 hashes, model artifact hashes, runtime environment, exact command, output hashes, and picture IDs or references to their stored locations."
+  },
+  "scope_limits": [
+    "Create or modify files only under test/44_task3_score_mixtures.",
+    "Do not modify src, other experiments, trained checkpoints, Kaggle submissions, or Git history.",
+    "No Git commit or push.",
+    "This public historical-reuse result does not establish hidden-test generalization or statistical independence."
+  ]
+}
