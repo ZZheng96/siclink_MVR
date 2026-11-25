@@ -1,0 +1,8 @@
+{
+  "scope": "Task2 public session4 holdout, mice1 and mice2; no production edits",
+  "control": "Exact production v5 final predictions, frozen public evaluation checkpoints in test/.cache/evaluate_final_task23_v1/models. Stop before main comparison if historical 512 two-mouse final OCF differs from 23.824141 by more than 0.00001.",
+  "intervention": "Capture complete reranked scores at production unique_assignment input. Full gallery 0.8*row_zscore(v5)+0.2*row_zscore(Poisson). Same production unique_assignment; no weight search.",
+  "cnn": "Experiment 41 exact training per mouse using session1-3 only; seeds 42,202,777, 12 epochs, batch 128, AdamW(0.002, weight_decay=0.001); arithmetic mean predicted rates before Poisson. No target labels for fitting, calibration, fusion or tuning.",
+  "subset": "Sorted complement of experiment 41 tune256 and heldout512 within 0..2747. numpy default_rng(314159).permutation(complement)[:512], sort selected IDs. Freeze SHA256 of little-endian int64 vector before inference. IDs only for public scoring; no claim of nonuse by other experiments.",
+  "outcomes": "Final assigned OCF and preassignment recall@32 on the same 512 per mouse; overall equal mouse means. Paired delta = intervention minus control. Advance iff both mice individually have OCF delta > 0 and recall32 delta >= 0. Single held day cannot establish generalization; advance does not authorize src changes."
+}

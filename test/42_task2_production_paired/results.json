@@ -1,0 +1,74 @@
+{
+  "historical_ocf": 23.824141005605483,
+  "historical_error": 5.605482300552467e-09,
+  "ids_sha256": "354a5ccbd55f8ca06c25a10158e510d96174685368ee3cce6e99159f199061e3",
+  "preregistration_sha256": "684c180517d55fb8f0abdfd676058a2a274c4fdad8c46a7fa92b05dca05dc5e1",
+  "environment": {
+    "python": "3.10.22 (main, Oct  9 2026, 15:18:58) [MSC v.1944 64 bit (AMD64)]",
+    "python_executable": "D:\\WORK\\siclink\\.venv\\Scripts\\python.exe",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "device": "cuda",
+    "cuda_device": "NVIDIA GeForce RTX 3080 Laptop GPU"
+  },
+  "checkpoint_sha256": {
+    "listwise_cnn.pt": "6f1f39366682945470ad4f1aa4f639631a697944eabd4148550b4955e212c515",
+    "task2\\mice1\\classifier.pt": "23b7c49e689330d6a16fbb6b62326ef32349ab8d76c6c910044adcf165b7f47f",
+    "task2\\mice1\\classifier_seed202.pt": "0b9cc16028813cc059ba2e1e9ef65c29551091ad640c99eeaf603b33a9e1d6a0",
+    "task2\\mice1\\classifier_seed777.pt": "0c81822d239d14167aeddc7884d19f8a179f9d4d718b6027b28388aa1c88fc86",
+    "task2\\mice2\\classifier.pt": "4a6af02abe7291c90bbff4627ff3d0fa479fc0b540e2155784520fcd1d37ecc0",
+    "task2\\mice2\\classifier_seed202.pt": "09d09885936c06fdca6f4d2b5287136eb2c997137ae9d86834746bb2e860bce0",
+    "task2\\mice2\\classifier_seed777.pt": "e813cf6f642588a5b652e4d6e20de19d2a4ac09b3bc6b0239be7088f0c3e883b",
+    "task2\\mice1\\encoding_prototypes.npy": "8f83ad812003a35c73aca416197d5ff1c9e96be6fd6e70d302a222914d8197d3",
+    "task2\\mice2\\encoding_prototypes.npy": "42d5b97b941b0388cf145eb61b0205e5f9d6cf4517843585ccafe89e48856f6f"
+  },
+  "config_sha256": "5e7ad90509bee5ef8852aeade371083fb597c8ad82d118aff7ccf55950bdcf83",
+  "status": "complete",
+  "per_mouse": {
+    "mice1": {
+      "v5": {
+        "final_ocf": 29.395919456385307,
+        "recall32": 0.564453125
+      },
+      "mixed": {
+        "final_ocf": 31.696586815805226,
+        "recall32": 0.58984375
+      },
+      "delta": {
+        "final_ocf": 2.3006673594199185,
+        "recall32": 0.025390625
+      },
+      "rate_sha256": "bfbe69af1836ba8332eb792d6b8e08480b3b1378ff54267b7e121b3b876b0feb"
+    },
+    "mice2": {
+      "v5": {
+        "final_ocf": 22.278761419093104,
+        "recall32": 0.35546875
+      },
+      "mixed": {
+        "final_ocf": 22.39804450998064,
+        "recall32": 0.33984375
+      },
+      "delta": {
+        "final_ocf": 0.11928309088753508,
+        "recall32": -0.015625
+      },
+      "rate_sha256": "a7e0d1217175aa72cecbf5a935108bdbd1427337931e988b1d239667ef677845"
+    }
+  },
+  "overall": {
+    "v5": {
+      "final_ocf": 25.837340437739208,
+      "recall32": 0.4599609375
+    },
+    "mixed": {
+      "final_ocf": 27.047315662892935,
+      "recall32": 0.46484375
+    },
+    "delta": {
+      "final_ocf": 1.2099752251537268,
+      "recall32": 0.0048828125
+    }
+  },
+  "advance": false
+}
