@@ -1,0 +1,130 @@
+{
+  "experiment": "41_forward_cnn_seed_ensemble",
+  "status": "preregistered_before_training",
+  "date": "2026-11-25",
+  "scope": "Only test/41_forward_cnn_seed_ensemble may be created or modified. No production code, model, checkpoint, configuration, or other experiment is changed by this experiment, irrespective of the gate result.",
+  "background": {
+    "experiment40_result": "The shared CNN plus source-day readout failed: heldout four-fold macro final OCF delta was -0.807 and only 1/4 fold-pooled deltas was positive.",
+    "next_falsifiable_candidate": "Test variance reduction from a fixed forward-CNN seed ensemble. Do not revisit the temporal mixing or attention hypothesis already rejected in experiment 26.",
+    "existing_single_seed": "The existing forward CNN uses seed 42."
+  },
+  "question": "Does averaging independently trained forward-CNN predicted unit-by-time rates over the fixed seeds 42, 202 and 777 improve heldout Task2 leave-one-day-out decoding and full Poisson NLL over the otherwise identical seed42 CNN?",
+  "data": {
+    "root": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset",
+    "split": "public train only",
+    "task": "task2",
+    "mice": ["mice1", "mice2"],
+    "days": ["session1", "session2", "session3", "session4"],
+    "bin_ms": 50,
+    "gallery_size": 2748,
+    "source_repeats_per_glyph_day": 4,
+    "target_repeats_per_glyph": 4,
+    "hidden_test_labels_or_ids": "not accessed",
+    "id_alignment": "none; labels are used only for public source training and post-hoc validation scoring"
+  },
+  "folds": {
+    "design": "four leave-one-day-out folds for each mouse; all eight mouse-folds are fit independently",
+    "split_seed": 42,
+    "session4_rule": "session4 is retrained exactly like sessions 1-3, including every CNN seed and every MLP seed; historical session4 checkpoints or metrics are never substituted for newly paired arm results",
+    "training_data": "only train_trials from the three source days of the current fold; the identical pooled source-day per-glyph mean-count matrix is supplied to every CNN seed",
+    "target_data_before_evaluation": "no target-day response or label enters CNN rates or CNN/MLP fitting. The established unlabeled target-session normalizer for the MLP input may use target-day response marginals without labels; it never enters neural-response rates.",
+    "target_labels": "used only after prediction for recall, oracle, final OCF/top1, and true-glyph NLL evaluation"
+  },
+  "picture_subsets": {
+    "subset_seed": 123,
+    "construction": "order = numpy.random.default_rng(123).permutation(2748)",
+    "tune": {
+      "size": 256,
+      "indices": "sort(order[0:256])",
+      "published_existing_list": "test/25_rotating_sessions/results.json:picture_ids.tune",
+      "purpose": "fixed public reporting only; no seed, arm, epoch, weight, architecture, threshold, or hyperparameter selection"
+    },
+    "heldout": {
+      "size": 512,
+      "indices": "sort(order[256:768])",
+      "published_existing_list": "test/25_rotating_sessions/results.json:picture_ids.held_out",
+      "purpose": "fixed public reporting subset for every preregistered decoding gate; both arms are evaluated"
+    },
+    "historical_reuse_limitation": "These picture IDs and leave-day protocols were reused in earlier experiments including 18, 24, 25, 26, 28, 34 and 40. Thus tune and heldout are not pristine or independent blind tests. Existing-CNN architecture, epochs, optimizer, MLP seeds/epochs, fusion weight, subset construction and the newly fixed CNN seed set are development choices rather than an independent confirmatory sample. No result-dependent selection is permitted here; results remain reused-development evidence and cannot support an independent-generalization claim."
+  },
+  "fixed_cnn_contract": {
+    "implementation": "experiment 24 Encoder and training procedure as verified in experiment 40, with the CNN seed exposed as the only changed argument",
+    "architecture": "two Conv2d branches with kernels 3 and 7, SiLU/pooling, 384-feature concatenation, Linear(384, units*5), softplus rate plus 1e-6",
+    "initialization": "per-glyph pooled source-training mean rate with the historical inverse-softplus head-bias transform",
+    "training_target": "arithmetic mean over the three source days of per-glyph mean counts; identical for all three seeds",
+    "epochs": 12,
+    "batch_size": 128,
+    "optimizer": "AdamW(lr=0.002, weight_decay=0.001)",
+    "training_loss": "historical PyTorch poisson_nll_loss(log_input=False, full=False) on mean counts; the omitted target-dependent factorial constant does not affect optimization",
+    "training_order": "for each seed, torch.manual_seed(seed) precedes model construction and all seeded batch permutations; seeds are run in the fixed order 42, 202, 777",
+    "checkpoint_selection": "none; final epoch only",
+    "source_days_and_architecture_matching": "source days, source trials, training target, architecture, epoch count, batch size, optimizer and loss are exactly identical across seeds and arms"
+  },
+  "fixed_arms": {
+    "existing_cnn": {
+      "cnn_seeds": [42],
+      "rate": "the seed42 predicted unit-by-time rate array"
+    },
+    "cnn_seed_ensemble": {
+      "cnn_seeds": [42, 202, 777],
+      "rate": "elementwise arithmetic mean of the three independently predicted unit-by-time rate arrays, including the exact same seed42 array used by existing_cnn",
+      "forbidden_aggregation": "no averaging of log-rates, logits, Poisson scores, observations, source-day observed prototypes, or target-day observations",
+      "score_construction": "Poisson scores are computed once from the already averaged rate, not averaged across seeds"
+    },
+    "seed42_reuse": "Within every mouse-fold, seed42 is trained exactly once. The existing_cnn arm references that same in-memory predicted rate array and the ensemble averages that same array with seed202 and seed777; no second seed42 fit or prediction is permitted. Experiment 40 saved neither CNN rates nor checkpoints, so this run cannot honestly reuse its historical rates and does not claim cross-run rate reuse.",
+    "seed_lock": "The set and order [42, 202, 777] are frozen before seeing any experiment 41 result. Replacing, adding, dropping, or reordering seeds after seeing results is prohibited."
+  },
+  "shared_mlp_and_fusion": {
+    "implementation": "test/25_rotating_sessions/run.py fit_mlp, retrained separately in every mouse-fold including session4",
+    "seeds": [42, 202, 777],
+    "epochs_by_mouse": {"mice1": 7, "mice2": 4},
+    "batch_size": 256,
+    "architecture": "SpikeClassifier(hidden=512, dropout=0.2, apply_log=False)",
+    "training_rows": "source-day single trials plus per-glyph means, with source-fitted session normalization as in experiments 25 and 40",
+    "checkpoint_selection": "none; fixed final epoch",
+    "ensemble": "equal arithmetic mean of the three raw logit matrices, then row_zscore",
+    "arm_scores": "four-repeat summed Poisson log-likelihood score excluding only candidate-independent constants",
+    "fusion": "0.5 * row_zscore(mean MLP logits) + 0.5 * row_zscore(Poisson scores from the arm rate)",
+    "pairing": "one freshly trained shared MLP score matrix and the same target observations are used for existing_cnn and cnn_seed_ensemble within each mouse-fold"
+  },
+  "metrics": {
+    "nll": {
+      "definition": "full Poisson negative log likelihood in nats per target trial and unit-by-time bin, including gammaln(k+1) = log(k!), using the four individual target repeats and their sufficient statistics; averaged over all 2748 target glyphs and all unit-by-time bins, then reported per mouse-fold",
+      "evaluation_domain": "the complete target day, not tune/heldout subsetting; the true public target glyph rate is used for evaluation only",
+      "arms": ["existing_cnn", "cnn_seed_ensemble", "constant_rate"],
+      "constant_rate": "one rate per unit-by-time bin, constant over glyphs, fitted as the mean of all individual source-training trials in the same mouse-fold; no target-day data",
+      "reported_deltas": "cnn_seed_ensemble minus existing_cnn and cnn_seed_ensemble minus constant_rate; negative is better",
+      "constant_rate_role": "same-fold diagnostic control retained in every record and summary; it is not an additional advancement criterion"
+    },
+    "recall_at_1_and_32": "rank of the true glyph in fused pre-assignment scores; larger score wins and exact ties are broken by smaller candidate index; reported separately from assignment outcomes",
+    "oracle32_ocf": "for each row, take the deterministic top 32 candidates from fused pre-assignment scores and compute the maximum official OCF against the true target among those 32; purely diagnostic, uses labels only after ranking, and is not unique assignment or a submittable prediction",
+    "final": "Hungarian unique_assignment independently for each arm on every complete 2748-row mouse-day fused score matrix, before tune/heldout subsetting; final_ocf is official OCF of assigned glyphs and final_top1 is exact assigned-ID accuracy",
+    "separation": "oracle32_ocf, pre-assignment recall, and final unique-assignment metrics are separate fields and are never substituted for one another",
+    "aggregation": "within a fold, pooled is the arithmetic mean of the two mouse values; macro is the arithmetic mean of the four fold-pooled values; per-mouse summaries are arithmetic means over that mouse's four folds. NLL uses the same fold-pooled/macro aggregation. Equal subset sizes make fold pooled equivalent to sample pooling."
+  },
+  "implementation_reuse_and_integrity": {
+    "experiment40_functions": "Reuse experiment 40 repeat_statistics, full_nll, poisson_scores, cached_ocf and measure_subset without changing their definitions. Its in-memory OCF pair cache is shared across both arms and all folds in this process.",
+    "ocf_cache_disclosure": "Experiment 40 did not persist its OCF cache, so no historical cache-value reuse is claimed. Experiment 41 starts an empty cache and reuses newly computed official OCF pairs within its own run.",
+    "historical_seed42_reproduction": "As an implementation-integrity check, newly paired existing_cnn metrics and full NLL are compared with experiment 40 records for all eight mouse-folds; maximum absolute error must be <= 1e-5 or the run is invalid. This check does not replace any newly paired arm value and is not an advancement shortcut.",
+    "dependency_hashing": "The final artifact manifest records SHA256 and byte size for this preregistration, run.py, experiment 40 run.py/results.json, experiment 25 run.py, experiment 24 run.py, and experiment 18 run.py, plus every output."
+  },
+  "preregistered_advancement_gate": {
+    "comparison": "cnn_seed_ensemble minus the paired newly trained existing_cnn(seed42), using the same shared MLP in each mouse-fold",
+    "macro_final_ocf": "four-fold heldout macro final_ocf delta must be strictly > 0",
+    "fold_consistency": "at least 3 of 4 fold-pooled heldout final_ocf deltas must be strictly > 0",
+    "each_mouse": "for each mouse separately, the four-fold mean heldout final_ocf delta must be strictly > 0 AND the four-fold mean heldout recall_at_32 delta must be >= 0",
+    "nll_macro": "four-fold macro complete-target-day full NLL for cnn_seed_ensemble must be strictly lower than existing_cnn (macro NLL delta < 0)",
+    "nll_each_mouse": "for each mouse separately, the four-fold mean complete-target-day full NLL for cnn_seed_ensemble must be no higher than existing_cnn (delta <= 0)",
+    "decision": "advance is the logical AND of macro final OCF, fold consistency, both per-mouse decoding checks, macro NLL, and both per-mouse NLL checks. Any failure rejects advancement. No tolerance, post-hoc metric substitution, seed change, threshold revision, or selective fold omission is allowed.",
+    "production_rule_for_this_run": "no production integration is performed in experiment 41 even if advance=true; a true gate only justifies a separate future review"
+  },
+  "outputs": {
+    "implementation": "test/41_forward_cnn_seed_ensemble/run.py",
+    "aggregate_results": "test/41_forward_cnn_seed_ensemble/results.json",
+    "training_summary": "test/41_forward_cnn_seed_ensemble/training_summary.json",
+    "manifest": "test/41_forward_cnn_seed_ensemble/artifact_manifest.json",
+    "reproduce_command": ".venv\\Scripts\\python.exe -B -u test\\41_forward_cnn_seed_ensemble\\run.py",
+    "synthetic_smoke_command": ".venv\\Scripts\\python.exe -B test\\41_forward_cnn_seed_ensemble\\run.py --smoke-test",
+    "initial_manifest_status": "not_run; the complete run replaces it with hashed runtime dependencies and outputs"
+  }
+}
