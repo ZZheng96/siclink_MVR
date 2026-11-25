@@ -15,7 +15,11 @@ PROTOCOL_KEYS = (
     "validation_session", "outer_folds", "target_day_excluded_from_base_training",
     "target_day_excluded_from_reranker_training",
 )
-EXPERIMENT_TASKS = {"24_forward_cnn": "task2", "25_rotating_sessions": "task2"}
+EXPERIMENT_TASKS = {
+    "24_forward_cnn": "task2",
+    "25_rotating_sessions": "task2",
+    "40_forward_cnn_day_readout": "task2",
+}
 
 
 def stable_hash(value):
@@ -308,6 +312,49 @@ def collect_nested_rerank(data, path, task, records, warnings):
                        heldout=make_metric(macro.get("heldout", {}).get(arm)))
 
 
+def fold_metric(value, ocf_key):
+    if not isinstance(value, dict):
+        return None
+    metric = make_metric({
+        "n": value.get("n"),
+        "ocf": value.get(ocf_key),
+        "overall_top1": value.get("final_top1") if ocf_key == "final_ocf" else None,
+    })
+    if metric is not None and ocf_key == "final_ocf":
+        for key in ("recall_at_1", "recall_at_32"):
+            if key in value:
+                metric[key] = value[key]
+    return metric
+
+
+def collect_fold_metrics(values, group, prefix, source, protocol, records, warnings):
+    for arm in ("existing_cnn", "day_readout", "constant_rate"):
+        metrics = values.get(arm)
+        if not isinstance(metrics, dict):
+            continue
+        method = f"{prefix}:{arm}"
+        for role, ocf_key in (("final", "final_ocf"), ("oracle", "oracle32_ocf")):
+            add_record(
+                records, warnings, task="task2", protocol=protocol, group=group, role=role,
+                method=method, source=source,
+                tune=fold_metric(metrics.get("tune"), ocf_key),
+                heldout=fold_metric(metrics.get("heldout"), ocf_key),
+            )
+
+
+def collect_day_readout(data, path, task, records, warnings):
+    source = path.relative_to(ROOT).as_posix()
+    prefix = method_prefix(data, path)
+    protocol = make_protocol(data, task)
+    protocol["schema"] = "leave_one_day_out_records_and_fold_pooled"
+    protocol["picture_ids_sha256"] = stable_hash(data.get("picture_ids"))
+    for fold in data.get("records", []):
+        group = f"{fold.get('mouse')}/{fold.get('held_session')}"
+        collect_fold_metrics(fold.get("metrics", {}), group, prefix, source, protocol, records, warnings)
+    for fold, values in data.get("fold_pooled", {}).items():
+        collect_fold_metrics(values, f"fold_pooled/{fold}", prefix, source, protocol, records, warnings)
+
+
 def best_method(methods):
     split = "tune" if any(value["tune"] is not None for value in methods.values()) else "heldout"
     candidates = [(name, value) for name, value in methods.items() if value[split] is not None]
@@ -367,6 +414,8 @@ def main():
             collect_layout_teacher(data, path, task, records, warnings)
         elif "macro_mean_of_three_outer_days" in data:
             collect_nested_rerank(data, path, task, records, warnings)
+        elif isinstance(data.get("records"), list) and isinstance(data.get("fold_pooled"), dict):
+            collect_day_readout(data, path, task, records, warnings)
         else:
             collect_standard(data, path, task, records, warnings)
         if len(records) == before:
