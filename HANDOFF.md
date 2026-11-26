@@ -130,8 +130,8 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 ## 8. Git 与当前运行状态
 
-- 最近结果提交：**`b77b11a test: reject Task3 continuous reconstruction retrieval`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
-- 实验 61：`7f61925`；实验 60：`2f5676a`；实验 59：`ecae7fb`；实验 58：`a85b915`；实验 57：`4be8f17`；实验 56：`a57df61`；实验 55：`bb65d8d` / `dbd6c11`；实验 54：`7a1e4bf`；实验 53：`f1baae7` / `a591bcc`。
+- 最近结果提交：**`1918cee test: score v6 multiresolution Task2/3 on the fixed protocol (worse than v5)`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
+- 实验 63：`1918cee`；实验 62：`b77b11a`；实验 61：`7f61925`；实验 60：`2f5676a`；实验 59：`ecae7fb`；实验 58：`a85b915`；实验 57：`4be8f17`；实验 56：`a57df61`；实验 55：`bb65d8d` / `dbd6c11`；实验 54：`7a1e4bf`；实验 53：`f1baae7` / `a591bcc`。
 - 本交接文档创建前工作树干净，实验 44、45 的后台 agent 均已结束。没有待处理的模型训练或自动 Kaggle 提交。
 - 新对话开始后先运行 `git status --short`、`git log -3 --oneline`，并检查是否有新增后台任务；以磁盘实际状态为准。
 - 大模型 checkpoint、预测 NPZ、缓存通常被 `.gitignore` 排除；轻量 preregistration、selection、results、manifest、training_summary 等按白名单入库。不要为提交而打包大型缓存。
