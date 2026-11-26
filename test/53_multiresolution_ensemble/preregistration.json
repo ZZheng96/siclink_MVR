@@ -1,0 +1,105 @@
+{
+  "experiment": "53_multiresolution_ensemble",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_training_or_real_metrics",
+  "date": "2026-11-26",
+  "purpose": "Test one new deterministic structural candidate, multires_ensemble, that fuses full-gallery discriminative logits from three temporal resolutions (10ms/25ms/50ms) under the frozen production_recipe training contract. Rationale: experiment 48 production_recipe reaches only 13% Task3 recall@32, which caps Hungarian final OCF; 10ms counts (25 time bins over the 250ms window) have never been tested in this project, and cross-resolution fusion is a new information source rather than a reranker or weight search. Development reuse is neither pristine validation nor a Kaggle result.",
+  "scope": "Create files only under test/53_multiresolution_ensemble. Do not modify src or other experiments. Experiment 48 code is read-only and supplies prepare_task2, prepare_task3, OcfPairCache, evaluate_logits, aggregate_rows, select_epoch and find_aggregate unchanged. Do not read experiment 49, 50, 51 or 52 outputs. No production change and no Kaggle submission.",
+  "data": {
+    "cache": "test/.cache/shared_preprocessing_v1",
+    "loader": "src.preprocessing.load_cached_blocks(cache, split='train', bin_ms=b) for b in (10, 25, 50)",
+    "cache_access": "read-only; never rebuild the cache",
+    "public_partition": "train only",
+    "views": [10, 25, 50],
+    "window_ms": 250,
+    "temporal_bins": {"10": 25, "25": 10, "50": 5},
+    "mice": ["mice1", "mice2"],
+    "blocks": [
+      "mice1/session1", "mice1/session2", "mice1/session3", "mice1/session4",
+      "mice2/session1", "mice2/session2", "mice2/session3", "mice2/session4"
+    ],
+    "n_classes": 2748,
+    "development_picture_subset": "np.sort(np.random.default_rng(20261128).permutation(2748)[:256])",
+    "subset_size": 256,
+    "same_subset_for_every_view_block_fold_mouse_and_epoch": true,
+    "row_preparation": "Experiment 48 prepare_task2 and prepare_task3 unchanged, applied separately to each view's block set; per-session normalizers are fitted from that view's train_trials only."
+  },
+  "folds": {
+    "task2": {
+      "split_construction": "make_split(all_eight_blocks, 'task2', seed=42, validation_session=s) for s in session1, session2, session3, in that order",
+      "fold_ids": ["session1", "session2", "session3"]
+    },
+    "task3": {
+      "split_construction": "make_split(all_eight_blocks, 'task3', seed=s) for s in 20261126 and 20261127, in that order",
+      "fold_ids": ["20261126", "20261127"]
+    }
+  },
+  "arm": {
+    "name": "multires_ensemble",
+    "arms_in_this_experiment": ["multires_ensemble"],
+    "views": [10, 25, 50],
+    "training_epochs": 20,
+    "view_weight_search": false,
+    "extra_hyperparameter_search": false,
+    "fusion_weighting": "equal arithmetic mean of per-view row z-scores; fixed, never fitted"
+  },
+  "model_and_training": {
+    "class": "src.neural.SpikeClassifier",
+    "per_view_configuration": "Experiment 48 production_recipe unchanged: hidden=512, dropout mice1=0.2/mice2=0.35, label_smoothing=0.05, weight_decay=0.001, AdamW, learning_rate=3e-4, batch_size=256, apply_log=False, gradient_clip_norm=5.0, training_seed=42, max_epochs=20.",
+    "input": "Experiment 48 per-session log1p+z-score normalization of the view's raw counts.",
+    "evaluation_epochs": [1, 2, 3, 4, 5, 7, 9, 12, 16, 20],
+    "epoch_selection": "For every view and task independently, select the macro assigned_final_ocf best epoch using experiment 48 select_epoch unchanged. This mirrors production's own rule; no cross-view epoch coupling and no per-fold selection.",
+    "loss": "float32 cross-entropy over all 2748 classes",
+    "consistency_check": "The 25ms view must reproduce experiment 48 production_recipe block-level metrics (absolute tolerance 1e-5) for every task/fold/mouse/epoch; otherwise abort before fusion and report the observed difference."
+  },
+  "fusion": {
+    "inputs": "Each view's validation logits at that view's selected macro epoch.",
+    "normalization": "Row-wise z-score per view: (x - row_mean) / max(row_std, 1e-6).",
+    "combination": "Arithmetic mean of the three z-scored logit matrices.",
+    "no_fusion": "No top-32 restriction, reranking, temperature, learned weights, or candidate mixing.",
+    "evaluation": "Experiment 48 evaluate_logits and src.retrieval.unique_assignment on the full 256x2748 fused matrix."
+  },
+  "evaluation": {
+    "metrics": ["raw_top1_accuracy", "raw_recall_at_32", "raw_top1_official_ocf", "assigned_final_ocf"],
+    "aggregation": "Experiment 48 corrected aggregate_rows: block rows -> mouse_fold -> mouse/fold/macro.",
+    "ocf_scale": "Native official 0-100 OCF; the +3 gate is an absolute assigned_final_ocf difference."
+  },
+  "reference48": {
+    "required_sources": [
+      "test/48_high_capacity_generalization/development_results.json",
+      "test/48_high_capacity_generalization/selection.json"
+    ],
+    "comparator": "production_recipe at its own already-selected macro epoch independently in Task2 and Task3.",
+    "integrity": "Before cache/CUDA access, validate both hashes, selection linkage, preregistration linkage, subset, selected epochs and row counts."
+  },
+  "advancement_gate": {
+    "comparison": "multires_ensemble minus experiment 48 production_recipe at production's own selected epoch, independently within each task.",
+    "macro_minimum_absolute_gain": 3.0,
+    "per_mouse": "Both mouse-level assigned_final_ocf deltas must be >=0 in each task.",
+    "required_nonnegative_folds": {"task2": 2, "task3": 2},
+    "folds": "Fold-level assigned_final_ocf deltas averaged over two mice must be nonnegative for at least 2/3 Task2 folds and 2/2 Task3 folds.",
+    "outcome": "All per-task gates must pass for overall advance=true. Otherwise stop with no alternate view set, fusion weight, epoch rule or hyperparameter search."
+  },
+  "audits": {
+    "per_fit": "Record view, task, fold, mouse, train row counts, feature dimension, and every evaluation-epoch metric.",
+    "isolation": "Changing held-out features must not change any view's normalizer, training rows, or fitted model; per-view normalizers are fitted only on that view's train_trials.",
+    "fusion_smoke": "Synthetic checks must confirm row z-score, equal-weight fusion, full-candidate axis, and that a single-view fusion equals that view's own scores.",
+    "gate_smoke": "Exercise positive, macro-negative, mouse-negative and fold-negative selection cases."
+  },
+  "outputs": {
+    "development_results": "test/53_multiresolution_ensemble/development_results.json",
+    "selection": "test/53_multiresolution_ensemble/selection.json",
+    "model_artifacts": "none retained",
+    "overwrite_policy": "Refuse --run if either output already exists."
+  },
+  "prohibited": [
+    "Task2 session4 validation or final evaluation",
+    "Task3 split seed 42 evaluation",
+    "hidden test labels or sample-ID/target alignment",
+    "validation labels for normalization, training, epoch selection inside a fold, or fusion weights",
+    "repeat aggregation in Task3",
+    "view-set, fusion-weight, temperature, rank, dropout or other hyperparameter search",
+    "dependence on experiment 49, 50, 51 or 52 outputs",
+    "production changes or Kaggle submission"
+  ]
+}
