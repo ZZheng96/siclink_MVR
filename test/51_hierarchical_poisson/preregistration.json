@@ -1,0 +1,134 @@
+{
+  "experiment": "51_hierarchical_poisson",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_training_or_real_metrics",
+  "date": "2026-11-26",
+  "purpose": "Evaluate one new full-gallery generative candidate, hierarchical_poisson, intended to improve raw recall and OCF through DCT16 image-prior shrinkage of raw-count empirical Poisson rates plus unlabeled target-marginal calibration. This is not v5 top-32 reranking or small-weight score fusion. Development reuse is not pristine validation and is not a Kaggle result.",
+  "scope": "Create implementation files only under test/51_hierarchical_poisson. Do not modify src, other experiments, or Git history. Experiment 48 code and development outputs are read-only; its completed production_recipe development result is used only as the required comparator, never to design candidate parameters. Do not depend on experiments 49 or 50.",
+  "data": {
+    "cache": "test/.cache/shared_preprocessing_v1",
+    "loader": "src.preprocessing.load_cached_blocks(cache, split='train', bin_ms=25)",
+    "cache_access": "read-only; never rebuild the cache",
+    "public_partition": "train only",
+    "raw_counts": "Shared unnormalized 25ms uint16 trial counts; no log transform or session normalization enters the generative rates or scores.",
+    "gallery": "Public pictures.npy, loaded read-only and binarized as (pictures >= 128).astype(float32) for both DCT16 and official OCF.",
+    "mice": ["mice1", "mice2"],
+    "blocks": [
+      "mice1/session1", "mice1/session2", "mice1/session3", "mice1/session4",
+      "mice2/session1", "mice2/session2", "mice2/session3", "mice2/session4"
+    ],
+    "n_classes": 2748,
+    "development_picture_subset": "np.sort(np.random.default_rng(20261128).permutation(2748)[:256])",
+    "subset_size": 256,
+    "same_subset_for_every_block_fold_and_mouse": true
+  },
+  "folds": {
+    "task2": {
+      "split_construction": "make_split(all_eight_blocks, 'task2', seed=42, validation_session=s) for s in session1, session2, session3, in that order",
+      "fold_ids": ["session1", "session2", "session3"],
+      "training": "For each mouse independently, only train_trials from the other three complete sessions. No target-session trial enters prior fitting, empirical rates, or source marginal.",
+      "validation": "The entire held-out target session supplies unlabeled single-trial counts for target_marginal. Local GT is used only after rate construction to simulate official group_ptr and select/score evaluation rows."
+    },
+    "task3": {
+      "split_construction": "make_split(all_eight_blocks, 'task3', seed=s) for s in 20261126 and 20261127, in that order",
+      "fold_ids": ["20261126", "20261127"],
+      "training": "For each mouse independently, each of four blocks has exactly three disjoint training repeats per glyph. Fit one shared image prior from all four blocks but retain a separate empirical posterior and gain for every block.",
+      "validation": "Exactly one disjoint validation single trial per glyph per block. All 2748 unlabeled validation singles in each block determine that block's target_marginal; no repeat aggregation."
+    }
+  },
+  "arm": {
+    "name": "hierarchical_poisson",
+    "arms_in_this_experiment": ["hierarchical_poisson"],
+    "deterministic_fit_only": true,
+    "training_epochs": 0,
+    "hyperparameter_search": false,
+    "epoch_field_adapter": "Result rows carry epoch=1 solely because experiment 48 aggregate_rows includes epoch in its keys. It denotes the single deterministic evaluation, not optimization or checkpoint selection."
+  },
+  "image_prior": {
+    "encoding": "src.ridge.dct_encode(binary_pictures, 16), producing 256 fixed DCT coefficients per glyph.",
+    "regression": "src.ridge.RidgePath.fit(DCT16_rows, log1p(class_mean_raw_counts)).predict(full_DCT16_bank, alpha=1.0)",
+    "alpha": 1.0,
+    "task2_rows": "For each of three training sessions independently, aggregate that session's four train repeats by target using an arithmetic raw-count mean; one row per target, exactly 3*2748 rows.",
+    "task3_rows": "For each of four training blocks independently, average that block's three train repeats by target in raw-count space; one row per target, exactly 4*2748 rows.",
+    "prediction": "prior_rate = maximum(expm1(predicted_log1p_rate), 1e-4), with shape 2748 x n_features.",
+    "rate_floor": 0.0001
+  },
+  "empirical_posterior": {
+    "task2": "Pool raw training single-trial count sums by target over all three training sessions. n=12 for every glyph; empirical_rate=sum_train_counts/12.",
+    "task3": "Within each block independently, sum its three raw training single trials by target. n=3 for every glyph; never pool the four block empirical rates or posteriors.",
+    "formula": "posterior_rate = (sum_train_counts + 3*prior_rate)/(n+3)",
+    "pseudo_count": 3,
+    "pseudo_count_search": false,
+    "rate_floor": 0.0001
+  },
+  "unlabeled_target_calibration": {
+    "source_marginal": "Overall feature-wise arithmetic mean of corresponding raw training single trials: all three Task2 training sessions, or each Task3 block separately.",
+    "target_marginal": "Overall feature-wise arithmetic mean of all raw unlabeled validation single trials: the whole Task2 held-out session, or each Task3 block's 2748 validation trials independently. Targets/labels are not inputs.",
+    "formula": "gain = clip((target_marginal + 0.01)/(source_marginal + 0.01), 0.25, 4.0)",
+    "offset": 0.01,
+    "clip": [0.25, 4.0],
+    "clip_search": false,
+    "calibrated_rate": "calibrated_rate = maximum(posterior_rate * gain, 1e-4)",
+    "rate_floor": 0.0001
+  },
+  "poisson_scoring": {
+    "device": "CUDA float32 torch.mm for real development; CPU float32 is permitted only for synthetic smoke.",
+    "task2": "Use local GT only to simulate official group_ptr: sum each target's four raw repeats to obtain 2748 query rows. For every row and all 2748 classes, score = sum_counts @ log(calibrated_rate).T - 4*calibrated_rate.sum(axis=1).",
+    "task3": "For every unmerged validation single row and all 2748 classes in each block, score = x @ log(calibrated_rate_for_this_block).T - calibrated_rate_for_this_block.sum(axis=1). Repeat aggregation is prohibited.",
+    "constant": "Omit log factorial and every other class-independent constant.",
+    "candidate_matrix": "Materialize only two-dimensional query-by-class matrices in query batches, with the complete 2748-class axis. Never construct a query-by-class-by-feature three-dimensional tensor.",
+    "score_modification": "None: no v5 logits, top-32 restriction/reranking, fusion, temperature, or learned weights."
+  },
+  "evaluation": {
+    "implementation": "Import and call experiment 48 OcfPairCache and evaluate_logits unchanged; gallery is binary {0,1} float32 from pictures >= 128.",
+    "rows": "After full-candidate scoring, select the same sorted 256 development targets. Task2 evaluates one 256 x 2748 matrix per mouse-fold; Task3 evaluates one 256 x 2748 matrix per block.",
+    "metrics": ["raw_top1_accuracy", "raw_recall_at_32", "raw_top1_official_ocf", "assigned_final_ocf"],
+    "hungarian": "Experiment 48 evaluate_logits/src.retrieval.unique_assignment independently on every 256 x 2748 raw Poisson score matrix, with all candidate columns available.",
+    "aggregation": "Import and call experiment 48's corrected aggregate_rows unchanged: block rows -> mouse_fold -> mouse/fold/macro, propagating n_evaluation_rows from n_rows only at mouse_fold and thereafter from n_evaluation_rows.",
+    "ocf_scale": "Native official score scale; the +3 gate is an absolute assigned_final_ocf difference."
+  },
+  "reference48": {
+    "required_sources": [
+      "test/48_high_capacity_generalization/development_results.json",
+      "test/48_high_capacity_generalization/selection.json"
+    ],
+    "comparator": "production_recipe at its own already-selected best macro epoch independently in Task2 and Task3; do not retrain or re-select it.",
+    "integrity": "Before cache/CUDA access, load both files, hash both, verify selection.development_results_sha256 equals the actual results SHA256, verify matching preregistration hashes and development subset, and independently verify the selected production epoch against experiment 48 macro history.",
+    "parameter_independence": "No candidate constant, fold, or model choice is derived from experiments 48, 49, or 50 metrics. The experiment 48 comparator is read only when a real run is explicitly requested, never during synthetic smoke."
+  },
+  "advancement_gate": {
+    "comparison": "hierarchical_poisson minus experiment 48 production_recipe at production's own selected epoch, independently within each task; the candidate has no epoch selection.",
+    "macro_minimum_absolute_gain": 3.0,
+    "per_mouse": "Both mouse-level assigned_final_ocf deltas must be >= 0 in each task.",
+    "required_nonnegative_folds": {"task2": 2, "task3": 2},
+    "folds": "Fold-level assigned_final_ocf deltas averaged over the two mice must be nonnegative for at least 2/3 Task2 folds and 2/2 Task3 folds.",
+    "outcome": "All per-task gates must pass for overall advance=true. Otherwise stop with no alternate model, alpha, pseudo-count, gain clip, or other hyperparameter search. Passing development still requires separately authorized pristine/final validation, which this experiment never performs."
+  },
+  "audits": {
+    "per_mouse_fold": "Record train/validation trial roles and counts, prior-row counts, n per glyph, exact source and unlabeled target marginal counts, label-isolation statements, and shape/SHA256/min/mean/max for empirical_rate, image prior, posterior, unclipped/clipped gain, calibrated rate, and marginals. Do not dump large rate matrices into JSON.",
+    "development_status": "Every real output explicitly states development reuse only, not pristine validation, and not a Kaggle result."
+  },
+  "prohibited": [
+    "Task2 session4 validation or final evaluation",
+    "Task3 split seed 42 evaluation",
+    "hidden test data or labels",
+    "final or heldout metrics for model or parameter selection",
+    "repeat aggregation in Task3",
+    "target validation labels in prior, posterior, source marginal, target marginal, or gain construction",
+    "v5 top-32 reranking or score fusion",
+    "query-by-class-by-feature three-dimensional score tensors",
+    "dependence on experiment 49 or 50 outputs",
+    "post-preregistration hyperparameter or epoch search"
+  ],
+  "outputs": {
+    "implementation": "test/51_hierarchical_poisson/run.py",
+    "preregistration": "test/51_hierarchical_poisson/preregistration.json",
+    "development_results": "test/51_hierarchical_poisson/development_results.json",
+    "selection": "test/51_hierarchical_poisson/selection.json",
+    "model_artifacts": "none retained",
+    "commands": {
+      "smoke": ".venv\\Scripts\\python.exe -B -u test\\51_hierarchical_poisson\\run.py --smoke-test",
+      "run": ".venv\\Scripts\\python.exe -B -u test\\51_hierarchical_poisson\\run.py --run"
+    }
+  }
+}
