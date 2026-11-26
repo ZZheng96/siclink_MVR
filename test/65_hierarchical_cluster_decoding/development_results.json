@@ -1,0 +1,2688 @@
+{
+  "experiment": "65_hierarchical_cluster_decoding",
+  "status": "development_paired_test",
+  "scope": "public train blocks only; no hidden test data; development pictures only",
+  "clusters": {
+    "features": "directional_multi k-means on the 2748 public gallery",
+    "k_grid": [
+      8,
+      16,
+      32
+    ],
+    "seed": 0
+  },
+  "development_pictures": [
+    7,
+    9,
+    10,
+    19,
+    22,
+    32,
+    47,
+    62,
+    92,
+    103,
+    116,
+    120,
+    123,
+    126,
+    141,
+    148,
+    168,
+    177,
+    185,
+    194,
+    199,
+    206,
+    220,
+    242,
+    250,
+    253,
+    258,
+    277,
+    279,
+    287,
+    303,
+    329,
+    334,
+    337,
+    360,
+    363,
+    371,
+    375,
+    379,
+    382,
+    414,
+    428,
+    446,
+    450,
+    465,
+    468,
+    475,
+    489,
+    499,
+    506,
+    518,
+    532,
+    559,
+    564,
+    575,
+    576,
+    585,
+    586,
+    607,
+    620,
+    626,
+    638,
+    653,
+    661,
+    672,
+    684,
+    692,
+    705,
+    711,
+    727,
+    746,
+    748,
+    768,
+    793,
+    804,
+    819,
+    821,
+    823,
+    839,
+    842,
+    857,
+    867,
+    904,
+    908,
+    926,
+    927,
+    945,
+    953,
+    975,
+    979,
+    996,
+    1034,
+    1037,
+    1043,
+    1055,
+    1080,
+    1083,
+    1087,
+    1090,
+    1104,
+    1106,
+    1113,
+    1117,
+    1120,
+    1123,
+    1149,
+    1153,
+    1157,
+    1168,
+    1175,
+    1198,
+    1202,
+    1209,
+    1218,
+    1231,
+    1247,
+    1249,
+    1254,
+    1260,
+    1286,
+    1309,
+    1352,
+    1377,
+    1379,
+    1395,
+    1396,
+    1400,
+    1413,
+    1419,
+    1420,
+    1423,
+    1424,
+    1455,
+    1462,
+    1482,
+    1488,
+    1492,
+    1498,
+    1501,
+    1504,
+    1509,
+    1550,
+    1554,
+    1585,
+    1588,
+    1591,
+    1605,
+    1625,
+    1630,
+    1635,
+    1643,
+    1644,
+    1656,
+    1675,
+    1677,
+    1718,
+    1729,
+    1739,
+    1741,
+    1742,
+    1746,
+    1753,
+    1758,
+    1777,
+    1780,
+    1791,
+    1800,
+    1804,
+    1823,
+    1836,
+    1840,
+    1841,
+    1872,
+    1878,
+    1880,
+    1888,
+    1896,
+    1906,
+    1913,
+    1936,
+    1949,
+    1950,
+    1955,
+    1957,
+    2009,
+    2016,
+    2022,
+    2027,
+    2029,
+    2030,
+    2042,
+    2055,
+    2069,
+    2072,
+    2108,
+    2109,
+    2111,
+    2131,
+    2152,
+    2173,
+    2177,
+    2183,
+    2186,
+    2203,
+    2206,
+    2219,
+    2225,
+    2237,
+    2249,
+    2256,
+    2268,
+    2277,
+    2282,
+    2285,
+    2286,
+    2303,
+    2304,
+    2312,
+    2327,
+    2330,
+    2335,
+    2343,
+    2345,
+    2347,
+    2382,
+    2406,
+    2437,
+    2444,
+    2486,
+    2487,
+    2499,
+    2508,
+    2509,
+    2510,
+    2519,
+    2523,
+    2524,
+    2526,
+    2529,
+    2544,
+    2548,
+    2552,
+    2560,
+    2581,
+    2582,
+    2586,
+    2591,
+    2598,
+    2604,
+    2618,
+    2632,
+    2667,
+    2674,
+    2675,
+    2702,
+    2714
+  ],
+  "configs": [
+    {
+      "name": "base"
+    },
+    {
+      "name": "soft_k8_l0.25",
+      "k": 8,
+      "lam": 0.25
+    },
+    {
+      "name": "soft_k8_l0.5",
+      "k": 8,
+      "lam": 0.5
+    },
+    {
+      "name": "soft_k8_l1.0",
+      "k": 8,
+      "lam": 1.0
+    },
+    {
+      "name": "soft_k16_l0.25",
+      "k": 16,
+      "lam": 0.25
+    },
+    {
+      "name": "soft_k16_l0.5",
+      "k": 16,
+      "lam": 0.5
+    },
+    {
+      "name": "soft_k16_l1.0",
+      "k": 16,
+      "lam": 1.0
+    },
+    {
+      "name": "soft_k32_l0.25",
+      "k": 32,
+      "lam": 0.25
+    },
+    {
+      "name": "soft_k32_l0.5",
+      "k": 32,
+      "lam": 0.5
+    },
+    {
+      "name": "soft_k32_l1.0",
+      "k": 32,
+      "lam": 1.0
+    },
+    {
+      "name": "hard_k8_top3",
+      "k": 8,
+      "top_clusters": 3
+    },
+    {
+      "name": "hard_k32_top5",
+      "k": 32,
+      "top_clusters": 5
+    }
+  ],
+  "folds": {
+    "task2/session1": {
+      "base": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 19.13032649078908,
+          "assigned_top1_accuracy": 0.033114992721979625,
+          "recall_at_32_from_scores": 0.2831149927219796
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.93218789111878,
+          "assigned_top1_accuracy": 0.02802037845705968,
+          "recall_at_32_from_scores": 0.2725618631732169
+        }
+      },
+      "soft_k8_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.75860950646753,
+          "assigned_top1_accuracy": 0.03275109170305677,
+          "recall_at_32_from_scores": 0.28857350800582243
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 17.720191336598916,
+          "assigned_top1_accuracy": 0.023289665211062592,
+          "recall_at_32_from_scores": 0.2714701601164483
+        }
+      },
+      "soft_k8_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.607891678036104,
+          "assigned_top1_accuracy": 0.02947598253275109,
+          "recall_at_32_from_scores": 0.27583697234352256
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 17.615779477499782,
+          "assigned_top1_accuracy": 0.02292576419213974,
+          "recall_at_32_from_scores": 0.2612809315866084
+        }
+      },
+      "soft_k8_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.823241448481575,
+          "assigned_top1_accuracy": 0.030931586608442505,
+          "recall_at_32_from_scores": 0.2540029112081514
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.68374255730517,
+          "assigned_top1_accuracy": 0.018558951965065504,
+          "recall_at_32_from_scores": 0.24163027656477437
+        }
+      },
+      "soft_k16_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.90968828731277,
+          "assigned_top1_accuracy": 0.03275109170305677,
+          "recall_at_32_from_scores": 0.29002911208151383
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 17.574783610053167,
+          "assigned_top1_accuracy": 0.02219796215429403,
+          "recall_at_32_from_scores": 0.27110625909752545
+        }
+      },
+      "soft_k16_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.536721307035968,
+          "assigned_top1_accuracy": 0.030931586608442505,
+          "recall_at_32_from_scores": 0.2842066957787482
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 17.407499515236115,
+          "assigned_top1_accuracy": 0.020378457059679767,
+          "recall_at_32_from_scores": 0.25800582241630277
+        }
+      },
+      "soft_k16_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.39094901877445,
+          "assigned_top1_accuracy": 0.02911208151382824,
+          "recall_at_32_from_scores": 0.262372634643377
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 17.295290184994894,
+          "assigned_top1_accuracy": 0.017831149927219795,
+          "recall_at_32_from_scores": 0.23580786026200873
+        }
+      },
+      "soft_k32_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.5114944010529,
+          "assigned_top1_accuracy": 0.033478893740902474,
+          "recall_at_32_from_scores": 0.29912663755458513
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.591705276993306,
+          "assigned_top1_accuracy": 0.022561863173216887,
+          "recall_at_32_from_scores": 0.2725618631732169
+        }
+      },
+      "soft_k32_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.83024944275939,
+          "assigned_top1_accuracy": 0.033478893740902474,
+          "recall_at_32_from_scores": 0.2925764192139738
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.802139516849017,
+          "assigned_top1_accuracy": 0.018922852983988356,
+          "recall_at_32_from_scores": 0.27074235807860264
+        }
+      },
+      "soft_k32_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.457522780779478,
+          "assigned_top1_accuracy": 0.03238719068413391,
+          "recall_at_32_from_scores": 0.262372634643377
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.87464021036641,
+          "assigned_top1_accuracy": 0.018195050946142648,
+          "recall_at_32_from_scores": 0.24417758369723436
+        }
+      },
+      "hard_k8_top3": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 18.646043869393388,
+          "assigned_top1_accuracy": 0.029839883551673944,
+          "recall_at_32_from_scores": 0.26455604075691413
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 17.147684746555157,
+          "assigned_top1_accuracy": 0.02438136826783115,
+          "recall_at_32_from_scores": 0.2601892285298399
+        }
+      },
+      "hard_k32_top5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 19.349790923809124,
+          "assigned_top1_accuracy": 0.030203784570596796,
+          "recall_at_32_from_scores": 0.2718340611353712
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.32566637567791,
+          "assigned_top1_accuracy": 0.023653566229985445,
+          "recall_at_32_from_scores": 0.25327510917030566
+        }
+      }
+    },
+    "task2/session2": {
+      "base": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 20.778496704563523,
+          "assigned_top1_accuracy": 0.0549490538573508,
+          "recall_at_32_from_scores": 0.37299854439592434
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 19.018460037474973,
+          "assigned_top1_accuracy": 0.029839883551673944,
+          "recall_at_32_from_scores": 0.2616448326055313
+        }
+      },
+      "soft_k8_l0.25": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 21.265485532405275,
+          "assigned_top1_accuracy": 0.05312954876273653,
+          "recall_at_32_from_scores": 0.37409024745269287
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 18.735742283941025,
+          "assigned_top1_accuracy": 0.027656477438136828,
+          "recall_at_32_from_scores": 0.25836972343522563
+        }
+      },
+      "soft_k8_l0.5": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 22.613177653025154,
+          "assigned_top1_accuracy": 0.05822416302765648,
+          "recall_at_32_from_scores": 0.35407569141193596
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 19.013600206730217,
+          "assigned_top1_accuracy": 0.026200873362445413,
+          "recall_at_32_from_scores": 0.25327510917030566
+        }
+      },
+      "soft_k8_l1.0": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 21.711488180918664,
+          "assigned_top1_accuracy": 0.05167394468704512,
+          "recall_at_32_from_scores": 0.32496360989810774
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.57206320382941,
+          "assigned_top1_accuracy": 0.022561863173216887,
+          "recall_at_32_from_scores": 0.22998544395924309
+        }
+      },
+      "soft_k16_l0.25": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 20.91167163210624,
+          "assigned_top1_accuracy": 0.05858806404657933,
+          "recall_at_32_from_scores": 0.3784570596797671
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 18.477695808700673,
+          "assigned_top1_accuracy": 0.030203784570596796,
+          "recall_at_32_from_scores": 0.26200873362445415
+        }
+      },
+      "soft_k16_l0.5": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 19.320600659602754,
+          "assigned_top1_accuracy": 0.05640465793304221,
+          "recall_at_32_from_scores": 0.35407569141193596
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.88274150788402,
+          "assigned_top1_accuracy": 0.02911208151382824,
+          "recall_at_32_from_scores": 0.2554585152838428
+        }
+      },
+      "soft_k16_l1.0": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 20.4490977774854,
+          "assigned_top1_accuracy": 0.054221251819505094,
+          "recall_at_32_from_scores": 0.32241630276564776
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.140914280454002,
+          "assigned_top1_accuracy": 0.024017467248908297,
+          "recall_at_32_from_scores": 0.23326055312954877
+        }
+      },
+      "soft_k32_l0.25": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 22.313052443834387,
+          "assigned_top1_accuracy": 0.05786026200873363,
+          "recall_at_32_from_scores": 0.38719068413391555
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 18.83261166553831,
+          "assigned_top1_accuracy": 0.03056768558951965,
+          "recall_at_32_from_scores": 0.259825327510917
+        }
+      },
+      "soft_k32_l0.5": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 20.86836100101791,
+          "assigned_top1_accuracy": 0.05895196506550218,
+          "recall_at_32_from_scores": 0.3726346433770015
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 19.015882100650934,
+          "assigned_top1_accuracy": 0.03056768558951965,
+          "recall_at_32_from_scores": 0.25691411935953423
+        }
+      },
+      "soft_k32_l1.0": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 21.389706037375802,
+          "assigned_top1_accuracy": 0.05203784570596798,
+          "recall_at_32_from_scores": 0.3373362445414847
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.424696471543406,
+          "assigned_top1_accuracy": 0.026928675400291122,
+          "recall_at_32_from_scores": 0.23326055312954877
+        }
+      },
+      "hard_k8_top3": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 19.305344863306313,
+          "assigned_top1_accuracy": 0.05240174672489083,
+          "recall_at_32_from_scores": 0.3420669577874818
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.364655587306203,
+          "assigned_top1_accuracy": 0.025109170305676855,
+          "recall_at_32_from_scores": 0.23471615720524017
+        }
+      },
+      "hard_k32_top5": {
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 20.506007255935614,
+          "assigned_top1_accuracy": 0.054221251819505094,
+          "recall_at_32_from_scores": 0.3460698689956332
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 18.04747313124595,
+          "assigned_top1_accuracy": 0.027656477438136828,
+          "recall_at_32_from_scores": 0.23471615720524017
+        }
+      }
+    },
+    "task2/session3": {
+      "base": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.97161399094319,
+          "assigned_top1_accuracy": 0.030931586608442505,
+          "recall_at_32_from_scores": 0.29475982532751094
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.518056763150838,
+          "assigned_top1_accuracy": 0.03165938864628821,
+          "recall_at_32_from_scores": 0.32751091703056767
+        }
+      },
+      "soft_k8_l0.25": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 21.092233704506388,
+          "assigned_top1_accuracy": 0.03275109170305677,
+          "recall_at_32_from_scores": 0.29512372634643375
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.381573836350757,
+          "assigned_top1_accuracy": 0.03420669577874818,
+          "recall_at_32_from_scores": 0.3318777292576419
+        }
+      },
+      "soft_k8_l0.5": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.453340077106702,
+          "assigned_top1_accuracy": 0.03384279475982533,
+          "recall_at_32_from_scores": 0.2827510917030568
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.569996976283797,
+          "assigned_top1_accuracy": 0.034934497816593885,
+          "recall_at_32_from_scores": 0.3140465793304221
+        }
+      },
+      "soft_k8_l1.0": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.464663186727204,
+          "assigned_top1_accuracy": 0.03202328966521106,
+          "recall_at_32_from_scores": 0.2521834061135371
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.463537379829084,
+          "assigned_top1_accuracy": 0.03165938864628821,
+          "recall_at_32_from_scores": 0.2863901018922853
+        }
+      },
+      "soft_k16_l0.25": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.923140421484,
+          "assigned_top1_accuracy": 0.029839883551673944,
+          "recall_at_32_from_scores": 0.2929403202328967
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.460055521892635,
+          "assigned_top1_accuracy": 0.034934497816593885,
+          "recall_at_32_from_scores": 0.33260553129548764
+        }
+      },
+      "soft_k16_l0.5": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 21.610520334505196,
+          "assigned_top1_accuracy": 0.026928675400291122,
+          "recall_at_32_from_scores": 0.274745269286754
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.831893604797067,
+          "assigned_top1_accuracy": 0.03529839883551674,
+          "recall_at_32_from_scores": 0.31149927219796214
+        }
+      },
+      "soft_k16_l1.0": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.914894799644077,
+          "assigned_top1_accuracy": 0.025109170305676855,
+          "recall_at_32_from_scores": 0.25181950509461426
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.4281245830961,
+          "assigned_top1_accuracy": 0.030931586608442505,
+          "recall_at_32_from_scores": 0.2827510917030568
+        }
+      },
+      "soft_k32_l0.25": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.900348983268202,
+          "assigned_top1_accuracy": 0.030203784570596796,
+          "recall_at_32_from_scores": 0.29621542940320233
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.287699808472663,
+          "assigned_top1_accuracy": 0.03784570596797671,
+          "recall_at_32_from_scores": 0.33005822416302766
+        }
+      },
+      "soft_k32_l0.5": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.953070372674077,
+          "assigned_top1_accuracy": 0.02947598253275109,
+          "recall_at_32_from_scores": 0.28457059679767105
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.90255646388924,
+          "assigned_top1_accuracy": 0.034570596797671035,
+          "recall_at_32_from_scores": 0.3220524017467249
+        }
+      },
+      "soft_k32_l1.0": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 21.415822061838767,
+          "assigned_top1_accuracy": 0.03056768558951965,
+          "recall_at_32_from_scores": 0.25946142649199416
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.395196655580076,
+          "assigned_top1_accuracy": 0.033478893740902474,
+          "recall_at_32_from_scores": 0.28457059679767105
+        }
+      },
+      "hard_k8_top3": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.325405302372033,
+          "assigned_top1_accuracy": 0.02911208151382824,
+          "recall_at_32_from_scores": 0.27292576419213976
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 19.038771091266145,
+          "assigned_top1_accuracy": 0.033114992721979625,
+          "recall_at_32_from_scores": 0.30604075691411936
+        }
+      },
+      "hard_k32_top5": {
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 20.932155746518966,
+          "assigned_top1_accuracy": 0.03275109170305677,
+          "recall_at_32_from_scores": 0.2587336244541485
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 18.485138099455455,
+          "assigned_top1_accuracy": 0.03202328966521106,
+          "recall_at_32_from_scores": 0.2889374090247453
+        }
+      }
+    },
+    "task3/20261126": {
+      "base": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.376976278193482,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.15611353711790393
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.665827642875733,
+          "assigned_top1_accuracy": 0.023653566229985445,
+          "recall_at_32_from_scores": 0.2019650655021834
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.366222217289263,
+          "assigned_top1_accuracy": 0.017831149927219795,
+          "recall_at_32_from_scores": 0.14737991266375547
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.005038901286184,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.21033478893740903
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.62405001382877,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.13646288209606988
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.867785306743311,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.12627365356623
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.118880905147336,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.14737991266375547
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.173943003304368,
+          "assigned_top1_accuracy": 0.013100436681222707,
+          "recall_at_32_from_scores": 0.13282387190684133
+        }
+      },
+      "soft_k8_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.492742301463649,
+          "assigned_top1_accuracy": 0.012008733624454149,
+          "recall_at_32_from_scores": 0.1586608442503639
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.25745051520848,
+          "assigned_top1_accuracy": 0.018922852983988356,
+          "recall_at_32_from_scores": 0.20378457059679767
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.89824621995185,
+          "assigned_top1_accuracy": 0.016375545851528384,
+          "recall_at_32_from_scores": 0.14665211062590974
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.342206374487567,
+          "assigned_top1_accuracy": 0.017831149927219795,
+          "recall_at_32_from_scores": 0.20997088791848617
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.738450170397707,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.13973799126637554
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.998789904420402,
+          "assigned_top1_accuracy": 0.009461426491994178,
+          "recall_at_32_from_scores": 0.12554585152838427
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.607492130119493,
+          "assigned_top1_accuracy": 0.00727802037845706,
+          "recall_at_32_from_scores": 0.14556040756914118
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.566715792202361,
+          "assigned_top1_accuracy": 0.009825327510917031,
+          "recall_at_32_from_scores": 0.13537117903930132
+        }
+      },
+      "soft_k8_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.46419787255143,
+          "assigned_top1_accuracy": 0.011644832605531296,
+          "recall_at_32_from_scores": 0.15138282387190685
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.00169809229658,
+          "assigned_top1_accuracy": 0.020378457059679767,
+          "recall_at_32_from_scores": 0.1895924308588064
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 18.135598064696254,
+          "assigned_top1_accuracy": 0.016375545851528384,
+          "recall_at_32_from_scores": 0.14301310043668122
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.0765422215781,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.1965065502183406
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.373881557099153,
+          "assigned_top1_accuracy": 0.009825327510917031,
+          "recall_at_32_from_scores": 0.13100436681222707
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.386280512173066,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.12081513828238719
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.26223091199116,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.13427947598253276
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.875933876205332,
+          "assigned_top1_accuracy": 0.012372634643377001,
+          "recall_at_32_from_scores": 0.1339155749636099
+        }
+      },
+      "soft_k8_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.332246365533093,
+          "assigned_top1_accuracy": 0.012008733624454149,
+          "recall_at_32_from_scores": 0.13864628820960698
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.77659217302795,
+          "assigned_top1_accuracy": 0.016739446870451237,
+          "recall_at_32_from_scores": 0.17831149927219797
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.186096382109476,
+          "assigned_top1_accuracy": 0.013828238719068414,
+          "recall_at_32_from_scores": 0.13682678311499272
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.807366091525083,
+          "assigned_top1_accuracy": 0.018558951965065504,
+          "recall_at_32_from_scores": 0.1772197962154294
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.680005720428664,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.11826783114992721
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.798585090023845,
+          "assigned_top1_accuracy": 0.006550218340611353,
+          "recall_at_32_from_scores": 0.11208151382823872
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 13.865131006802084,
+          "assigned_top1_accuracy": 0.00727802037845706,
+          "recall_at_32_from_scores": 0.12372634643377002
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 15.04626701830966,
+          "assigned_top1_accuracy": 0.011644832605531296,
+          "recall_at_32_from_scores": 0.12372634643377002
+        }
+      },
+      "soft_k16_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.336381287555401,
+          "assigned_top1_accuracy": 0.011280931586608443,
+          "recall_at_32_from_scores": 0.1586608442503639
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.79914885200587,
+          "assigned_top1_accuracy": 0.021106259097525473,
+          "recall_at_32_from_scores": 0.2088791848617176
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.896756494636385,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.1524745269286754
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.167413140693572,
+          "assigned_top1_accuracy": 0.01564774381368268,
+          "recall_at_32_from_scores": 0.2190684133915575
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 17.156607729318768,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.13755458515283842
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.943570011626171,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.12663755458515283
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.258382403213972,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.14556040756914118
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.792504134889622,
+          "assigned_top1_accuracy": 0.009461426491994178,
+          "recall_at_32_from_scores": 0.13282387190684133
+        }
+      },
+      "soft_k16_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.325973676810397,
+          "assigned_top1_accuracy": 0.013100436681222707,
+          "recall_at_32_from_scores": 0.1524745269286754
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.324551966455417,
+          "assigned_top1_accuracy": 0.018922852983988356,
+          "recall_at_32_from_scores": 0.2059679767103348
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.381605364570223,
+          "assigned_top1_accuracy": 0.017831149927219795,
+          "recall_at_32_from_scores": 0.14810771470160117
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.68577084654052,
+          "assigned_top1_accuracy": 0.016739446870451237,
+          "recall_at_32_from_scores": 0.20924308588064047
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.562665527625846,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.1339155749636099
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.900643930193148,
+          "assigned_top1_accuracy": 0.006914119359534207,
+          "recall_at_32_from_scores": 0.12008733624454149
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.486694988158234,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.13828238719068414
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 15.116904484580497,
+          "assigned_top1_accuracy": 0.010917030567685589,
+          "recall_at_32_from_scores": 0.12590975254730713
+        }
+      },
+      "soft_k16_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.45070827695224,
+          "assigned_top1_accuracy": 0.013828238719068414,
+          "recall_at_32_from_scores": 0.13609898107714702
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 16.555399697656334,
+          "assigned_top1_accuracy": 0.016739446870451237,
+          "recall_at_32_from_scores": 0.1888646288209607
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 18.03974458048711,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.14192139737991266
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.144954355816672,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.17831149927219797
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.341906148310475,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.1277292576419214
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.603279678036557,
+          "assigned_top1_accuracy": 0.0054585152838427945,
+          "recall_at_32_from_scores": 0.11062590975254731
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.48291858656265,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.12590975254730713
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 15.022661595360077,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.11972343522561864
+        }
+      },
+      "soft_k32_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.23421837606536,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.1641193595342067
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 18.284134264740345,
+          "assigned_top1_accuracy": 0.020014556040756915,
+          "recall_at_32_from_scores": 0.2096069868995633
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.771952171248532,
+          "assigned_top1_accuracy": 0.017831149927219795,
+          "recall_at_32_from_scores": 0.14956331877729256
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.4092792358336,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.22489082969432314
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.551146115223485,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.13755458515283842
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.868450586406603,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.13173216885007277
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.907760718717842,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.15138282387190685
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.681561240029149,
+          "assigned_top1_accuracy": 0.011280931586608443,
+          "recall_at_32_from_scores": 0.13973799126637554
+        }
+      },
+      "soft_k32_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.246241405031181,
+          "assigned_top1_accuracy": 0.009825327510917031,
+          "recall_at_32_from_scores": 0.1539301310043668
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.106816119500035,
+          "assigned_top1_accuracy": 0.019650655021834062,
+          "recall_at_32_from_scores": 0.2012372634643377
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.863529379462847,
+          "assigned_top1_accuracy": 0.016375545851528384,
+          "recall_at_32_from_scores": 0.1502911208151383
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.640782076652577,
+          "assigned_top1_accuracy": 0.016375545851528384,
+          "recall_at_32_from_scores": 0.2165211062590975
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.65422275466429,
+          "assigned_top1_accuracy": 0.010917030567685589,
+          "recall_at_32_from_scores": 0.13500727802037846
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.12246831841723,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.12590975254730713
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.803353914720082,
+          "assigned_top1_accuracy": 0.007641921397379912,
+          "recall_at_32_from_scores": 0.14483260553129548
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.771452557577806,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.13209606986899564
+        }
+      },
+      "soft_k32_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.366401172689883,
+          "assigned_top1_accuracy": 0.011644832605531296,
+          "recall_at_32_from_scores": 0.1401018922852984
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 17.47071024814968,
+          "assigned_top1_accuracy": 0.019650655021834062,
+          "recall_at_32_from_scores": 0.188136826783115
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 16.824714223350266,
+          "assigned_top1_accuracy": 0.01455604075691412,
+          "recall_at_32_from_scores": 0.13355167394468703
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.62757219214774,
+          "assigned_top1_accuracy": 0.013828238719068414,
+          "recall_at_32_from_scores": 0.18777292576419213
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.120294090119614,
+          "assigned_top1_accuracy": 0.011644832605531296,
+          "recall_at_32_from_scores": 0.1324599708879185
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.826296362039976,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.1098981077147016
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.196201318584368,
+          "assigned_top1_accuracy": 0.006914119359534207,
+          "recall_at_32_from_scores": 0.13573508005822416
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.588206144785351,
+          "assigned_top1_accuracy": 0.009461426491994178,
+          "recall_at_32_from_scores": 0.12882096069868995
+        }
+      },
+      "hard_k8_top3": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.426875714640982,
+          "assigned_top1_accuracy": 0.012372634643377001,
+          "recall_at_32_from_scores": 0.14883551673944687
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 16.809162172818343,
+          "assigned_top1_accuracy": 0.018195050946142648,
+          "recall_at_32_from_scores": 0.18995633187772926
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.30633736085069,
+          "assigned_top1_accuracy": 0.013828238719068414,
+          "recall_at_32_from_scores": 0.14519650655021835
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.255318606738673,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.19323144104803494
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.06240405741194,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.1270014556040757
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.443986218154961,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.1160844250363901
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.869983457055682,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.13537117903930132
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.758103648192783,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.12299854439592431
+        }
+      },
+      "hard_k32_top5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.30408930286713,
+          "assigned_top1_accuracy": 0.011644832605531296,
+          "recall_at_32_from_scores": 0.14410480349344978
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 18.20546878610704,
+          "assigned_top1_accuracy": 0.018195050946142648,
+          "recall_at_32_from_scores": 0.18850072780203783
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 17.593232764748887,
+          "assigned_top1_accuracy": 0.016375545851528384,
+          "recall_at_32_from_scores": 0.12918486171761281
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 16.087902471419945,
+          "assigned_top1_accuracy": 0.018195050946142648,
+          "recall_at_32_from_scores": 0.18631732168850074
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.474540631104045,
+          "assigned_top1_accuracy": 0.009825327510917031,
+          "recall_at_32_from_scores": 0.1215429403202329
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.552907737456342,
+          "assigned_top1_accuracy": 0.007641921397379912,
+          "recall_at_32_from_scores": 0.11790393013100436
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.634745636448605,
+          "assigned_top1_accuracy": 0.00727802037845706,
+          "recall_at_32_from_scores": 0.13609898107714702
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 15.027591998189735,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.12445414847161572
+        }
+      }
+    },
+    "task3/20261127": {
+      "base": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.087219676703143,
+          "assigned_top1_accuracy": 0.014919941775836972,
+          "recall_at_32_from_scores": 0.15211062590975255
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 16.361476168473487,
+          "assigned_top1_accuracy": 0.021470160116448325,
+          "recall_at_32_from_scores": 0.21870451237263464
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.323691094429362,
+          "assigned_top1_accuracy": 0.014192139737991267,
+          "recall_at_32_from_scores": 0.13537117903930132
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.734720592659848,
+          "assigned_top1_accuracy": 0.02074235807860262,
+          "recall_at_32_from_scores": 0.19868995633187772
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.3732787905921,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.1324599708879185
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.238162754149645,
+          "assigned_top1_accuracy": 0.009461426491994178,
+          "recall_at_32_from_scores": 0.12336244541484716
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.474399626702763,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.13427947598253276
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.549764651065248,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.13209606986899564
+        }
+      },
+      "soft_k8_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.585024559071204,
+          "assigned_top1_accuracy": 0.012736535662299854,
+          "recall_at_32_from_scores": 0.15756914119359533
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.657323248140784,
+          "assigned_top1_accuracy": 0.01928675400291121,
+          "recall_at_32_from_scores": 0.2121542940320233
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.697101915343286,
+          "assigned_top1_accuracy": 0.009825327510917031,
+          "recall_at_32_from_scores": 0.14264919941775836
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 18.319368804494538,
+          "assigned_top1_accuracy": 0.020014556040756915,
+          "recall_at_32_from_scores": 0.20087336244541484
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.309852079424745,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.1324599708879185
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.03866089549926,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.12190684133915575
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.807149742464057,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.13427947598253276
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.80564743561741,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.12918486171761281
+        }
+      },
+      "soft_k8_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 14.889218506161495,
+          "assigned_top1_accuracy": 0.011280931586608443,
+          "recall_at_32_from_scores": 0.15538573508005823
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 16.06426779629414,
+          "assigned_top1_accuracy": 0.019650655021834062,
+          "recall_at_32_from_scores": 0.20087336244541484
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.904109115079981,
+          "assigned_top1_accuracy": 0.010917030567685589,
+          "recall_at_32_from_scores": 0.13573508005822416
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 18.181665631151684,
+          "assigned_top1_accuracy": 0.017831149927219795,
+          "recall_at_32_from_scores": 0.19723435225618632
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.33225512470597,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.13100436681222707
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 13.872088405606517,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.11790393013100436
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.810113413508162,
+          "assigned_top1_accuracy": 0.009825327510917031,
+          "recall_at_32_from_scores": 0.13027656477438138
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.768513616590884,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.1222707423580786
+        }
+      },
+      "soft_k8_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 14.71503880378975,
+          "assigned_top1_accuracy": 0.011644832605531296,
+          "recall_at_32_from_scores": 0.14374090247452692
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.63334505413715,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.18522561863173218
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.867355255003021,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.12190684133915575
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.302662897695072,
+          "assigned_top1_accuracy": 0.01455604075691412,
+          "recall_at_32_from_scores": 0.17612809315866085
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.434753649402898,
+          "assigned_top1_accuracy": 0.007641921397379912,
+          "recall_at_32_from_scores": 0.11899563318777293
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.562402918371372,
+          "assigned_top1_accuracy": 0.00727802037845706,
+          "recall_at_32_from_scores": 0.10625909752547306
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.074499740605349,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.13100436681222707
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.222201373093505,
+          "assigned_top1_accuracy": 0.006914119359534207,
+          "recall_at_32_from_scores": 0.11717612809315867
+        }
+      },
+      "soft_k16_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.73038915589629,
+          "assigned_top1_accuracy": 0.012736535662299854,
+          "recall_at_32_from_scores": 0.1579330422125182
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.89547266748838,
+          "assigned_top1_accuracy": 0.021470160116448325,
+          "recall_at_32_from_scores": 0.2157933042212518
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.67666386414152,
+          "assigned_top1_accuracy": 0.010917030567685589,
+          "recall_at_32_from_scores": 0.14264919941775836
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.932986677815627,
+          "assigned_top1_accuracy": 0.01928675400291121,
+          "recall_at_32_from_scores": 0.20050946142649198
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.676630208167934,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.13282387190684133
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.220867141149192,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.11972343522561864
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.103606688694668,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.13682678311499272
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 15.518095846710079,
+          "assigned_top1_accuracy": 0.007641921397379912,
+          "recall_at_32_from_scores": 0.13537117903930132
+        }
+      },
+      "soft_k16_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.733779962544801,
+          "assigned_top1_accuracy": 0.013464337700145561,
+          "recall_at_32_from_scores": 0.15756914119359533
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 16.294810070067335,
+          "assigned_top1_accuracy": 0.018558951965065504,
+          "recall_at_32_from_scores": 0.20378457059679767
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.71595908980124,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.13864628820960698
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.998429541973934,
+          "assigned_top1_accuracy": 0.01928675400291121,
+          "recall_at_32_from_scores": 0.19978165938864628
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 14.773797605729635,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.12882096069868995
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.978163894647334,
+          "assigned_top1_accuracy": 0.007641921397379912,
+          "recall_at_32_from_scores": 0.11499272197962154
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.717781804071999,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.13427947598253276
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.795022129277069,
+          "assigned_top1_accuracy": 0.006914119359534207,
+          "recall_at_32_from_scores": 0.13173216885007277
+        }
+      },
+      "soft_k16_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.074396607790092,
+          "assigned_top1_accuracy": 0.009825327510917031,
+          "recall_at_32_from_scores": 0.14810771470160117
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.846821542558747,
+          "assigned_top1_accuracy": 0.021470160116448325,
+          "recall_at_32_from_scores": 0.18449781659388648
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.33655185089629,
+          "assigned_top1_accuracy": 0.011280931586608443,
+          "recall_at_32_from_scores": 0.12445414847161572
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.94826714816746,
+          "assigned_top1_accuracy": 0.016375545851528384,
+          "recall_at_32_from_scores": 0.17576419213973798
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.186984198709688,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.11390101892285298
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.02605266995684,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.1098981077147016
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.513453308927296,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.12554585152838427
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.983243435310069,
+          "assigned_top1_accuracy": 0.004366812227074236,
+          "recall_at_32_from_scores": 0.11863173216885008
+        }
+      },
+      "soft_k32_l0.25": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.24552464271935,
+          "assigned_top1_accuracy": 0.011644832605531296,
+          "recall_at_32_from_scores": 0.16193595342066958
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.718065439866812,
+          "assigned_top1_accuracy": 0.021470160116448325,
+          "recall_at_32_from_scores": 0.2197962154294032
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.14712786733893,
+          "assigned_top1_accuracy": 0.012008733624454149,
+          "recall_at_32_from_scores": 0.13864628820960698
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 18.31386565586765,
+          "assigned_top1_accuracy": 0.018558951965065504,
+          "recall_at_32_from_scores": 0.2019650655021834
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.663501216814701,
+          "assigned_top1_accuracy": 0.007641921397379912,
+          "recall_at_32_from_scores": 0.1339155749636099
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.6895039203592,
+          "assigned_top1_accuracy": 0.007641921397379912,
+          "recall_at_32_from_scores": 0.11863173216885008
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.27746366884917,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.13755458515283842
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 15.38824030791119,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.13791848617176128
+        }
+      },
+      "soft_k32_l0.5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.875853061099544,
+          "assigned_top1_accuracy": 0.013828238719068414,
+          "recall_at_32_from_scores": 0.1648471615720524
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.964466989820188,
+          "assigned_top1_accuracy": 0.018922852983988356,
+          "recall_at_32_from_scores": 0.21506550218340612
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.199281671909382,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.13791848617176128
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.925286544369634,
+          "assigned_top1_accuracy": 0.017831149927219795,
+          "recall_at_32_from_scores": 0.19614264919941776
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 16.284757770862434,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.13136826783114994
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.431708294289729,
+          "assigned_top1_accuracy": 0.007641921397379912,
+          "recall_at_32_from_scores": 0.12081513828238719
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.011741122686079,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.1306404657933042
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.944522116492012,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.13355167394468703
+        }
+      },
+      "soft_k32_l1.0": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.44386628427549,
+          "assigned_top1_accuracy": 0.014919941775836972,
+          "recall_at_32_from_scores": 0.14847161572052403
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.808349600078675,
+          "assigned_top1_accuracy": 0.018558951965065504,
+          "recall_at_32_from_scores": 0.19723435225618632
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.567427923856535,
+          "assigned_top1_accuracy": 0.011644832605531296,
+          "recall_at_32_from_scores": 0.12481804949053857
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 18.136614089156268,
+          "assigned_top1_accuracy": 0.01710334788937409,
+          "recall_at_32_from_scores": 0.18085880640465793
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.863965977395456,
+          "assigned_top1_accuracy": 0.006914119359534207,
+          "recall_at_32_from_scores": 0.12481804949053857
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.118663941883366,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.11353711790393013
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.803803968202395,
+          "assigned_top1_accuracy": 0.008733624454148471,
+          "recall_at_32_from_scores": 0.12409024745269287
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.429976733758416,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.12045123726346434
+        }
+      },
+      "hard_k8_top3": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.487132214219933,
+          "assigned_top1_accuracy": 0.012008733624454149,
+          "recall_at_32_from_scores": 0.15211062590975255
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 16.455322196767327,
+          "assigned_top1_accuracy": 0.02074235807860262,
+          "recall_at_32_from_scores": 0.2019650655021834
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.163245579301066,
+          "assigned_top1_accuracy": 0.012008733624454149,
+          "recall_at_32_from_scores": 0.1324599708879185
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.84835515462528,
+          "assigned_top1_accuracy": 0.020378457059679767,
+          "recall_at_32_from_scores": 0.17976710334788937
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.057490098306014,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.12372634643377002
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 14.793641867271543,
+          "assigned_top1_accuracy": 0.008369723435225618,
+          "recall_at_32_from_scores": 0.11208151382823872
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 15.213918349667503,
+          "assigned_top1_accuracy": 0.010189228529839884,
+          "recall_at_32_from_scores": 0.1270014556040757
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.73250244746449,
+          "assigned_top1_accuracy": 0.00727802037845706,
+          "recall_at_32_from_scores": 0.12190684133915575
+        }
+      },
+      "hard_k32_top5": {
+        "mice1/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.57583090541807,
+          "assigned_top1_accuracy": 0.010553129548762736,
+          "recall_at_32_from_scores": 0.15574963609898107
+        },
+        "mice1/session2": {
+          "rows": 256,
+          "assigned_ocf": 16.564906754610455,
+          "assigned_top1_accuracy": 0.020014556040756915,
+          "recall_at_32_from_scores": 0.19323144104803494
+        },
+        "mice1/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.890842509610584,
+          "assigned_top1_accuracy": 0.010917030567685589,
+          "recall_at_32_from_scores": 0.12882096069868995
+        },
+        "mice1/session4": {
+          "rows": 256,
+          "assigned_ocf": 17.577971739364187,
+          "assigned_top1_accuracy": 0.019650655021834062,
+          "recall_at_32_from_scores": 0.18085880640465793
+        },
+        "mice2/session1": {
+          "rows": 256,
+          "assigned_ocf": 15.213053722854795,
+          "assigned_top1_accuracy": 0.006914119359534207,
+          "recall_at_32_from_scores": 0.12590975254730713
+        },
+        "mice2/session2": {
+          "rows": 256,
+          "assigned_ocf": 15.274245556782981,
+          "assigned_top1_accuracy": 0.009097525473071324,
+          "recall_at_32_from_scores": 0.10807860262008734
+        },
+        "mice2/session3": {
+          "rows": 256,
+          "assigned_ocf": 14.756567234964713,
+          "assigned_top1_accuracy": 0.011280931586608443,
+          "recall_at_32_from_scores": 0.12336244541484716
+        },
+        "mice2/session4": {
+          "rows": 256,
+          "assigned_ocf": 14.204714040311963,
+          "assigned_top1_accuracy": 0.008005822416302766,
+          "recall_at_32_from_scores": 0.1222707423580786
+        }
+      }
+    }
+  },
+  "gate": {
+    "macro_minimum_absolute_gain": 3.0,
+    "both_mice_nonnegative": true,
+    "required_nonnegative_folds": {
+      "task2": 2,
+      "task3": 2
+    }
+  },
+  "summary": {
+    "tasks": {
+      "task2": {
+        "base_macro": 19.724856979673394,
+        "per_config": {
+          "base": {
+            "macro": 19.724856979673394,
+            "fold_macro": {
+              "session1": 19.03125719095393,
+              "session2": 19.898478371019248,
+              "session3": 20.244835377047014
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": 0.0,
+                "mice2": 0.0
+              },
+              "session2": {
+                "mice1": 0.0,
+                "mice2": 0.0
+              },
+              "session3": {
+                "mice1": 0.0,
+                "mice2": 0.0
+              }
+            },
+            "fold_delta": {
+              "session1": 0.0,
+              "session2": 0.0,
+              "session3": 0.0
+            },
+            "macro_delta": 0.0
+          },
+          "soft_k8_l0.25": {
+            "macro": 19.65897270004498,
+            "fold_macro": {
+              "session1": 18.239400421533222,
+              "session2": 20.00061390817315,
+              "session3": 20.736903770428572
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.37171698432155154,
+                "mice2": -1.2119965545198639
+              },
+              "session2": {
+                "mice1": 0.4869888278417527,
+                "mice2": -0.282717753533948
+              },
+              "session3": {
+                "mice1": 0.12061971356319745,
+                "mice2": 0.8635170731999189
+              }
+            },
+            "fold_delta": {
+              "session1": -0.7918567694207077,
+              "session2": 0.10213553715390233,
+              "session3": 0.49206839338155817
+            },
+            "macro_delta": -0.06588427962841337
+          },
+          "soft_k8_l0.5": {
+            "macro": 19.645631011446955,
+            "fold_macro": {
+              "session1": 18.11183557776794,
+              "session2": 20.813388929877686,
+              "session3": 20.01166852669525
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.5224348127529765,
+                "mice2": -1.3164084136189977
+              },
+              "session2": {
+                "mice1": 1.8346809484616315,
+                "mice2": -0.004859830744756266
+              },
+              "session3": {
+                "mice1": -0.518273913836488,
+                "mice2": 0.05194021313295849
+              }
+            },
+            "fold_delta": {
+              "session1": -0.9194216131859889,
+              "session2": 0.9149105588584376,
+              "session3": -0.23316685035176477
+            },
+            "macro_delta": -0.07922596822643868
+          },
+          "soft_k8_l1.0": {
+            "macro": 19.11978932618185,
+            "fold_macro": {
+              "session1": 17.753492002893374,
+              "session2": 19.641775692374036,
+              "session3": 19.964100283278142
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.3070850423075058,
+                "mice2": -2.24844533381361
+              },
+              "session2": {
+                "mice1": 0.9329914763551415,
+                "mice2": -1.446396833645565
+              },
+              "session3": {
+                "mice1": -0.506950804215986,
+                "mice2": -0.05451938332175388
+              }
+            },
+            "fold_delta": {
+              "session1": -1.277765188060556,
+              "session2": -0.2567026786452118,
+              "session3": -0.28073509376887174
+            },
+            "macro_delta": -0.6050676534915453
+          },
+          "soft_k16_l0.25": {
+            "macro": 19.376172546924913,
+            "fold_macro": {
+              "session1": 18.242235948682968,
+              "session2": 19.694683720403457,
+              "session3": 20.191597971688317
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.22063820347631236,
+                "mice2": -1.3574042810656124
+              },
+              "session2": {
+                "mice1": 0.13317492754271854,
+                "mice2": -0.5407642287743002
+              },
+              "session3": {
+                "mice1": -0.04847356945919046,
+                "mice2": -0.058001241258203606
+              }
+            },
+            "fold_delta": {
+              "session1": -0.7890212422709624,
+              "session2": -0.20379465061579083,
+              "session3": -0.05323740535869703
+            },
+            "macro_delta": -0.34868443274848104
+          },
+          "soft_k16_l0.5": {
+            "macro": 19.098329488176855,
+            "fold_macro": {
+              "session1": 17.972110411136043,
+              "session2": 18.601671083743387,
+              "session3": 20.72120696965113
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.5936051837531124,
+                "mice2": -1.5246883758826648
+              },
+              "session2": {
+                "mice1": -1.4578960449607692,
+                "mice2": -1.135718529590953
+              },
+              "session3": {
+                "mice1": 0.6389063435620059,
+                "mice2": 0.3138368416462285
+              }
+            },
+            "fold_delta": {
+              "session1": -1.0591467798178869,
+              "session2": -1.2968072872758611,
+              "session3": 0.4763715926041172
+            },
+            "macro_delta": -0.6265274914965389
+          },
+          "soft_k16_l1.0": {
+            "macro": 18.936545107408154,
+            "fold_macro": {
+              "session1": 17.843119601884673,
+              "session2": 18.795006028969702,
+              "session3": 20.17150969137009
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.7393774720146311,
+                "mice2": -1.6368977061238859
+              },
+              "session2": {
+                "mice1": -0.3293989270781239,
+                "mice2": -1.8775457570209717
+              },
+              "session3": {
+                "mice1": -0.05671919129911274,
+                "mice2": -0.08993218005473835
+              }
+            },
+            "fold_delta": {
+              "session1": -1.1881375890692567,
+              "session2": -1.103472342049546,
+              "session3": -0.07332568567692377
+            },
+            "macro_delta": -0.7883118722652398
+          },
+          "soft_k32_l0.25": {
+            "macro": 19.572818763193297,
+            "fold_macro": {
+              "session1": 17.551599839023105,
+              "session2": 20.572832054686348,
+              "session3": 20.594024395870434
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.6188320897361805,
+                "mice2": -2.3404826141254738
+              },
+              "session2": {
+                "mice1": 1.5345557392708642,
+                "mice2": -0.1858483719366646
+              },
+              "session3": {
+                "mice1": -0.07126500767498811,
+                "mice2": 0.7696430453218248
+              }
+            },
+            "fold_delta": {
+              "session1": -1.4796573519308254,
+              "session2": 0.6743536836670998,
+              "session3": 0.3491890188234201
+            },
+            "macro_delta": -0.15203821648009708
+          },
+          "soft_k32_l0.5": {
+            "macro": 19.39537648297343,
+            "fold_macro": {
+              "session1": 17.816194479804203,
+              "session2": 19.942121550834422,
+              "session3": 20.42781341828166
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.30007704802969215,
+                "mice2": -2.1300483742697622
+              },
+              "session2": {
+                "mice1": 0.08986429645438676,
+                "mice2": -0.002577936824039284
+              },
+              "session3": {
+                "mice1": -0.018543618269113438,
+                "mice2": 0.38449970073840234
+              }
+            },
+            "fold_delta": {
+              "session1": -1.2150627111497272,
+              "session2": 0.04364317981517374,
+              "session3": 0.18297804123464445
+            },
+            "macro_delta": -0.32948049669996493
+          },
+          "soft_k32_l1.0": {
+            "macro": 19.159597369580656,
+            "fold_macro": {
+              "session1": 17.666081495572946,
+              "session2": 19.407201254459604,
+              "session3": 20.405509358709423
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.6728037100096032,
+                "mice2": -2.057547680752368
+              },
+              "session2": {
+                "mice1": 0.6112093328122796,
+                "mice2": -1.5937635659315674
+              },
+              "session3": {
+                "mice1": 0.4442080708955771,
+                "mice2": -0.12286010757076227
+              }
+            },
+            "fold_delta": {
+              "session1": -1.3651756953809837,
+              "session2": -0.4912771165596439,
+              "session3": 0.1606739816624092
+            },
+            "macro_delta": -0.5652596100927383
+          },
+          "hard_k8_top3": {
+            "macro": 18.63798424336654,
+            "fold_macro": {
+              "session1": 17.896864307974273,
+              "session2": 18.33500022530626,
+              "session3": 19.682088196819087
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": -0.48428262139569256,
+                "mice2": -1.7845031445636224
+              },
+              "session2": {
+                "mice1": -1.4731518412572093,
+                "mice2": -1.6538044501687708
+              },
+              "session3": {
+                "mice1": -0.6462086885711571,
+                "mice2": -0.47928567188469273
+              }
+            },
+            "fold_delta": {
+              "session1": -1.1343928829796575,
+              "session2": -1.5634781457129883,
+              "session3": -0.5627471802279267
+            },
+            "macro_delta": -1.086872736306855
+          },
+          "hard_k32_top5": {
+            "macro": 18.941038588773836,
+            "fold_macro": {
+              "session1": 17.837728649743518,
+              "session2": 19.276740193590783,
+              "session3": 19.70864692298721
+            },
+            "mouse_delta": {
+              "session1": {
+                "mice1": 0.21946443302004326,
+                "mice2": -2.606521515440871
+              },
+              "session2": {
+                "mice1": -0.27248944862790836,
+                "mice2": -0.9709869062290224
+              },
+              "session3": {
+                "mice1": -0.03945824442422463,
+                "mice2": -1.0329186636953835
+              }
+            },
+            "fold_delta": {
+              "session1": -1.1935285412104122,
+              "session2": -0.6217381774284654,
+              "session3": -0.5361884540598041
+            },
+            "macro_delta": -0.7838183908995582
+          }
+        },
+        "selected": "soft_k8_l0.25",
+        "selected_macro_delta": -0.06588427962841337,
+        "selected_both_mice_nonnegative": false,
+        "selected_nonnegative_folds": 2,
+        "selected_fold_count": 3,
+        "pass": false
+      },
+      "task3": {
+        "base_macro": 15.708839851465253,
+        "per_config": {
+          "base": {
+            "macro": 15.708839851465253,
+            "fold_macro": {
+              "20261126": 15.899840533583557,
+              "20261127": 15.51783916934695
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": 0.0,
+                "mice2": 0.0
+              },
+              "20261127": {
+                "mice1": 0.0,
+                "mice2": 0.0
+              }
+            },
+            "fold_delta": {
+              "20261126": 0.0,
+              "20261127": 0.0
+            },
+            "macro_delta": 0.0
+          },
+          "soft_k8_l0.25": {
+            "macro": 15.632638880519174,
+            "fold_macro": {
+              "20261126": 15.86276167603144,
+              "20261127": 15.40251608500691
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.10585490713328127,
+                "mice2": 0.03169719202904453
+              },
+              "20261127": {
+                "mice1": -0.3120722513040093,
+                "mice2": 0.08142608262392947
+              }
+            },
+            "fold_delta": {
+              "20261126": -0.03707885755211748,
+              "20261127": -0.11532308434003902
+            },
+            "macro_delta": -0.07620097094607914
+          },
+          "soft_k8_l0.5": {
+            "macro": 15.712412169855618,
+            "fold_macro": {
+              "20261126": 16.072045388573883,
+              "20261127": 15.352778951137353
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": 0.06599280286942388,
+                "mice2": 0.27841690711123235
+              },
+              "20261127": {
+                "mice1": -0.3669616208946387,
+                "mice2": 0.03684118447544371
+              }
+            },
+            "fold_delta": {
+              "20261126": 0.17220485499032634,
+              "20261127": -0.1650602182095966
+            },
+            "macro_delta": 0.0035723183903648703
+          },
+          "soft_k8_l1.0": {
+            "macro": 15.519034346241122,
+            "fold_macro": {
+              "20261126": 15.811536230969981,
+              "20261127": 15.226532461512264
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.07794100686226813,
+                "mice2": -0.09866759836488193
+              },
+              "20261127": {
+                "mice1": -0.747176380410215,
+                "mice2": 0.16456296474084198
+              }
+            },
+            "fold_delta": {
+              "20261126": -0.08830430261357591,
+              "20261127": -0.2913067078346856
+            },
+            "macro_delta": -0.18980550522413075
+          },
+          "soft_k16_l0.25": {
+            "macro": 15.944092269000215,
+            "fold_macro": {
+              "20261126": 16.16884550674247,
+              "20261127": 15.719339031257961
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.05359131618835988,
+                "mice2": 0.5916012625061899
+              },
+              "20261127": {
+                "mice1": -0.31789879173100744,
+                "mice2": 0.7208985155530296
+              }
+            },
+            "fold_delta": {
+              "20261126": 0.26900497315891414,
+              "20261127": 0.201499861911012
+            },
+            "macro_delta": 0.23525241753496218
+          },
+          "soft_k16_l0.5": {
+            "macro": 15.862034680190476,
+            "fold_macro": {
+              "20261126": 16.098101348116785,
+              "20261127": 15.625968012264169
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.1740407963170263,
+                "mice2": 0.5705624253834856
+              },
+              "20261127": {
+                "mice1": -0.19103221696963502,
+                "mice2": 0.40728990280407196
+              }
+            },
+            "fold_delta": {
+              "20261126": 0.19826081453322786,
+              "20261127": 0.10812884291721936
+            },
+            "macro_delta": 0.15319482872522272
+          },
+          "soft_k16_l1.0": {
+            "macro": 15.784833980093662,
+            "fold_macro": {
+              "20261126": 15.830196614897766,
+              "20261127": 15.73947134528956
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.30581453218307786,
+                "mice2": 0.16652669481149474
+              },
+              "20261127": {
+                "mice1": -0.07526759571331354,
+                "mice2": 0.5185319475985342
+              }
+            },
+            "fold_delta": {
+              "20261126": -0.06964391868579156,
+              "20261127": 0.2216321759426112
+            },
+            "macro_delta": 0.07599412862840893
+          },
+          "soft_k32_l0.25": {
+            "macro": 15.946987214249496,
+            "fold_macro": {
+              "20261126": 16.213562838533115,
+              "20261127": 15.680411589965876
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": 0.07137975206079261,
+                "mice2": 0.5560648578383223
+              },
+              "20261127": {
+                "mice1": -0.27063098161827526,
+                "mice2": 0.5957758228561278
+              }
+            },
+            "fold_delta": {
+              "20261126": 0.31372230494955744,
+              "20261127": 0.16257242061892718
+            },
+            "macro_delta": 0.2381473627842432
+          },
+          "soft_k32_l0.5": {
+            "macro": 15.74040525609719,
+            "fold_macro": {
+              "20261126": 15.901108315753255,
+              "20261127": 15.579702196441126
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.13917401474950708,
+                "mice2": 0.14170957908890536
+              },
+              "20261127": {
+                "mice1": -0.3855548162667741,
+                "mice2": 0.5092808704551235
+              }
+            },
+            "fold_delta": {
+              "20261126": 0.0012677821696982505,
+              "20261127": 0.06186302709417646
+            },
+            "macro_delta": 0.031565404631937355
+          },
+          "soft_k32_l1.0": {
+            "macro": 15.637066516904593,
+            "fold_macro": {
+              "20261126": 15.62754946898336,
+              "20261127": 15.646583564825825
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.2811668008267745,
+                "mice2": -0.26341532837361825
+              },
+              "20261127": {
+                "mice1": -0.38771240872472035,
+                "mice2": 0.6452011996824698
+              }
+            },
+            "fold_delta": {
+              "20261126": -0.27229106460019636,
+              "20261127": 0.12874439547887562
+            },
+            "macro_delta": -0.07177333456066037
+          },
+          "hard_k8_top3": {
+            "macro": 15.667736196467951,
+            "fold_macro": {
+              "20261126": 15.866521404483008,
+              "20261127": 15.468950988452894
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.4040927961489942,
+                "mice2": 0.33745453794789704
+              },
+              "20261127": {
+                "mice1": -0.3882630968380596,
+                "mice2": 0.2904867350499494
+              }
+            },
+            "fold_delta": {
+              "20261126": -0.03331912910054946,
+              "20261127": -0.04888818089405511
+            },
+            "macro_delta": -0.041103654997302286
+          },
+          "hard_k32_top5": {
+            "macro": 15.746163237016217,
+            "fold_macro": {
+              "20261126": 15.985059916042715,
+              "20261127": 15.50726655798972
+            },
+            "mouse_delta": {
+              "20261126": {
+                "mice1": -0.05584292862541673,
+                "mice2": 0.2262816935437364
+              },
+              "20261127": {
+                "mice1": -0.22438890581563697,
+                "mice2": 0.20324368310117435
+              }
+            },
+            "fold_delta": {
+              "20261126": 0.08521938245915806,
+              "20261127": -0.010572611357229533
+            },
+            "macro_delta": 0.03732338555096426
+          }
+        },
+        "selected": "soft_k32_l0.25",
+        "selected_macro_delta": 0.2381473627842432,
+        "selected_both_mice_nonnegative": false,
+        "selected_nonnegative_folds": 2,
+        "selected_fold_count": 2,
+        "pass": false
+      }
+    },
+    "selection": {
+      "task2": "soft_k8_l0.25",
+      "task3": "soft_k32_l0.25"
+    },
+    "advance": false
+  },
+  "elapsed_seconds": 653.4125675999094
+}
