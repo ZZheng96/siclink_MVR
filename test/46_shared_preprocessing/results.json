@@ -1,0 +1,40 @@
+{
+  "experiment": "46_shared_preprocessing",
+  "status": "passed",
+  "cache": "test\\.cache\\shared_preprocessing_v1",
+  "manifest_sha256": "aa1553fe8f313de3fd8738c6682d7878d6366e92743a3d504547e04db5d80903",
+  "checks": {
+    "bin_10_exact_train_equality": true,
+    "bin_25_exact_train_equality": true,
+    "bin_50_exact_train_equality": true,
+    "train_trials_total": 87936,
+    "pictures_shape": [
+      2748,
+      64,
+      64
+    ],
+    "source_files_hashed": 28,
+    "splits": {
+      "task1": {
+        "path": "test\\.cache\\shared_preprocessing_v1\\splits\\task1_seed42.json",
+        "sha256": "5ae72886890566b20d669c4986129271b3d1caee8544820416d7f24e543f645f",
+        "blocks": 8,
+        "round_trip_exact": true
+      },
+      "task2": {
+        "path": "test\\.cache\\shared_preprocessing_v1\\splits\\task2_seed42.json",
+        "sha256": "5c9a0c6561dbe5fe8bc37109097760cd15406ace26f8ca10594379e33663408f",
+        "blocks": 8,
+        "round_trip_exact": true
+      },
+      "task3": {
+        "path": "test\\.cache\\shared_preprocessing_v1\\splits\\task3_seed42.json",
+        "sha256": "ccf2ccdf170d3be517cf0de6249a58ade1d22a0cd05ec7de17643a100cd6e4cf",
+        "blocks": 8,
+        "round_trip_exact": true
+      }
+    }
+  },
+  "production_changed": false,
+  "ocf_computed": false
+}

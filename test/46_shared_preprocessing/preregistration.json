@@ -1,0 +1,42 @@
+{
+  "experiment": "46_shared_preprocessing",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_cache_or_real_metrics",
+  "date": "2026-11-26",
+  "purpose": "Build one deterministic, auditable trial-level data layer shared by later experiments; no model selection or OCF tuning occurs here.",
+  "source": {
+    "root": "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset",
+    "catalog_and_every_npz_sha256": true,
+    "public_train_labels_only": true,
+    "hidden_test_targets_or_external_id_alignment": false
+  },
+  "cache": {
+    "path": "test/.cache/shared_preprocessing_v1",
+    "schema": 1,
+    "bin_ms": [10, 25, 50],
+    "array_layout": "one trial per row; flattened unit-major unit x time counts; uint16 NPY memmaps",
+    "shared_content": "raw deterministic counts, target IDs only for train, sample/trial mappings, sample IDs, mouse/session/task metadata, source and count hashes",
+    "excluded_content": "normalization statistics, PCA, class prototypes, model weights, validation-derived parameters, hidden labels"
+  },
+  "required_real_data_checks": {
+    "train_blocks": 8,
+    "train_trials_total": 87936,
+    "train_trials_per_block": 10992,
+    "glyphs": 2748,
+    "training_repeats_per_glyph_per_block": 4,
+    "test_targets_absent": true,
+    "pictures_shape": [2748, 64, 64],
+    "count_equality": "Cached counts must exactly equal src.features.trial_count_features for every train block and every cached bin width.",
+    "memmap_reload_equality": true,
+    "source_and_count_sha256_recorded": true
+  },
+  "split_manifests": {
+    "generator": "src.splits.make_split(seed=42)",
+    "tasks": ["task1", "task2", "task3"],
+    "task2_validation_session": "session4",
+    "checks": "Every trial appears exactly once across train/validation within each block; zero trial overlap; Task1 zero target overlap; Task2 complete held-out day; Task3 exactly three train and one validation trial for every glyph in every block.",
+    "round_trip": "Save and reload explicit indices, then require exact equality with freshly generated frozen splits."
+  },
+  "completion_gate": "All real-data checks and split checks pass. No OCF is computed and no production pipeline is changed by this experiment.",
+  "run_command": ".venv\\Scripts\\python.exe -B -u test\\46_shared_preprocessing\\run.py --run"
+}

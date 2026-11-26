@@ -1,0 +1,101 @@
+{
+  "experiment": "47_train_single_trial_top1",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_training_or_real_metrics",
+  "date": "2026-11-26",
+  "purpose": "First-step capacity and public-train label-pipeline acceptance: fit two mouse-specific classifiers and require exact target-ID top-1 on every original public training single trial. Training-set 100% is not a generalization claim.",
+  "scope": "Only test/47_train_single_trial_top1 may be created or modified. Do not modify src production code, other experiments, or Git history. This script never builds the shared cache and never starts real training in smoke-test mode.",
+  "data": {
+    "cache": "test/.cache/shared_preprocessing_v1",
+    "cache_schema": 1,
+    "cache_access": "Read-only preflight of manifest.json and cached 25ms count hashes, followed by load_cached_blocks(split='train', bin_ms=25). If the cache is absent or incomplete, fail clearly; never call prepare_cache.",
+    "bin_ms": 25,
+    "public_partition": "train only",
+    "split_manifest_required": false,
+    "validation_fold": null,
+    "validation_or_test_labels_used": false,
+    "mice": [
+      "mice1",
+      "mice2"
+    ],
+    "blocks": [
+      "mice1/session1",
+      "mice1/session2",
+      "mice1/session3",
+      "mice1/session4",
+      "mice2/session1",
+      "mice2/session2",
+      "mice2/session3",
+      "mice2/session4"
+    ],
+    "target_classes": 2748,
+    "trials_per_block": 10992,
+    "trials_per_mouse": 43968,
+    "trials_total": 87936,
+    "training_repeats_per_target_per_block": 4,
+    "row_policy": "Keep every original single-trial count row exactly once per epoch. No repeat averaging, mean rows, duplication, trial subsampling, or test-time augmentation.",
+    "integrity_checks": "Require the eight ordered train blocks, 10,992 trials per block, 43,968 per mouse, 87,936 overall, four in-range rows for every target in every block, and consistent feature dimensions within each mouse."
+  },
+  "normalization": {
+    "session": "For each mouse/session independently, compute log1p(max(raw_count, 0)) mean and population std over all 10,992 public training trials in that session, using float64 statistics and scale floor 1e-5; apply the same statistics to those rows.",
+    "concatenation": "Concatenate the four session-normalized training matrices per mouse without aggregation.",
+    "model": "SpikeClassifier.set_normalization on the concatenated, session-normalized training matrix for that mouse only, with apply_log=False so log1p is not applied twice.",
+    "leakage": "There is no validation fold. Every statistic is fitted only on the same mouse's permitted public training trials; no validation/test responses or labels enter any statistic."
+  },
+  "model_and_training": {
+    "models": "Two independent src.neural.SpikeClassifier instances, one per mouse; no pooled mouse model and no assignment between mice.",
+    "n_classes": 2748,
+    "hidden": 1024,
+    "dropout": 0.0,
+    "apply_log": false,
+    "seed": 42,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0,
+    "loss": "cross_entropy(label_smoothing=0.0)",
+    "batch_size": 256,
+    "max_epochs_per_mouse": 100,
+    "gradient_clip_norm": 5.0,
+    "row_order": "For each mouse and 1-based epoch e, numpy.random.default_rng(42 + e).permutation(43968). Each original row occurs once per epoch.",
+    "mixed_precision": "CUDA training/evaluation may use bfloat16 autocast with float32 cross-entropy, matching src.neural inference; CPU uses float32.",
+    "fit_full_reuse": "Forbidden because src.final.fit_full and existing neural fit helpers apply nonzero label smoothing. This experiment implements its own explicit zero-smoothing loop."
+  },
+  "evaluation_and_stopping": {
+    "frequency": "After every training epoch for the mouse just trained.",
+    "mode": "model.eval() and torch.inference_mode().",
+    "coverage": "Every original single trial for that mouse, in sequential full-array batches; no sampled estimate, repeat aggregation, validation rows, or test rows.",
+    "metric": "Hard target-ID argmax top-1 with integer correct/total counts and accuracy=correct/total; no Hungarian assignment or one-to-one constraint.",
+    "history": "After every epoch save loss, exact correct, exact total, and exact accuracy to the mouse history and save the current last-epoch checkpoint.",
+    "mouse_early_stop": "Stop a mouse immediately at 43,968/43,968 because further updates to that mouse cannot be required for its acceptance condition.",
+    "overall_early_stop": "Training is sequential by mouse. After each completed mouse fit, sum only the exact full-training evaluations. Stop the experiment immediately when both mice total 87,936/87,936.",
+    "pass_rule": "status=passed if and only overall correct=87,936 and total=87,936; accuracy must be exactly 1.0.",
+    "failure_rule": "If the epoch limit is reached without exact overall 100%, status=failed. Never round up, omit errors, select a better earlier epoch, or report training-batch accuracy as the acceptance metric.",
+    "checkpoint_rule": "Save each mouse's last evaluated epoch, whether it passes or fails; there is no best-validation checkpoint."
+  },
+  "debug_override": {
+    "argument": "--epochs N",
+    "default": null,
+    "strict_default_epochs": 100,
+    "allowed_with": "--run only",
+    "purpose": "Debugging only. Any explicit override, including --epochs 100, marks results as protocol_status=non_preregistered_debug and is_preregistered_protocol=false. The actual correct/total and passed/failed status remain truthful."
+  },
+  "prohibited_methods": [
+    "mean augmentation or repeat-mean training rows",
+    "Hungarian assignment or any one-to-one assignment",
+    "validation labels or test labels",
+    "validation or test responses",
+    "image features, image lookup, image-index priors, or target-ID ordering priors",
+    "external labels, hidden test data, submissions, or any other leakage",
+    "generalization claims from training-set accuracy"
+  ],
+  "outputs": {
+    "implementation": "test/47_train_single_trial_top1/run.py",
+    "preregistration": "test/47_train_single_trial_top1/preregistration.json",
+    "per_mouse_checkpoint": "test/47_train_single_trial_top1/artifacts/models/{mice1,mice2}/classifier.pt",
+    "per_mouse_history": "test/47_train_single_trial_top1/artifacts/models/{mice1,mice2}/history.json",
+    "results": "test/47_train_single_trial_top1/results.json with lightweight per-mouse summaries and explicit overall correct, total=87936, correct_over_total, and accuracy",
+    "real_run_command": ".venv\\Scripts\\python.exe -B -u test\\47_train_single_trial_top1\\run.py --run",
+    "debug_command_example_non_preregistered": ".venv\\Scripts\\python.exe -B -u test\\47_train_single_trial_top1\\run.py --run --epochs 1",
+    "synthetic_smoke_command": ".venv\\Scripts\\python.exe -B test\\47_train_single_trial_top1\\run.py --smoke-test"
+  }
+}
