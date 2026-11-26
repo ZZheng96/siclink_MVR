@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "experiment": "51_hierarchical_poisson",
+  "status": "development_selection_complete",
+  "development_reuse": "development reuse only; not pristine validation; not a Kaggle result",
+  "reference48": {
+    "development_results": "test/48_high_capacity_generalization/development_results.json",
+    "selection": "test/48_high_capacity_generalization/selection.json",
+    "development_results_sha256": "93211e490cbb0cef09564ddebefaca37435c7976ef2dc9a49c6dea0653c377e1",
+    "selection_sha256": "b389710363ab42ef965cab0fb8270546590754f45b09145f957f4e5a2efae1fe",
+    "run_code_sha256": "4b1ecd339df387867d00afbe3948f6dd3a2cf9300a281bf560a36a2de0d62b07",
+    "arm": "production_recipe",
+    "selected_epochs": {
+      "task2": 5,
+      "task3": 12
+    }
+  },
+  "development_reference_metrics_used": true,
+  "final_or_heldout_metrics_used": false,
+  "tasks": {
+    "task2": {
+      "production_selected_epoch": 5,
+      "candidate_epoch_selection": "none; one deterministic fit with aggregate adapter epoch=1",
+      "selected_macro": {
+        "production_recipe": {
+          "task": "task2",
+          "arm": "production_recipe",
+          "epoch": 5,
+          "n_source_cells": 6,
+          "n_evaluation_rows": 1536,
+          "raw_top1_accuracy": 0.02734375,
+          "raw_recall_at_32": 0.2565104166666667,
+          "raw_top1_official_ocf": 18.135712977266017,
+          "assigned_final_ocf": 18.37188143983611
+        },
+        "hierarchical_poisson": {
+          "task": "task2",
+          "arm": "hierarchical_poisson",
+          "epoch": 1,
+          "n_source_cells": 6,
+          "n_evaluation_rows": 1536,
+          "raw_top1_accuracy": 0.029296875,
+          "raw_recall_at_32": 0.19205729166666666,
+          "raw_top1_official_ocf": 17.66244716058394,
+          "assigned_final_ocf": 17.704885497390684
+        }
+      },
+      "hierarchical_poisson_minus_production": {
+        "macro_assigned_final_ocf": -0.6669959424454248,
+        "per_mouse_assigned_final_ocf": {
+          "mice1": -0.7415028080479829,
+          "mice2": -0.5924890768428703
+        },
+        "per_fold_assigned_final_ocf": {
+          "session1": -1.3410904353986908,
+          "session2": -0.3008583170650212,
+          "session3": -0.3590390748725696
+        }
+      },
+      "nonnegative_fold_count": 0,
+      "required_nonnegative_fold_count": 2,
+      "gates": {
+        "macro_assigned_ocf_delta_at_least_3": false,
+        "both_mouse_deltas_nonnegative": false,
+        "fold_deltas_nonnegative": false
+      },
+      "advance": false,
+      "next_step": "stop; no alternate model or hyperparameter search"
+    },
+    "task3": {
+      "production_selected_epoch": 12,
+      "candidate_epoch_selection": "none; one deterministic fit with aggregate adapter epoch=1",
+      "selected_macro": {
+        "production_recipe": {
+          "task": "task3",
+          "arm": "production_recipe",
+          "epoch": 12,
+          "n_source_cells": 4,
+          "n_evaluation_rows": 4096,
+          "raw_top1_accuracy": 0.012939453125,
+          "raw_recall_at_32": 0.129638671875,
+          "raw_top1_official_ocf": 15.518122129833761,
+          "assigned_final_ocf": 15.695588428447389
+        },
+        "hierarchical_poisson": {
+          "task": "task3",
+          "arm": "hierarchical_poisson",
+          "epoch": 1,
+          "n_source_cells": 4,
+          "n_evaluation_rows": 4096,
+          "raw_top1_accuracy": 0.005615234375,
+          "raw_recall_at_32": 0.075927734375,
+          "raw_top1_official_ocf": 14.12717561013461,
+          "assigned_final_ocf": 14.113824362532728
+        }
+      },
+      "hierarchical_poisson_minus_production": {
+        "macro_assigned_final_ocf": -1.5817640659146601,
+        "per_mouse_assigned_final_ocf": {
+          "mice1": -1.1774684873094259,
+          "mice2": -1.9860596445198926
+        },
+        "per_fold_assigned_final_ocf": {
+          "20261126": -1.6444060937604377,
+          "20261127": -1.5191220380688808
+        }
+      },
+      "nonnegative_fold_count": 0,
+      "required_nonnegative_fold_count": 2,
+      "gates": {
+        "macro_assigned_ocf_delta_at_least_3": false,
+        "both_mouse_deltas_nonnegative": false,
+        "fold_deltas_nonnegative": false
+      },
+      "advance": false,
+      "next_step": "stop; no alternate model or hyperparameter search"
+    }
+  },
+  "advance": false,
+  "preregistration_sha256": "ae8baaf37c6600a425cd491cd14bbceb6d85f44ff852abaa69a576b746fc7252",
+  "development_results_sha256": "213f9dcaa6e4124df82de1a5a9e9d0f372d9681798595f928a04c305a94d9445"
+}
