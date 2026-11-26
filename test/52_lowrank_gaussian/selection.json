@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "experiment": "52_lowrank_gaussian",
+  "status": "development_selection_complete",
+  "development_reuse": "development reuse only; not pristine validation; not a Kaggle result",
+  "reference48": {
+    "development_results": "test/48_high_capacity_generalization/development_results.json",
+    "selection": "test/48_high_capacity_generalization/selection.json",
+    "development_results_sha256": "93211e490cbb0cef09564ddebefaca37435c7976ef2dc9a49c6dea0653c377e1",
+    "selection_sha256": "b389710363ab42ef965cab0fb8270546590754f45b09145f957f4e5a2efae1fe",
+    "run_code_sha256": "4b1ecd339df387867d00afbe3948f6dd3a2cf9300a281bf560a36a2de0d62b07",
+    "arm": "production_recipe",
+    "selected_epochs": {
+      "task2": 5,
+      "task3": 12
+    }
+  },
+  "development_reference_metrics_used": true,
+  "final_or_heldout_metrics_used": false,
+  "tasks": {
+    "task2": {
+      "production_selected_epoch": 5,
+      "candidate_epoch_selection": "none; one deterministic fit with aggregate adapter epoch=1",
+      "selected_macro": {
+        "production_recipe": {
+          "task": "task2",
+          "arm": "production_recipe",
+          "epoch": 5,
+          "n_source_cells": 6,
+          "n_evaluation_rows": 1536,
+          "raw_top1_accuracy": 0.02734375,
+          "raw_recall_at_32": 0.2565104166666667,
+          "raw_top1_official_ocf": 18.135712977266017,
+          "assigned_final_ocf": 18.37188143983611
+        },
+        "lowrank_gaussian": {
+          "task": "task2",
+          "arm": "lowrank_gaussian",
+          "epoch": 1,
+          "n_source_cells": 6,
+          "n_evaluation_rows": 1536,
+          "raw_top1_accuracy": 0.020833333333333332,
+          "raw_recall_at_32": 0.18359375,
+          "raw_top1_official_ocf": 16.53359348129986,
+          "assigned_final_ocf": 16.697472234958457
+        }
+      },
+      "lowrank_gaussian_minus_production": {
+        "macro_assigned_final_ocf": -1.6744092048776515,
+        "per_mouse_assigned_final_ocf": {
+          "mice1": -2.2415412998697164,
+          "mice2": -1.1072771098855831
+        },
+        "per_fold_assigned_final_ocf": {
+          "session1": -1.5089170779436074,
+          "session2": -1.1799456063338916,
+          "session3": -2.3343649303554592
+        }
+      },
+      "nonnegative_fold_count": 0,
+      "required_nonnegative_fold_count": 2,
+      "gates": {
+        "macro_assigned_ocf_delta_at_least_3": false,
+        "both_mouse_deltas_nonnegative": false,
+        "fold_deltas_nonnegative": false
+      },
+      "advance": false,
+      "next_step": "stop; no alternate model or hyperparameter search"
+    },
+    "task3": {
+      "production_selected_epoch": 12,
+      "candidate_epoch_selection": "none; one deterministic fit with aggregate adapter epoch=1",
+      "selected_macro": {
+        "production_recipe": {
+          "task": "task3",
+          "arm": "production_recipe",
+          "epoch": 12,
+          "n_source_cells": 4,
+          "n_evaluation_rows": 4096,
+          "raw_top1_accuracy": 0.012939453125,
+          "raw_recall_at_32": 0.129638671875,
+          "raw_top1_official_ocf": 15.518122129833761,
+          "assigned_final_ocf": 15.695588428447389
+        },
+        "lowrank_gaussian": {
+          "task": "task3",
+          "arm": "lowrank_gaussian",
+          "epoch": 1,
+          "n_source_cells": 4,
+          "n_evaluation_rows": 4096,
+          "raw_top1_accuracy": 0.0029296875,
+          "raw_recall_at_32": 0.042724609375,
+          "raw_top1_official_ocf": 13.168488917213178,
+          "assigned_final_ocf": 13.368807501834791
+        }
+      },
+      "lowrank_gaussian_minus_production": {
+        "macro_assigned_final_ocf": -2.3267809266125976,
+        "per_mouse_assigned_final_ocf": {
+          "mice1": -2.416551100324744,
+          "mice2": -2.237010752900453
+        },
+        "per_fold_assigned_final_ocf": {
+          "20261126": -2.0860526608627357,
+          "20261127": -2.5675091923624613
+        }
+      },
+      "nonnegative_fold_count": 0,
+      "required_nonnegative_fold_count": 2,
+      "gates": {
+        "macro_assigned_ocf_delta_at_least_3": false,
+        "both_mouse_deltas_nonnegative": false,
+        "fold_deltas_nonnegative": false
+      },
+      "advance": false,
+      "next_step": "stop; no alternate model or hyperparameter search"
+    }
+  },
+  "advance": false,
+  "preregistration_sha256": "ddf124dd9c1f8a57784bf51cc182d5de358eeae622a8cae06590fb42e4b5aabb",
+  "development_results_sha256": "41c719b0d41ff473713307a67f7bc44ef48136cbe923a9e09e770a7b2b2e60d3"
+}
