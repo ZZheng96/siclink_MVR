@@ -1,0 +1,2842 @@
+{
+  "schema": 1,
+  "experiment": "49_feature_quantile_transport",
+  "status": "development_results_complete",
+  "data_policy": "public train only; development reuse; no Task2 session4 or Task3 seed42 final evaluation",
+  "development_reuse": "development reuse only; not pristine validation; not a Kaggle result",
+  "preregistration_sha256": "41657849bd51c846f2131236866a11b3feb2b65f8f49d7b54c6bb76c0dcb884f",
+  "cache_manifest_sha256": "aa1553fe8f313de3fd8738c6682d7878d6366e92743a3d504547e04db5d80903",
+  "epoch_source": {
+    "path": "test/48_high_capacity_generalization/selection.json",
+    "sha256": "b389710363ab42ef965cab0fb8270546590754f45b09145f957f4e5a2efae1fe",
+    "arm": "production_recipe",
+    "fixed_epochs": {
+      "task2": 5,
+      "task3": 12
+    }
+  },
+  "run": {
+    "device": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "bin_ms": 25,
+    "training_seed": 42,
+    "n_quantiles": 33,
+    "fits_completed": 20,
+    "model_artifacts_retained": false,
+    "ocf_pair_cache": {
+      "storage": "memory only",
+      "scoring_calls": 88,
+      "unique_pairs_scored": 7471
+    },
+    "elapsed_seconds": 211.66781997680664
+  },
+  "development_picture_subset": [
+    7,
+    9,
+    10,
+    19,
+    22,
+    32,
+    47,
+    62,
+    92,
+    103,
+    116,
+    120,
+    123,
+    126,
+    141,
+    148,
+    168,
+    177,
+    185,
+    194,
+    199,
+    206,
+    220,
+    242,
+    250,
+    253,
+    258,
+    277,
+    279,
+    287,
+    303,
+    329,
+    334,
+    337,
+    360,
+    363,
+    371,
+    375,
+    379,
+    382,
+    414,
+    428,
+    446,
+    450,
+    465,
+    468,
+    475,
+    489,
+    499,
+    506,
+    518,
+    532,
+    559,
+    564,
+    575,
+    576,
+    585,
+    586,
+    607,
+    620,
+    626,
+    638,
+    653,
+    661,
+    672,
+    684,
+    692,
+    705,
+    711,
+    727,
+    746,
+    748,
+    768,
+    793,
+    804,
+    819,
+    821,
+    823,
+    839,
+    842,
+    857,
+    867,
+    904,
+    908,
+    926,
+    927,
+    945,
+    953,
+    975,
+    979,
+    996,
+    1034,
+    1037,
+    1043,
+    1055,
+    1080,
+    1083,
+    1087,
+    1090,
+    1104,
+    1106,
+    1113,
+    1117,
+    1120,
+    1123,
+    1149,
+    1153,
+    1157,
+    1168,
+    1175,
+    1198,
+    1202,
+    1209,
+    1218,
+    1231,
+    1247,
+    1249,
+    1254,
+    1260,
+    1286,
+    1309,
+    1352,
+    1377,
+    1379,
+    1395,
+    1396,
+    1400,
+    1413,
+    1419,
+    1420,
+    1423,
+    1424,
+    1455,
+    1462,
+    1482,
+    1488,
+    1492,
+    1498,
+    1501,
+    1504,
+    1509,
+    1550,
+    1554,
+    1585,
+    1588,
+    1591,
+    1605,
+    1625,
+    1630,
+    1635,
+    1643,
+    1644,
+    1656,
+    1675,
+    1677,
+    1718,
+    1729,
+    1739,
+    1741,
+    1742,
+    1746,
+    1753,
+    1758,
+    1777,
+    1780,
+    1791,
+    1800,
+    1804,
+    1823,
+    1836,
+    1840,
+    1841,
+    1872,
+    1878,
+    1880,
+    1888,
+    1896,
+    1906,
+    1913,
+    1936,
+    1949,
+    1950,
+    1955,
+    1957,
+    2009,
+    2016,
+    2022,
+    2027,
+    2029,
+    2030,
+    2042,
+    2055,
+    2069,
+    2072,
+    2108,
+    2109,
+    2111,
+    2131,
+    2152,
+    2173,
+    2177,
+    2183,
+    2186,
+    2203,
+    2206,
+    2219,
+    2225,
+    2237,
+    2249,
+    2256,
+    2268,
+    2277,
+    2282,
+    2285,
+    2286,
+    2303,
+    2304,
+    2312,
+    2327,
+    2330,
+    2335,
+    2343,
+    2345,
+    2347,
+    2382,
+    2406,
+    2437,
+    2444,
+    2486,
+    2487,
+    2499,
+    2508,
+    2509,
+    2510,
+    2519,
+    2523,
+    2524,
+    2526,
+    2529,
+    2544,
+    2548,
+    2552,
+    2560,
+    2581,
+    2582,
+    2586,
+    2591,
+    2598,
+    2604,
+    2618,
+    2632,
+    2667,
+    2674,
+    2675,
+    2702,
+    2714
+  ],
+  "fold_audits": [
+    {
+      "task": "task2",
+      "mouse": "mice1",
+      "fold": "session1",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice1/session2",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session3",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": null
+    },
+    {
+      "task": "task2",
+      "mouse": "mice1",
+      "fold": "session1",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice1/session2",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session3",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": {
+        "n_quantiles": 33,
+        "reference": "concatenated baseline z-score single-trial rows of the three training sessions",
+        "reference_rows": 32976,
+        "reference_sha256": "dc0d4ce42107fe4710379fe27cc17aebb7fb9851fbb959ae60a39b0c828a6b40",
+        "reference_contains_target_session": false,
+        "maps": [
+          {
+            "session": "session2",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session3",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session4",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session1",
+            "source_rows": 10992,
+            "source": "all unlabeled target-session trials",
+            "applied_to": [
+              "validation four_repeat_mean_rows"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "task2",
+      "mouse": "mice2",
+      "fold": "session1",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice2/session2",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session3",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": null
+    },
+    {
+      "task": "task2",
+      "mouse": "mice2",
+      "fold": "session1",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice2/session2",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session3",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": {
+        "n_quantiles": 33,
+        "reference": "concatenated baseline z-score single-trial rows of the three training sessions",
+        "reference_rows": 32976,
+        "reference_sha256": "8b3cad2a92c071389a9524208008669bc3129dc5183c8d6c0db8151b96049941",
+        "reference_contains_target_session": false,
+        "maps": [
+          {
+            "session": "session2",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session3",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session4",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session1",
+            "source_rows": 10992,
+            "source": "all unlabeled target-session trials",
+            "applied_to": [
+              "validation four_repeat_mean_rows"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "task2",
+      "mouse": "mice1",
+      "fold": "session2",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session2",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice1/session3",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": null
+    },
+    {
+      "task": "task2",
+      "mouse": "mice1",
+      "fold": "session2",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session2",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice1/session3",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": {
+        "n_quantiles": 33,
+        "reference": "concatenated baseline z-score single-trial rows of the three training sessions",
+        "reference_rows": 32976,
+        "reference_sha256": "f9693bf3e12c0b1138770d71376fc6dcac3525f3663899df3eda5655bf909b37",
+        "reference_contains_target_session": false,
+        "maps": [
+          {
+            "session": "session1",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session3",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session4",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session2",
+            "source_rows": 10992,
+            "source": "all unlabeled target-session trials",
+            "applied_to": [
+              "validation four_repeat_mean_rows"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "task2",
+      "mouse": "mice2",
+      "fold": "session2",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session2",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice2/session3",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": null
+    },
+    {
+      "task": "task2",
+      "mouse": "mice2",
+      "fold": "session2",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session2",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice2/session3",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": {
+        "n_quantiles": 33,
+        "reference": "concatenated baseline z-score single-trial rows of the three training sessions",
+        "reference_rows": 32976,
+        "reference_sha256": "dfb846fb70e9bbf6eb84573a6019a86d8ec90ec6c4734dc6f2c47c2b85728121",
+        "reference_contains_target_session": false,
+        "maps": [
+          {
+            "session": "session1",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session3",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session4",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session2",
+            "source_rows": 10992,
+            "source": "all unlabeled target-session trials",
+            "applied_to": [
+              "validation four_repeat_mean_rows"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "task2",
+      "mouse": "mice1",
+      "fold": "session3",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session2",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session3",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": null
+    },
+    {
+      "task": "task2",
+      "mouse": "mice1",
+      "fold": "session3",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session2",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice1/session3",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": {
+        "n_quantiles": 33,
+        "reference": "concatenated baseline z-score single-trial rows of the three training sessions",
+        "reference_rows": 32976,
+        "reference_sha256": "2c9b63f42c7b8c6b7fbd5088b42021a8e07ec68097a9c3a2c3772dece63695fb",
+        "reference_contains_target_session": false,
+        "maps": [
+          {
+            "session": "session1",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session2",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session4",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session3",
+            "source_rows": 10992,
+            "source": "all unlabeled target-session trials",
+            "applied_to": [
+              "validation four_repeat_mean_rows"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "task2",
+      "mouse": "mice2",
+      "fold": "session3",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session2",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session3",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": null
+    },
+    {
+      "task": "task2",
+      "mouse": "mice2",
+      "fold": "session3",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 8244,
+      "train_rows": 41220,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session2",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        },
+        {
+          "block": "mice2/session3",
+          "role": "validation",
+          "train_trials": 0,
+          "validation_trials": 10992,
+          "validation_rows": 256,
+          "normalizer_source": "all unlabeled trials in the target session",
+          "validation_row_policy": "four-repeat raw-count arithmetic mean, then target-session normalization"
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train",
+          "train_trials": 10992,
+          "single_trial_rows": 10992,
+          "four_repeat_mean_rows": 2748,
+          "normalizer_source": "this fold's train_trials in this session only"
+        }
+      ],
+      "quantile_transport": {
+        "n_quantiles": 33,
+        "reference": "concatenated baseline z-score single-trial rows of the three training sessions",
+        "reference_rows": 32976,
+        "reference_sha256": "35ef547b8bd11f204d90ff9c0021303b92ab83c21da8a1128c23863c74e94ca4",
+        "reference_contains_target_session": false,
+        "maps": [
+          {
+            "session": "session1",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session2",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session4",
+            "source_rows": 10992,
+            "applied_to": [
+              "single_trial_rows",
+              "four_repeat_mean_rows"
+            ]
+          },
+          {
+            "session": "session3",
+            "source_rows": 10992,
+            "source": "all unlabeled target-session trials",
+            "applied_to": [
+              "validation four_repeat_mean_rows"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "task": "task3",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 0,
+      "train_rows": 32976,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice1/session2",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice1/session3",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        }
+      ]
+    },
+    {
+      "task": "task3",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 0,
+      "train_rows": 32976,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "430c5474ad1f2aa31c5132997d2b7e907ffdcba0a2cd51f84188d68cb2bd3bfa",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice1/session2",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "5042022fad36557de521d4594b5e71e3d78d332e50110d7118d4b6292408e1b3",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice1/session3",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "6f2171603781b06db02014507414a5f59f7947e47e9ea8097adcc5b9ba8c8790",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "28ec2a25510b5807074f1e1b61b727a530ff2bdc535f839a6036582c2138c7b5",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        }
+      ]
+    },
+    {
+      "task": "task3",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 0,
+      "train_rows": 32976,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice2/session2",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice2/session3",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        }
+      ]
+    },
+    {
+      "task": "task3",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 0,
+      "train_rows": 32976,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "7c33e8d5a89c8a4c0fd5697dde15394ab2d851b8d0bc6087405b00bbd2531c87",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice2/session2",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "eed05aaf09d35127299355736072b8efeeb571e17ed17c6440185725e4d6c505",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice2/session3",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "01cb2d8bf1ee7905b0a1b88b49f1b983b73ea54a6151dbf1259e50fe6bfb023a",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "6e3aa36bc98d5a2d34dd2010bad02344814d456ad0bdb9722d5046eb67963ff2",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        }
+      ]
+    },
+    {
+      "task": "task3",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 0,
+      "train_rows": 32976,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice1/session2",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice1/session3",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        }
+      ]
+    },
+    {
+      "task": "task3",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 0,
+      "train_rows": 32976,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice1/session1",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "3cd79ff3db236808b12ce2a18eadc25ea753d54c270aa44ce551016036780da4",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice1/session2",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "728298cd70c5da305a597b46a74c99885125c43df51912122a9043c5209b0034",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice1/session3",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "f6db199a10b894954ea872ffc5a002599737dac613542386d8f258343f24ea8a",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice1/session4",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "574bb5ccbde86d2a6e4ff1f4b19fd2d51b7bf1b6d9ba104547a2cf54344d54f5",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        }
+      ]
+    },
+    {
+      "task": "task3",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "arm": "baseline_zscore",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 0,
+      "train_rows": 32976,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice2/session2",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice2/session3",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": null
+        }
+      ]
+    },
+    {
+      "task": "task3",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "arm": "feature_quantile_transport",
+      "single_trial_rows": 32976,
+      "four_repeat_mean_rows": 0,
+      "train_rows": 32976,
+      "validation_rows_per_block": 256,
+      "blocks": [
+        {
+          "block": "mice2/session1",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "9df8f821a21c2f3bea64a6b4aa3ad9543a4adce6d0a79a87f4e5540746968d49",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice2/session2",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "b635b7bbab12d0edd01291fa077a52911bd490f27e4bd1aa252eaba3b2ad56d7",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice2/session3",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "50535cfc5afa52cf7b7006226b24e52751fb989bdc231e915b44e5833b97c017",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        },
+        {
+          "block": "mice2/session4",
+          "role": "train_and_validation",
+          "train_trials": 8244,
+          "single_trial_rows": 8244,
+          "four_repeat_mean_rows": 0,
+          "validation_trials": 2748,
+          "validation_rows": 256,
+          "normalizer_source": "this block's train_trials only",
+          "validation_row_policy": "strictly one unmerged trial per target",
+          "quantile_transport": {
+            "n_quantiles": 33,
+            "reference": "this block's train-fold baseline z-score single-trial rows",
+            "reference_rows": 8244,
+            "reference_sha256": "152790fc61aee36566c11f244d509c283941e4695f5bf34edfc3b309e64716b4",
+            "source": "this block's unlabeled validation single-trial rows",
+            "source_rows": 2748,
+            "applied_to": [
+              "validation single-trial rows"
+            ],
+            "training_rows_transformed": false
+          }
+        }
+      ]
+    }
+  ],
+  "block": [
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "session1",
+      "block": "session1",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0234375,
+      "raw_recall_at_32": 0.2578125,
+      "raw_top1_official_ocf": 17.225344287972167,
+      "assigned_final_ocf": 18.01058941598932
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "session1",
+      "block": "session1",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.25390625,
+      "raw_top1_official_ocf": 16.77590167216816,
+      "assigned_final_ocf": 17.764311420047783
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "session1",
+      "block": "session1",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.20703125,
+      "raw_top1_official_ocf": 17.631204834359067,
+      "assigned_final_ocf": 17.535924282398263
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "session1",
+      "block": "session1",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.203125,
+      "raw_top1_official_ocf": 17.122634702988687,
+      "assigned_final_ocf": 17.60205926691766
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "session2",
+      "block": "session2",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.03515625,
+      "raw_recall_at_32": 0.29296875,
+      "raw_top1_official_ocf": 19.6468734408518,
+      "assigned_final_ocf": 20.1462091098573
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "session2",
+      "block": "session2",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0390625,
+      "raw_recall_at_32": 0.27734375,
+      "raw_top1_official_ocf": 20.6398693653491,
+      "assigned_final_ocf": 20.768302115401134
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "session2",
+      "block": "session2",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.22265625,
+      "raw_top1_official_ocf": 16.78455255516686,
+      "assigned_final_ocf": 16.557654532483692
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "session2",
+      "block": "session2",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.23828125,
+      "raw_top1_official_ocf": 17.390135311428534,
+      "assigned_final_ocf": 16.63007715560867
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "session3",
+      "block": "session3",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.04296875,
+      "raw_recall_at_32": 0.26953125,
+      "raw_top1_official_ocf": 19.276869753147096,
+      "assigned_final_ocf": 19.12666717378013
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "session3",
+      "block": "session3",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.046875,
+      "raw_recall_at_32": 0.26171875,
+      "raw_top1_official_ocf": 19.961252654102548,
+      "assigned_final_ocf": 19.830658443240857
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "session3",
+      "block": "session3",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.03125,
+      "raw_recall_at_32": 0.2890625,
+      "raw_top1_official_ocf": 18.2494329920991,
+      "assigned_final_ocf": 18.854244124507957
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "session3",
+      "block": "session3",
+      "epoch": 5,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0234375,
+      "raw_recall_at_32": 0.3203125,
+      "raw_top1_official_ocf": 17.349662278901427,
+      "assigned_final_ocf": 17.392757020545133
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "block": "mice1/session1",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0078125,
+      "raw_recall_at_32": 0.13671875,
+      "raw_top1_official_ocf": 14.795647995791274,
+      "assigned_final_ocf": 15.405171344893615
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "block": "mice1/session2",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.15625,
+      "raw_top1_official_ocf": 15.63544230352975,
+      "assigned_final_ocf": 15.93936205147135
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "block": "mice1/session3",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.14453125,
+      "raw_top1_official_ocf": 15.600966320737482,
+      "assigned_final_ocf": 15.749349322719423
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "block": "mice1/session4",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.15234375,
+      "raw_top1_official_ocf": 15.485682845021145,
+      "assigned_final_ocf": 15.56077676637413
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "block": "mice1/session1",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.00390625,
+      "raw_recall_at_32": 0.140625,
+      "raw_top1_official_ocf": 14.475640089503322,
+      "assigned_final_ocf": 14.943466734823634
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "block": "mice1/session2",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.1484375,
+      "raw_top1_official_ocf": 15.982429030951582,
+      "assigned_final_ocf": 15.864203029495007
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "block": "mice1/session3",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.12890625,
+      "raw_top1_official_ocf": 15.450094446586514,
+      "assigned_final_ocf": 15.519311380922
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "block": "mice1/session4",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0078125,
+      "raw_recall_at_32": 0.15625,
+      "raw_top1_official_ocf": 15.088958774766347,
+      "assigned_final_ocf": 15.190838768946936
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "block": "mice2/session1",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.125,
+      "raw_top1_official_ocf": 16.480584509516536,
+      "assigned_final_ocf": 16.821632121597872
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "block": "mice2/session2",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0078125,
+      "raw_recall_at_32": 0.0859375,
+      "raw_top1_official_ocf": 15.003046628796628,
+      "assigned_final_ocf": 15.304097302572234
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "block": "mice2/session3",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.00390625,
+      "raw_recall_at_32": 0.11328125,
+      "raw_top1_official_ocf": 14.6828023067612,
+      "assigned_final_ocf": 14.864047544965837
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "block": "mice2/session4",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.00390625,
+      "raw_recall_at_32": 0.12109375,
+      "raw_top1_official_ocf": 14.22846403361321,
+      "assigned_final_ocf": 14.38708159213972
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "block": "mice2/session1",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.12890625,
+      "raw_top1_official_ocf": 15.939336482077646,
+      "assigned_final_ocf": 16.315559575373086
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "block": "mice2/session2",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0078125,
+      "raw_recall_at_32": 0.08203125,
+      "raw_top1_official_ocf": 15.095393151324913,
+      "assigned_final_ocf": 15.304442506003591
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "block": "mice2/session3",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0078125,
+      "raw_recall_at_32": 0.12109375,
+      "raw_top1_official_ocf": 15.083167718960022,
+      "assigned_final_ocf": 15.120186585724454
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "block": "mice2/session4",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.00390625,
+      "raw_recall_at_32": 0.14453125,
+      "raw_top1_official_ocf": 14.226308174509057,
+      "assigned_final_ocf": 14.363700202301304
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "block": "mice1/session1",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.12109375,
+      "raw_top1_official_ocf": 15.614364008595103,
+      "assigned_final_ocf": 15.712402610664661
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "block": "mice1/session2",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.03125,
+      "raw_recall_at_32": 0.16796875,
+      "raw_top1_official_ocf": 17.356795858634047,
+      "assigned_final_ocf": 17.47417971741482
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "block": "mice1/session3",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0078125,
+      "raw_recall_at_32": 0.1328125,
+      "raw_top1_official_ocf": 15.209131313610417,
+      "assigned_final_ocf": 15.200805863895589
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "block": "mice1/session4",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.17578125,
+      "raw_top1_official_ocf": 16.07685778067658,
+      "assigned_final_ocf": 16.790774341013204
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "block": "mice1/session1",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.0078125,
+      "raw_recall_at_32": 0.1015625,
+      "raw_top1_official_ocf": 14.689734778765278,
+      "assigned_final_ocf": 14.931686623392114
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "block": "mice1/session2",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.02734375,
+      "raw_recall_at_32": 0.16796875,
+      "raw_top1_official_ocf": 16.918383730890245,
+      "assigned_final_ocf": 17.062330683152013
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "block": "mice1/session3",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.00390625,
+      "raw_recall_at_32": 0.13671875,
+      "raw_top1_official_ocf": 15.14660646607928,
+      "assigned_final_ocf": 14.639348413189772
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "block": "mice1/session4",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.171875,
+      "raw_top1_official_ocf": 16.163011826504864,
+      "assigned_final_ocf": 16.377124270576587
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "block": "mice2/session1",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.12109375,
+      "raw_top1_official_ocf": 15.664804672497432,
+      "assigned_final_ocf": 15.610690729863595
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "block": "mice2/session2",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.09765625,
+      "raw_top1_official_ocf": 16.25274929020331,
+      "assigned_final_ocf": 15.550126382066809
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "block": "mice2/session3",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.140625,
+      "raw_top1_official_ocf": 16.090943402168882,
+      "assigned_final_ocf": 16.13127636070545
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "block": "mice2/session4",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.00390625,
+      "raw_recall_at_32": 0.08203125,
+      "raw_top1_official_ocf": 14.111670807187195,
+      "assigned_final_ocf": 14.627640802799911
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "block": "mice2/session1",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.125,
+      "raw_top1_official_ocf": 15.362987387550504,
+      "assigned_final_ocf": 15.292821597913434
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "block": "mice2/session2",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.10546875,
+      "raw_top1_official_ocf": 16.05923148311565,
+      "assigned_final_ocf": 16.106227194937198
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "block": "mice2/session3",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.14453125,
+      "raw_top1_official_ocf": 16.26326122125677,
+      "assigned_final_ocf": 16.21562029948157
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "block": "mice2/session4",
+      "epoch": 12,
+      "n_rows": 256,
+      "raw_top1_accuracy": 0.00390625,
+      "raw_recall_at_32": 0.09375,
+      "raw_top1_official_ocf": 14.112145208350885,
+      "assigned_final_ocf": 14.072348461609401
+    }
+  ],
+  "mouse_fold": [
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "session1",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.0234375,
+      "raw_recall_at_32": 0.2578125,
+      "raw_top1_official_ocf": 17.225344287972167,
+      "assigned_final_ocf": 18.01058941598932
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "session2",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.03515625,
+      "raw_recall_at_32": 0.29296875,
+      "raw_top1_official_ocf": 19.6468734408518,
+      "assigned_final_ocf": 20.1462091098573
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "session3",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.04296875,
+      "raw_recall_at_32": 0.26953125,
+      "raw_top1_official_ocf": 19.276869753147096,
+      "assigned_final_ocf": 19.12666717378013
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "session1",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.20703125,
+      "raw_top1_official_ocf": 17.631204834359067,
+      "assigned_final_ocf": 17.535924282398263
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "session2",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.22265625,
+      "raw_top1_official_ocf": 16.78455255516686,
+      "assigned_final_ocf": 16.557654532483692
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "session3",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.03125,
+      "raw_recall_at_32": 0.2890625,
+      "raw_top1_official_ocf": 18.2494329920991,
+      "assigned_final_ocf": 18.854244124507957
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "session1",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.25390625,
+      "raw_top1_official_ocf": 16.77590167216816,
+      "assigned_final_ocf": 17.764311420047783
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "session2",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.0390625,
+      "raw_recall_at_32": 0.27734375,
+      "raw_top1_official_ocf": 20.6398693653491,
+      "assigned_final_ocf": 20.768302115401134
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "session3",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.046875,
+      "raw_recall_at_32": 0.26171875,
+      "raw_top1_official_ocf": 19.961252654102548,
+      "assigned_final_ocf": 19.830658443240857
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "session1",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.203125,
+      "raw_top1_official_ocf": 17.122634702988687,
+      "assigned_final_ocf": 17.60205926691766
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "session2",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.23828125,
+      "raw_top1_official_ocf": 17.390135311428534,
+      "assigned_final_ocf": 16.63007715560867
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "session3",
+      "epoch": 5,
+      "n_source_cells": 1,
+      "n_evaluation_rows": 256,
+      "raw_top1_accuracy": 0.0234375,
+      "raw_recall_at_32": 0.3203125,
+      "raw_top1_official_ocf": 17.349662278901427,
+      "assigned_final_ocf": 17.392757020545133
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 1024,
+      "raw_top1_accuracy": 0.0126953125,
+      "raw_recall_at_32": 0.1474609375,
+      "raw_top1_official_ocf": 15.379434866269913,
+      "assigned_final_ocf": 15.663664871364631
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 1024,
+      "raw_top1_accuracy": 0.0166015625,
+      "raw_recall_at_32": 0.1494140625,
+      "raw_top1_official_ocf": 16.064287240379034,
+      "assigned_final_ocf": 16.294540633247067
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 1024,
+      "raw_top1_accuracy": 0.0087890625,
+      "raw_recall_at_32": 0.111328125,
+      "raw_top1_official_ocf": 15.098724369671892,
+      "assigned_final_ocf": 15.344214640318915
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 1024,
+      "raw_top1_accuracy": 0.013671875,
+      "raw_recall_at_32": 0.1103515625,
+      "raw_top1_official_ocf": 15.530042043014205,
+      "assigned_final_ocf": 15.479933568858941
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261126",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 1024,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.1435546875,
+      "raw_top1_official_ocf": 15.249280585451942,
+      "assigned_final_ocf": 15.379454978546892
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "fold": "20261127",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 1024,
+      "raw_top1_accuracy": 0.0126953125,
+      "raw_recall_at_32": 0.14453125,
+      "raw_top1_official_ocf": 15.729434200559917,
+      "assigned_final_ocf": 15.752622497577622
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261126",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 1024,
+      "raw_top1_accuracy": 0.0078125,
+      "raw_recall_at_32": 0.119140625,
+      "raw_top1_official_ocf": 15.08605138171791,
+      "assigned_final_ocf": 15.275972217350608
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "fold": "20261127",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 1024,
+      "raw_top1_accuracy": 0.0146484375,
+      "raw_recall_at_32": 0.1171875,
+      "raw_top1_official_ocf": 15.449406325068452,
+      "assigned_final_ocf": 15.421754388485402
+    }
+  ],
+  "mouse": [
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "epoch": 5,
+      "n_source_cells": 3,
+      "n_evaluation_rows": 768,
+      "raw_top1_accuracy": 0.033854166666666664,
+      "raw_recall_at_32": 0.2734375,
+      "raw_top1_official_ocf": 18.716362493990356,
+      "assigned_final_ocf": 19.09448856654225
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "epoch": 5,
+      "n_source_cells": 3,
+      "n_evaluation_rows": 768,
+      "raw_top1_accuracy": 0.020833333333333332,
+      "raw_recall_at_32": 0.23958333333333334,
+      "raw_top1_official_ocf": 17.555063460541675,
+      "assigned_final_ocf": 17.64927431312997
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "epoch": 5,
+      "n_source_cells": 3,
+      "n_evaluation_rows": 768,
+      "raw_top1_accuracy": 0.03515625,
+      "raw_recall_at_32": 0.2643229166666667,
+      "raw_top1_official_ocf": 19.12567456387327,
+      "assigned_final_ocf": 19.45442399289659
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "epoch": 5,
+      "n_source_cells": 3,
+      "n_evaluation_rows": 768,
+      "raw_top1_accuracy": 0.018229166666666668,
+      "raw_recall_at_32": 0.25390625,
+      "raw_top1_official_ocf": 17.287477431106215,
+      "assigned_final_ocf": 17.208297814357156
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice1",
+      "epoch": 12,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 2048,
+      "raw_top1_accuracy": 0.0146484375,
+      "raw_recall_at_32": 0.1484375,
+      "raw_top1_official_ocf": 15.721861053324474,
+      "assigned_final_ocf": 15.979102752305849
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "mouse": "mice2",
+      "epoch": 12,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 2048,
+      "raw_top1_accuracy": 0.01123046875,
+      "raw_recall_at_32": 0.11083984375,
+      "raw_top1_official_ocf": 15.314383206343049,
+      "assigned_final_ocf": 15.412074104588928
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice1",
+      "epoch": 12,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 2048,
+      "raw_top1_accuracy": 0.01220703125,
+      "raw_recall_at_32": 0.14404296875,
+      "raw_top1_official_ocf": 15.489357393005928,
+      "assigned_final_ocf": 15.566038738062257
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "mouse": "mice2",
+      "epoch": 12,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 2048,
+      "raw_top1_accuracy": 0.01123046875,
+      "raw_recall_at_32": 0.1181640625,
+      "raw_top1_official_ocf": 15.26772885339318,
+      "assigned_final_ocf": 15.348863302918005
+    }
+  ],
+  "fold": [
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "fold": "session1",
+      "epoch": 5,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 512,
+      "raw_top1_accuracy": 0.01953125,
+      "raw_recall_at_32": 0.232421875,
+      "raw_top1_official_ocf": 17.428274561165615,
+      "assigned_final_ocf": 17.773256849193793
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "fold": "session2",
+      "epoch": 5,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 512,
+      "raw_top1_accuracy": 0.025390625,
+      "raw_recall_at_32": 0.2578125,
+      "raw_top1_official_ocf": 18.21571299800933,
+      "assigned_final_ocf": 18.351931821170496
+    },
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "fold": "session3",
+      "epoch": 5,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 512,
+      "raw_top1_accuracy": 0.037109375,
+      "raw_recall_at_32": 0.279296875,
+      "raw_top1_official_ocf": 18.7631513726231,
+      "assigned_final_ocf": 18.990455649144046
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "fold": "session1",
+      "epoch": 5,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 512,
+      "raw_top1_accuracy": 0.015625,
+      "raw_recall_at_32": 0.228515625,
+      "raw_top1_official_ocf": 16.949268187578426,
+      "assigned_final_ocf": 17.68318534348272
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "fold": "session2",
+      "epoch": 5,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 512,
+      "raw_top1_accuracy": 0.029296875,
+      "raw_recall_at_32": 0.2578125,
+      "raw_top1_official_ocf": 19.01500233838882,
+      "assigned_final_ocf": 18.6991896355049
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "fold": "session3",
+      "epoch": 5,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 512,
+      "raw_top1_accuracy": 0.03515625,
+      "raw_recall_at_32": 0.291015625,
+      "raw_top1_official_ocf": 18.655457466501986,
+      "assigned_final_ocf": 18.611707731892995
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "fold": "20261126",
+      "epoch": 12,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 2048,
+      "raw_top1_accuracy": 0.0107421875,
+      "raw_recall_at_32": 0.12939453125,
+      "raw_top1_official_ocf": 15.239079617970901,
+      "assigned_final_ocf": 15.503939755841774
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "fold": "20261127",
+      "epoch": 12,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 2048,
+      "raw_top1_accuracy": 0.01513671875,
+      "raw_recall_at_32": 0.1298828125,
+      "raw_top1_official_ocf": 15.79716464169662,
+      "assigned_final_ocf": 15.887237101053003
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "fold": "20261126",
+      "epoch": 12,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 2048,
+      "raw_top1_accuracy": 0.009765625,
+      "raw_recall_at_32": 0.13134765625,
+      "raw_top1_official_ocf": 15.167665983584925,
+      "assigned_final_ocf": 15.327713597948751
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "fold": "20261127",
+      "epoch": 12,
+      "n_source_cells": 2,
+      "n_evaluation_rows": 2048,
+      "raw_top1_accuracy": 0.013671875,
+      "raw_recall_at_32": 0.130859375,
+      "raw_top1_official_ocf": 15.589420262814183,
+      "assigned_final_ocf": 15.587188443031511
+    }
+  ],
+  "macro": [
+    {
+      "task": "task2",
+      "arm": "baseline_zscore",
+      "epoch": 5,
+      "n_source_cells": 6,
+      "n_evaluation_rows": 1536,
+      "raw_top1_accuracy": 0.02734375,
+      "raw_recall_at_32": 0.2565104166666667,
+      "raw_top1_official_ocf": 18.135712977266017,
+      "assigned_final_ocf": 18.37188143983611
+    },
+    {
+      "task": "task2",
+      "arm": "feature_quantile_transport",
+      "epoch": 5,
+      "n_source_cells": 6,
+      "n_evaluation_rows": 1536,
+      "raw_top1_accuracy": 0.026692708333333332,
+      "raw_recall_at_32": 0.2591145833333333,
+      "raw_top1_official_ocf": 18.206575997489747,
+      "assigned_final_ocf": 18.331360903626873
+    },
+    {
+      "task": "task3",
+      "arm": "baseline_zscore",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 4096,
+      "raw_top1_accuracy": 0.012939453125,
+      "raw_recall_at_32": 0.129638671875,
+      "raw_top1_official_ocf": 15.518122129833761,
+      "assigned_final_ocf": 15.695588428447389
+    },
+    {
+      "task": "task3",
+      "arm": "feature_quantile_transport",
+      "epoch": 12,
+      "n_source_cells": 4,
+      "n_evaluation_rows": 4096,
+      "raw_top1_accuracy": 0.01171875,
+      "raw_recall_at_32": 0.131103515625,
+      "raw_top1_official_ocf": 15.378543123199554,
+      "assigned_final_ocf": 15.457451020490131
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "experiment": "50_glyph_structured_classifier",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_training_or_real_metrics",
+  "date": "2026-11-26",
+  "purpose": "Test one structural candidate: replace only the experiment 48 production_recipe free 2748-way linear classifier with a fixed, full-gallery DCT16 cosine-classification head. This is not score fusion, DCT-MSE image regression, or batch-only contrastive learning. Development reuse is not pristine validation and is not a Kaggle result.",
+  "scope": "Create implementation files only under test/50_glyph_structured_classifier. Do not modify src, other experiments, or Git history. Experiment 48 code and completed development outputs are read-only inputs. Do not depend on experiment 49 or inspect final/heldout metrics.",
+  "data": {
+    "cache": "test/.cache/shared_preprocessing_v1",
+    "loader": "src.preprocessing.load_cached_blocks(cache, split='train', bin_ms=25)",
+    "cache_access": "read-only; never rebuild the cache",
+    "public_partition": "train only",
+    "mice": ["mice1", "mice2"],
+    "blocks": [
+      "mice1/session1", "mice1/session2", "mice1/session3", "mice1/session4",
+      "mice2/session1", "mice2/session2", "mice2/session3", "mice2/session4"
+    ],
+    "n_classes": 2748,
+    "development_picture_subset": "np.sort(np.random.default_rng(20261128).permutation(2748)[:256])",
+    "subset_size": 256,
+    "same_subset_for_every_block_fold_mouse_and_epoch": true,
+    "row_preparation": "Import and call experiment 48 prepare_task2 and prepare_task3 unchanged, so the 25ms train/validation rows are exactly the production_recipe rows."
+  },
+  "folds": {
+    "task2": {
+      "split_construction": "make_split(all_eight_blocks, 'task2', seed=42, validation_session=s) for s in session1, session2, session3, in that order",
+      "fold_ids": ["session1", "session2", "session3"],
+      "training": "For each mouse independently, use every original trial in its other three complete sessions. Do not train on any trial from the target session.",
+      "validation": "The target session only. Session4 is never a Task2 validation fold."
+    },
+    "task3": {
+      "split_construction": "make_split(all_eight_blocks, 'task3', seed=s) for s in 20261126 and 20261127, in that order",
+      "fold_ids": ["20261126", "20261127"],
+      "training": "For each mouse independently, pool the four sessions after per-session normalization; each block has exactly three training trials per glyph.",
+      "validation": "Exactly one disjoint validation trial per glyph per block; no repeat aggregation."
+    }
+  },
+  "normalization_and_rows": {
+    "session_transform": "Exactly experiment 48: log1p(max(raw_count,0)); mean and population std in float64; float32 mean/scale with scale floor 1e-5.",
+    "task2_train": "Original single-trial rows plus separate per-session/per-target four-repeat arithmetic-mean rows, with the experiment 48 train-only session normalizers.",
+    "task2_validation": "The experiment 48 target-session rows: average each target's four repeats in raw-count space, then apply the target-session normalizer fitted on all unlabeled target-session trials.",
+    "task3_train": "Original single-trial rows only; no mean rows or repeat merging.",
+    "task3_validation": "Strictly one unmerged single trial per target per block, using that block's train-fold normalizer.",
+    "model_second_normalization": "SpikeClassifier.set_normalization on the concatenated training matrix for the current mouse/fold only, with apply_log=False. No validation rows enter this statistic."
+  },
+  "model": {
+    "trunk_class": "src.neural.SpikeClassifier",
+    "recipe": "Fixed to experiment 48 production_recipe except that n_classes=256 makes the final trunk linear layer a 256-dimensional embedding output.",
+    "hidden": 512,
+    "dropout": {"mice1": 0.2, "mice2": 0.35},
+    "dropout_applies_to": ["task2", "task3"],
+    "embedding_dimension": 256,
+    "apply_log": false,
+    "free_2748_way_linear_head": false
+  },
+  "structured_head": {
+    "arm": "structured_dct16",
+    "gallery_source": "The same public 2748 x 64 x 64 pictures used by experiment 48, loaded read-only.",
+    "binarization": "binary_gallery = (pictures >= 128).astype(float32)",
+    "dct": "scipy orthonormal 2-D DCT-II through src.ridge.dct_encode(binary_gallery, cutoff=16)",
+    "low_frequency_shape": [16, 16],
+    "target_dimension": 256,
+    "gallery_normalization": "L2-normalize every flattened DCT target row independently in float64. np.divide with where=(norm>0) leaves a zero-DCT glyph as an exact zero row; no class is dropped.",
+    "forward": "embedding = L2_normalize(trunk(features)); cosine_logits = embedding @ fixed_L2_normalized_DCT_gallery.T; logits = cosine_logits * exp(clamp(log_scale, log(1), log(100))).",
+    "embedding_normalization_epsilon": 1e-12,
+    "log_scale_initial_value": 2.302585092994046,
+    "initial_scale": 10.0,
+    "scale_bounds": [1.0, 100.0],
+    "gallery_storage": "A float32 registered buffer, not a parameter; requires_grad=false and fixed for every forward, optimization step, fold, mouse, and checkpoint.",
+    "trainable_parameters": "Only the SpikeClassifier trunk and scalar log_scale. No gallery or class-specific 2748-way weight matrix is trainable."
+  },
+  "loss": {
+    "function": "torch.nn.functional.cross_entropy on float32 logits",
+    "classes_per_batch": 2748,
+    "negative_policy": "Every batch uses the complete fixed gallery, including all non-batch classes as negatives; never batch-only InfoNCE.",
+    "label_smoothing": 0.05,
+    "mse_image_regression": false
+  },
+  "shared_training_contract": {
+    "n_classes": 2748,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.001,
+    "batch_size": 256,
+    "training_seed": 42,
+    "max_epochs": 20,
+    "evaluation_epochs": [1, 2, 3, 4, 5, 7, 9, 12, 16, 20],
+    "row_order": "np.random.default_rng(42 + epoch).permutation(n_train_rows), matching experiment 48 for a fixed task/fold/mouse/epoch",
+    "gradient_clip_norm": 5.0,
+    "mixed_precision": "bfloat16 CUDA autocast and float32 cross entropy; float32 on synthetic CPU smoke",
+    "fits": "Ten structured-arm fits only: 3 Task2 folds + 2 Task3 folds, each for two mice. Do not retrain production_recipe.",
+    "other_methods": "No early stopping, learning-rate search, seed search, DCT-cutoff search, scale search, architecture search, assignment during training, score fusion, or cross-mouse model."
+  },
+  "checkpoint_evaluation": {
+    "score_source": "Raw float32 scaled full-gallery cosine logits in eval mode; no fusion, temperature tuning after preregistration, or label-derived score modification.",
+    "rows": "Task2: the 256 locally repeat-averaged target rows. Task3: the 256 single-trial rows per block. Rows are sorted by target ID.",
+    "raw_top1_accuracy": "Mean(raw argmax target == true target).",
+    "raw_recall_at_32": "Mean(true target appears in stable argsort of descending raw logits[:32]).",
+    "raw_top1_official_ocf": "Mean official OCF for raw argmax IDs, using the experiment 48 OcfPairCache and src.evaluation.score_predictions.",
+    "hungarian": "src.retrieval.unique_assignment independently on each 256 x 2748 raw-logit matrix, with every gallery column available.",
+    "assigned_final_ocf": "Mean official OCF for Hungarian-assigned IDs on the same rows.",
+    "aggregation": "Use experiment 48's corrected aggregate_rows: block rows -> mouse_fold -> mouse/fold/macro, propagating n_evaluation_rows from n_rows only at mouse_fold and from n_evaluation_rows thereafter. Average with the same equal-cell policy as experiment 48.",
+    "gallery_binarization_for_ocf": "Exactly (pictures >= 128).astype(float32), identical to experiment 48.",
+    "ocf_scale": "Native official score scale; the +3 gate is an absolute difference on that scale."
+  },
+  "selection": {
+    "within_each_task": "Select one structured_dct16 epoch shared by both mice and all folds. Maximize macro assigned_final_ocf; break exact ties by macro raw_recall_at_32, macro raw_top1_accuracy, then earlier epoch.",
+    "production_reference": "Use production_recipe at its own already-selected best epoch in experiment 48 selection.json, independently for each task; do not re-select or retrain it in experiment 50.",
+    "required_sources": [
+      "test/48_high_capacity_generalization/development_results.json",
+      "test/48_high_capacity_generalization/selection.json"
+    ],
+    "source_integrity": "Record both source SHA256 values and experiment 48 run.py SHA256 in both experiment 50 outputs. Verify selection.development_results_sha256 and matching development subset before training.",
+    "missing_source": "--run raises FileNotFoundError before CUDA initialization/checks, cache preflight, real-data loading, or gallery loading if either experiment 48 output is absent.",
+    "selection_inputs": "New structured development metrics plus only the preregistered experiment 48 production_recipe development reference. No experiment 49 result, Task3 seed42 evaluation, Kaggle result, or final/heldout metric."
+  },
+  "advancement_gate": {
+    "comparison": "structured_dct16 minus production_recipe, each at its own selected epoch, independently within Task2 and Task3.",
+    "macro_minimum_absolute_gain": 3.0,
+    "per_mouse": "Both mouse-level assigned_final_ocf deltas must be >= 0 in each task.",
+    "required_nonnegative_folds": {"task2": 2, "task3": 2},
+    "folds": "Fold-level assigned_final_ocf deltas averaged over the two mice must be nonnegative for at least 2/3 Task2 folds and 2/2 Task3 folds.",
+    "outcome": "All per-task gates must pass for overall advance=true. Otherwise stop with no alternate head, DCT cutoff, scale, epoch grid, or hyperparameter search. Passing development still requires separately authorized pristine/final validation, which this experiment never performs."
+  },
+  "prohibited": [
+    "Task2 session4 validation or final evaluation",
+    "Task3 split seed 42 evaluation",
+    "hidden test data or labels",
+    "final or heldout metrics for model or epoch selection",
+    "repeat aggregation in Task3",
+    "batch-only InfoNCE or omission of full-gallery negatives",
+    "MSE image-regression loss",
+    "trainable DCT gallery targets or a free 2748-way linear classifier",
+    "score fusion or 0.x mixture-weight tuning",
+    "assignment labels or assignment-based training",
+    "dependence on experiment 49 outputs",
+    "post-preregistration hyperparameter search"
+  ],
+  "outputs": {
+    "implementation": "test/50_glyph_structured_classifier/run.py",
+    "preregistration": "test/50_glyph_structured_classifier/preregistration.json",
+    "development_results": "test/50_glyph_structured_classifier/development_results.json",
+    "selection": "test/50_glyph_structured_classifier/selection.json",
+    "model_artifacts": "none retained",
+    "commands": {
+      "smoke": ".venv\\Scripts\\python.exe -B -u test\\50_glyph_structured_classifier\\run.py --smoke-test",
+      "run": ".venv\\Scripts\\python.exe -B -u test\\50_glyph_structured_classifier\\run.py --run"
+    }
+  }
+}
