@@ -128,7 +128,11 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 ### 原始 spike 时间戳审计（公开 train）
 
-逐块核对两鼠各四个 session：共 87,936 个单 trial 样本、38,100,565 个事件。按 catalog 的 30,000 Hz 和 250 ms 窗口，`spike_samples` 是 trial 内 int32 采样偏移（0–7499），不是毫秒或 bin 编号。八块均覆盖全部 7,500 个偏移，且 `spike_samples % 300` 均覆盖 300 个值；因此即使 10 ms 计数也确实丢失了窗内位置。所有块的 group_ptr/trial_ptr 边界、事件数及 unit_index 范围均通过检查。未读取竞赛 test NPZ，未训练模型或测量 OCF。下一步应在 Task3 开发折隔离检验窗内位置相对计数的增量，不能从时间精度推断解码收益。
+逐块核对两鼠各四个 session：共 87,936 个单 trial 样本、38,100,565 个事件。按 catalog 的 30,000 Hz 和 250 ms 窗口，`spike_samples` 是 trial 内 int32 采样偏移（0–7499），不是毫秒或 bin 编号。八块均覆盖全部 7,500 个偏移，且 `spike_samples % 300` 均覆盖 300 个值；因此即使 10 ms 计数也确实丢失了窗内位置。所有块的 group_ptr/trial_ptr 边界、事件数及 unit_index 范围均通过检查。未读取竞赛 test NPZ，未训练模型或测量 OCF。
+
+### 实验 66 窗内时序配对检验（Task3，开发折）
+
+脚本与结果在 `test/66_sub_bin_timing/`。特征：25 ms 计数（log1p）+ 每 (unit, bin) 的归一化窗内平均偏移；三臂同配方同种子：`counts`、`real`（真实偏移）、`shuffled`（在同 trial 内、同计数的 cell 之间置换偏移，逐 cell 计数与 trial 内偏移多重集完全不变）。开发折为 Task3 种子 20261126/20261127，整块匈牙利后取 256 张开发图，官方 OCF，9 epochs、hidden 512、seed 42。结果：counts 15.578 / real 15.069 / shuffled 14.927；**real − shuffled = +0.142**（折 −0.069 / +0.352，鼠 +0.145 / +0.139），远低于预注册 +2.0 门槛，且 real 比 counts 低 0.509。**窗内 spike 时序在本配方下不提供可用的身份信息，时间戳路线到此关闭**；不得再据“数据保留了精确时序”推断存在未利用增益。
 
 ## 7. 建议的下一项可证伪工作
 
@@ -144,7 +148,7 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 ## 8. Git 与当前运行状态
 
-- 最近结果提交：**`1918cee test: score v6 multiresolution Task2/3 on the fixed protocol (worse than v5)`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
+- 最近结果提交：**`098dcac docs: record raw train spike timestamp audit`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
 - 实验 63：`1918cee`；实验 62：`b77b11a`；实验 61：`7f61925`；实验 60：`2f5676a`；实验 59：`ecae7fb`；实验 58：`a85b915`；实验 57：`4be8f17`；实验 56：`a57df61`；实验 55：`bb65d8d` / `dbd6c11`；实验 54：`7a1e4bf`；实验 53：`f1baae7` / `a591bcc`。
 - 本交接文档创建前工作树干净，实验 44、45 的后台 agent 均已结束。没有待处理的模型训练或自动 Kaggle 提交。
 - 新对话开始后先运行 `git status --short`、`git log -3 --oneline`，并检查是否有新增后台任务；以磁盘实际状态为准。
