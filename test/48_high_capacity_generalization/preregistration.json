@@ -1,0 +1,122 @@
+{
+  "experiment": "48_high_capacity_generalization",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_training_or_real_metrics",
+  "date": "2026-11-26",
+  "purpose": "Test whether the frozen high-capacity/no-regularization recipe yields a large development generalization gain over the production MLP recipe. Development reuse is not pristine validation and is not a Kaggle result.",
+  "scope": "Create files only under test/48_high_capacity_generalization. Do not modify src, other experiments, or Git history. Do not inspect or use historical heldout metrics for selection.",
+  "data": {
+    "cache": "test/.cache/shared_preprocessing_v1",
+    "loader": "src.preprocessing.load_cached_blocks(cache, split='train', bin_ms=25)",
+    "cache_access": "read-only; never rebuild the cache",
+    "public_partition": "train only",
+    "mice": ["mice1", "mice2"],
+    "blocks": [
+      "mice1/session1", "mice1/session2", "mice1/session3", "mice1/session4",
+      "mice2/session1", "mice2/session2", "mice2/session3", "mice2/session4"
+    ],
+    "n_classes": 2748,
+    "development_picture_subset": "np.sort(np.random.default_rng(20261128).permutation(2748)[:256])",
+    "subset_size": 256,
+    "same_subset_for_every_block_fold_mouse_arm_and_epoch": true
+  },
+  "folds": {
+    "task2": {
+      "split_construction": "make_split(all_eight_blocks, 'task2', seed=42, validation_session=s) for s in session1, session2, session3, in that order",
+      "fold_ids": ["session1", "session2", "session3"],
+      "training": "For each mouse independently, use every original trial in its other three complete sessions. Do not train on any trial from the target session.",
+      "validation": "The target session only. Session4 is never a Task2 validation fold."
+    },
+    "task3": {
+      "split_construction": "make_split(all_eight_blocks, 'task3', seed=s) for s in 20261126 and 20261127, in that order",
+      "fold_ids": ["20261126", "20261127"],
+      "training": "For each mouse independently, pool the four sessions after per-session normalization; each block has exactly three training trials per glyph.",
+      "validation": "Exactly one disjoint validation trial per glyph per block; no repeat aggregation."
+    }
+  },
+  "normalization_and_rows": {
+    "session_transform": "log1p(max(raw_count,0)); mean and population std in float64; float32 mean/scale with scale floor 1e-5",
+    "task2_train": "Fit each training session normalizer on that fold's train_trials only. Include normalized original single-trial rows and, separately, normalized per-session/per-target four-repeat arithmetic-mean rows. Both row types have equal per-row weight in shuffled training.",
+    "task2_validation": "Fit the target-session normalizer on all its unlabeled validation trials. Use target labels only to locally simulate the official group_ptr by grouping each target's four repeats and averaging raw counts before applying that normalizer. Labels never generate, alter, rank, or assign predictions.",
+    "task3_train": "Fit each block normalizer on that block's train_trials only. Include original single-trial rows only; no mean rows or repeat merging.",
+    "task3_validation": "Apply the same block's train-fold normalizer to each single validation trial. Strictly no repeat merging and no validation-response normalizer fitting.",
+    "model_second_normalization": "SpikeClassifier.set_normalization on the concatenated training matrix for the current mouse/fold/arm only, with apply_log=False to avoid a second log1p. No validation rows enter this statistic."
+  },
+  "arms": {
+    "production_recipe": {
+      "class": "src.neural.SpikeClassifier",
+      "hidden": 512,
+      "dropout": {"mice1": 0.2, "mice2": 0.35},
+      "dropout_applies_to": ["task2", "task3"],
+      "label_smoothing": 0.05,
+      "weight_decay": 0.001,
+      "learning_rate": 0.0003
+    },
+    "high_capacity_noreg": {
+      "class": "src.neural.SpikeClassifier",
+      "hidden": 1024,
+      "dropout": {"mice1": 0.0, "mice2": 0.0},
+      "dropout_applies_to": ["task2", "task3"],
+      "label_smoothing": 0.0,
+      "weight_decay": 0.0,
+      "learning_rate": 0.0003
+    }
+  },
+  "shared_training_contract": {
+    "n_classes": 2748,
+    "apply_log": false,
+    "optimizer": "AdamW",
+    "batch_size": 256,
+    "training_seed": 42,
+    "max_epochs": 20,
+    "evaluation_epochs": [1, 2, 3, 4, 5, 7, 9, 12, 16, 20],
+    "row_order": "np.random.default_rng(42 + epoch).permutation(n_train_rows), identical across arms for a fixed task/fold/mouse",
+    "gradient_clip_norm": 5.0,
+    "mixed_precision": "bfloat16 CUDA autocast and float32 cross entropy; float32 on CPU",
+    "other_methods": "No early stopping, learning-rate search, seed search, architecture change, assignment during training, encoding/reranker fusion, image prior, or cross-mouse model."
+  },
+  "checkpoint_evaluation": {
+    "score_source": "Raw float32 MLP logits only, in eval mode; no fusion, temperature tuning, or label-derived score modification.",
+    "rows": "Task2: the 256 locally repeat-averaged target rows. Task3: the 256 single-trial rows. Rows are sorted by target ID because the frozen subset is sorted.",
+    "raw_top1_accuracy": "Mean(raw argmax target == true target) over 256 rows.",
+    "raw_recall_at_32": "Mean(true target appears in stable argsort of descending raw logits[:32]) over 256 rows.",
+    "raw_top1_official_ocf": "Mean official OCF between gallery images at raw argmax IDs and true target images over 256 rows, including PNG-equivalent quantization through src.evaluation.score_predictions.",
+    "hungarian": "scipy linear_sum_assignment(maximize=True), through src.retrieval.unique_assignment, independently on each 256 x 2748 raw-logit submatrix. Assignment uses scores only and all 2748 columns remain available.",
+    "assigned_final_ocf": "Mean official OCF between gallery images at Hungarian-assigned IDs and true target images over the same 256 rows.",
+    "aggregation": "Retain every block/mouse/fold/epoch row. Average blocks within each mouse-fold, folds within each mouse, mice within each fold, and all mouse-fold cells for the macro average. All cells have equal 256-row block sizes.",
+    "ocf_scale": "Native official score scale; the +3 gate is an absolute difference on that scale.",
+    "gallery_binarization": "Match test/evaluate_final.py: binary_gallery = (uint8_gallery >= 128).astype(float32); official score_predictions performs its standard PNG-equivalent prediction quantization. This explicit correction follows a pre-metric binary-target exception and precedes every real OCF value."
+  },
+  "selection": {
+    "within_each_task_and_arm": "Select one epoch shared by both mice and all folds. Maximize macro assigned_final_ocf; break exact ties in order by macro raw_recall_at_32, macro raw_top1_accuracy, then earlier epoch. raw_top1_official_ocf is reported but is not a selection key.",
+    "between_arms": "Compare the two selected-epoch macro summaries with the same ordered keys: assigned_final_ocf, raw_recall_at_32, raw_top1_accuracy, then earlier selected epoch.",
+    "selection_inputs": "Only the newly computed preregistered development metrics. No fixed-seed42 Task3 final evaluation, Task2 session4 evaluation, Kaggle submission, or historical heldout metric."
+  },
+  "advancement_gate": {
+    "comparison": "Winner minus production_recipe, each at its own selected epoch, within each task.",
+    "macro_minimum_absolute_gain": 3.0,
+    "per_mouse": "Both mouse-level assigned_final_ocf deltas (averaged over development folds) must be >= 0.",
+    "folds": "A strict majority of fold-level assigned_final_ocf deltas (averaged over the two mice) must be >= 0: at least 2/3 Task2 folds and 2/2 Task3 folds.",
+    "outcome": "If the high-capacity arm is not the winner or any condition fails, stop with advance=false. Do not search alternate hyperparameters. Passing development alone would still require a separately authorized pristine/final protocol; this experiment never performs it."
+  },
+  "prohibited": [
+    "Task2 session4 validation or final evaluation",
+    "Task3 split seed 42 evaluation",
+    "hidden test data or labels",
+    "historical heldout metrics for model, arm, or epoch selection",
+    "repeat aggregation in Task3",
+    "assignment labels or assignment-based training",
+    "post-preregistration hyperparameter search"
+  ],
+  "outputs": {
+    "implementation": "test/48_high_capacity_generalization/run.py",
+    "preregistration": "test/48_high_capacity_generalization/preregistration.json",
+    "development_results": "test/48_high_capacity_generalization/development_results.json",
+    "selection": "test/48_high_capacity_generalization/selection.json",
+    "model_artifacts": "none retained",
+    "commands": {
+      "smoke": ".venv\\Scripts\\python.exe -B -u test\\48_high_capacity_generalization\\run.py --smoke-test",
+      "run": ".venv\\Scripts\\python.exe -B -u test\\48_high_capacity_generalization\\run.py --run"
+    }
+  }
+}
