@@ -92,6 +92,11 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 **重要结论**：纯生成式/原型式全字库分类（51、52）在开发协议上系统性低于 v5 的判别式 MLP 配方约 1.5–2.3 分，且 Task3 单 trial 的 raw recall@32 只有 4.3%（v5 为 13.0%）。继续在“类模板 + 噪声模型”族内换参数不会带来大幅提升；下一步应转向判别式表征或候选生成的结构性改变，而不是再包装同一族模型。
 
+- **实验 53**：三分辨率（10/25/50ms）判别式集成，逐行 z-score 等权融合。Task2 18.371881→19.909159（Δ+1.537278，recall@32 25.65%→34.05%），Task3 15.695588→16.439417（Δ+0.743829，recall@32 12.96%→18.63%）。双鼠与所有折均非负（Task2 +0.97/+2.10，3/3 折；Task3 +0.87/+0.61，2/2 折），25ms 视图逐位复现 48（最大差 0.0）。但 macro 未达 +3，advance=false。10ms 单视图明显更差（16.14/14.49）。
+- **实验 54（探索性，未预注册）**：Task3 推理策略诊断（50ms、epoch9）。最优 `zlogits+pS` 仅 +1.119，且 mice1 −0.123、mice2 +1.691，不稳健；top32 内两两 directional 相似度均值 58.29，正确答案进入 top32 时 medoid 命中仅 4.81%。确认 argmax 错误时 OCF 均值 14.65、P90 22.60。
+- **目标可行性（关键）**：Task2/3 的预测直接取自 GT 字图库，分类正确即 OCF=100。由 Task3 final 16.44 与 top1 1.76% 得 `final≈100p+14.65(1−p)`；要 40 分需 p≈30%，即 top1 再提升 17 倍。4 repeat 平均的 Task2 top1 仅 4.1%，按 SNR 平方根规律，单 trial 达 30% 需约 290 repeat，物理不可达。用户已确认继续 Task2/3 表征侧而非转向 Task1。
+- **实验 55（进行中）**：Sinkhorn 平衡软伪标签转导（50ms、base epoch Task2=7/Task3=9、2 轮、温度 0.05、20 次迭代、软权重 0.5、微调 2 epochs lr=3e-5）。协议 `test/55_balanced_transductive/preregistration.json`，门槛相对 48 production +3、双鼠非负、折非负，同时报告相对同折 50ms base 的归因 delta。
+
 ## 7. 建议的下一项可证伪工作
 
 优先顺序不是必须机械执行，但不能把失败路线换参数重复包装：
@@ -105,8 +110,8 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 ## 8. Git 与当前运行状态
 
-- 最近结果提交：**`09c539f test: reject low-rank correlated-noise model on development gates`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
-- 实验 52 实现提交：`2dd2209`；此前实验 51 提交：`bef877c`；实验 50 提交：`98278c5`。
+- 最近结果提交：**`7a1e4bf test: record exploratory structure-inference diagnosis`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
+- 实验 53 结果提交：`f1baae7`；实验 53 协议提交：`a591bcc`；实验 52 提交：`2dd2209`/`09c539f`；实验 51 提交：`bef877c`；实验 50 提交：`98278c5`。
 - 本交接文档创建前工作树干净，实验 44、45 的后台 agent 均已结束。没有待处理的模型训练或自动 Kaggle 提交。
 - 新对话开始后先运行 `git status --short`、`git log -3 --oneline`，并检查是否有新增后台任务；以磁盘实际状态为准。
 - 大模型 checkpoint、预测 NPZ、缓存通常被 `.gitignore` 排除；轻量 preregistration、selection、results、manifest、training_summary 等按白名单入库。不要为提交而打包大型缓存。

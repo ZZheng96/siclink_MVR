@@ -1,0 +1,119 @@
+{
+  "experiment": "55_balanced_transductive",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_training_or_real_metrics",
+  "date": "2026-11-26",
+  "purpose": "Test one new training-side candidate, balanced_transductive, that adds two rounds of Sinkhorn-balanced soft pseudo-label fine-tuning on unlabeled evaluation blocks to the strongest single-view discriminative model (50ms). Rationale: experiments 53 and 54 showed inference-only structure re-ranking adds at most +1.12 and is unstable, while the evaluation blocks carry a known balanced structure (one example per class in Task3; four repeats per class in Task2) that is available without labels in the real test setting. This is transductive learning on official unlabeled inputs, not a reranker, weight search, or generative model. Development reuse is neither pristine validation nor a Kaggle result.",
+  "scope": "Create files only under test/55_balanced_transductive. Do not modify src or other experiments. Experiment 48 code is read-only and supplies prepare_task2, prepare_task3, OcfPairCache, evaluate_logits, aggregate_rows, select_epoch, find_aggregate and subset_positions unchanged. Do not read experiment 49-54 outputs. No production change and no Kaggle submission.",
+  "data": {
+    "cache": "test/.cache/shared_preprocessing_v1",
+    "loader": "src.preprocessing.load_cached_blocks(cache, split='train', bin_ms=50)",
+    "cache_access": "read-only; never rebuild the cache",
+    "public_partition": "train only",
+    "view_bin_ms": 50,
+    "mice": ["mice1", "mice2"],
+    "blocks": [
+      "mice1/session1", "mice1/session2", "mice1/session3", "mice1/session4",
+      "mice2/session1", "mice2/session2", "mice2/session3", "mice2/session4"
+    ],
+    "n_classes": 2748,
+    "development_picture_subset": "np.sort(np.random.default_rng(20261128).permutation(2748)[:256])",
+    "subset_size": 256,
+    "row_preparation": "Experiment 48 prepare_task2 and prepare_task3 unchanged on the 50ms block set."
+  },
+  "folds": {
+    "task2": {
+      "split_construction": "make_split(all_eight_blocks, 'task2', seed=42, validation_session=s) for s in session1, session2, session3, in that order",
+      "fold_ids": ["session1", "session2", "session3"]
+    },
+    "task3": {
+      "split_construction": "make_split(all_eight_blocks, 'task3', seed=s) for s in 20261126 and 20261127, in that order",
+      "fold_ids": ["20261126", "20261127"]
+    }
+  },
+  "arm": {
+    "name": "balanced_transductive",
+    "arms_in_this_experiment": ["balanced_transductive"],
+    "base_view_bin_ms": 50,
+    "base_epochs": {"task2": 7, "task3": 9},
+    "base_epoch_source": "Experiment 53 selected 50ms single-view macro epochs; reused as a fixed already-selected constant, not re-selected here.",
+    "transduction_rounds": 2,
+    "extra_hyperparameter_search": false,
+    "weight_search": false
+  },
+  "base_training": {
+    "class": "src.neural.SpikeClassifier",
+    "configuration": "Experiment 48 production_recipe unchanged: hidden=512, dropout mice1=0.2/mice2=0.35, label_smoothing=0.05, weight_decay=0.001, AdamW, learning_rate=3e-4, batch_size=256, apply_log=False, gradient_clip_norm=5.0, training_seed=42, bf16 autocast, TF32 disabled.",
+    "loss": "float32 cross-entropy over all 2748 classes",
+    "stop_rule": "Train to the fixed base epoch, evaluate once, then begin transduction."
+  },
+  "transductive_unlabeled_queries": {
+    "task2": "Group the held session's 10992 unlabeled single trials into 2748 rows by sample using only group_ptr/trial_sample_indices, average raw counts per sample, then apply the held session's train-fitted normalizer. No labels enter grouping or normalization.",
+    "task3": "Each of the four validation blocks contributes 2748 unlabeled single-trial rows; apply that block's train-fitted normalizer.",
+    "label_isolation": "Targets are read only after all transduction rounds are complete, for evaluation."
+  },
+  "sinkhorn_balancing": {
+    "input": "row_zscore(logits) divided by fixed temperature 0.05, then row softmax",
+    "column_target": "1.0 per class for every block (Task2 grouped rows and Task3 single rows both contain exactly one row per class)",
+    "iterations": 20,
+    "row_normalization": "each row sums to 1",
+    "column_normalization": "each class column sums to column_target",
+    "output": "soft assignment matrix P with shape rows x 2748",
+    "search": "none; temperature and iterations are fixed constants"
+  },
+  "fine_tuning": {
+    "rounds": 2,
+    "per_round_epochs": 2,
+    "learning_rate": 3e-05,
+    "weight_decay": 0.001,
+    "batch_size": 256,
+    "loss": "cross_entropy(hard train logits, train targets) + 0.5 * soft_cross_entropy(val logits, Sinkhorn P)",
+    "soft_target_weight": 0.5,
+    "initialization": "continue from the previous round's weights; never reset",
+    "search": "none"
+  },
+  "inference_and_evaluation": {
+    "final_prediction": "argmax and unique_assignment independently on the final full 2748-class score matrix; both are reported.",
+    "metrics": ["raw_top1_accuracy", "raw_recall_at_32", "raw_top1_official_ocf", "assigned_final_ocf"],
+    "aggregation": "Experiment 48 corrected aggregate_rows: block rows -> mouse_fold -> mouse/fold/macro.",
+    "ocf_scale": "native official 0-100 OCF"
+  },
+  "reference48": {
+    "required_sources": [
+      "test/48_high_capacity_generalization/development_results.json",
+      "test/48_high_capacity_generalization/selection.json"
+    ],
+    "comparator": "production_recipe at its own already-selected macro epoch independently in Task2 and Task3.",
+    "integrity": "Before cache/CUDA access, validate both hashes, linkage, subset, selected epochs and row counts.",
+    "secondary_attribution": "Also report each fold/mouse against the same 50ms base model before transduction, so the transductive increment is separable from the 50ms view increment."
+  },
+  "advancement_gate": {
+    "comparison": "balanced_transductive minus experiment 48 production_recipe at production's own selected epoch, independently within each task.",
+    "macro_minimum_absolute_gain": 3.0,
+    "per_mouse": "Both mouse-level assigned_final_ocf deltas must be >=0 in each task.",
+    "required_nonnegative_folds": {"task2": 2, "task3": 2},
+    "folds": "Fold-level assigned_final_ocf deltas averaged over two mice must be nonnegative for at least 2/3 Task2 folds and 2/2 Task3 folds.",
+    "outcome": "All per-task gates must pass for overall advance=true. Otherwise stop with no alternate temperature, iteration count, soft weight, round count or learning-rate search."
+  },
+  "audits": {
+    "per_fit": "Record base metrics, per-round Sinkhorn marginal error, pseudo-label top1 agreement with the previous round, and every evaluation-block metric.",
+    "isolation": "Confirm by smoke test that held-out labels never enter grouping, normalization, Sinkhorn, pseudo-labels, or fine-tuning; permuting held-out labels must leave all fitted quantities and P unchanged.",
+    "smoke": "Synthetic checks for Sinkhorn row/column marginals, soft-target loss, label-permutation invariance, full-candidate axis, aggregation counts, and positive/negative gate cases."
+  },
+  "outputs": {
+    "development_results": "test/55_balanced_transductive/development_results.json",
+    "selection": "test/55_balanced_transductive/selection.json",
+    "model_artifacts": "none retained",
+    "overwrite_policy": "Refuse --run if either output already exists."
+  },
+  "prohibited": [
+    "Task2 session4 validation or final evaluation",
+    "Task3 split seed 42 evaluation",
+    "hidden test labels or sample-ID/target alignment",
+    "held-out labels in grouping, normalization, Sinkhorn, pseudo-labels or fine-tuning",
+    "repeat aggregation in Task3",
+    "temperature, iteration, soft-weight, round or learning-rate search",
+    "dependence on experiment 49, 50, 51, 52, 53 or 54 outputs",
+    "production changes or Kaggle submission"
+  ]
+}
