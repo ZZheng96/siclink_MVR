@@ -1,0 +1,125 @@
+{
+  "experiment": "52_lowrank_gaussian",
+  "freeze_revision": 1,
+  "status": "preregistered_before_real_training_or_real_metrics",
+  "date": "2026-11-26",
+  "purpose": "Evaluate one deterministic full-gallery generative candidate, lowrank_gaussian, using class templates and a shared residual covariance Sigma=L L^T+diag(d), exact Woodbury whitening, and finite-template/repeat predictive covariance. This is a new correlated-noise model, not a reranker, Poisson reparameterization, or score-fusion search. Development reuse is neither pristine validation nor a Kaggle result.",
+  "scope": "Create files only under test/52_lowrank_gaussian. Do not modify src, other experiments, or Git history. Experiment 48 code and completed development outputs are read-only comparator/evaluation utilities. Do not read any real experiment metrics before --run and do not depend on experiment 49, 50, or 51 outputs.",
+  "data": {
+    "cache": "test/.cache/shared_preprocessing_v1",
+    "loader": "src.preprocessing.load_cached_blocks(cache, split='train', bin_ms=25)",
+    "cache_access": "read-only; never rebuild the cache",
+    "public_partition": "train only",
+    "raw_counts": "Shared unnormalized 25ms uint16 trial counts; the only transform is log1p after split isolation.",
+    "gallery": "Public pictures.npy, read-only, binarized as (pictures >= 128).astype(float32) solely for official OCF.",
+    "mice": ["mice1", "mice2"],
+    "blocks": [
+      "mice1/session1", "mice1/session2", "mice1/session3", "mice1/session4",
+      "mice2/session1", "mice2/session2", "mice2/session3", "mice2/session4"
+    ],
+    "n_classes": 2748,
+    "development_picture_subset": "np.sort(np.random.default_rng(20261128).permutation(2748)[:256])",
+    "subset_size": 256,
+    "same_subset_for_every_block_fold_and_mouse": true
+  },
+  "folds": {
+    "task2": {
+      "split_construction": "make_split(all_eight_blocks, 'task2', seed=42, validation_session=s) for s in session1, session2, session3, in that order",
+      "fold_ids": ["session1", "session2", "session3"],
+      "training": "For each mouse independently, only train_trials from the other three complete sessions enter templates and covariance.",
+      "validation": "The entire held-out target session supplies unlabeled trials for one target-session marginal. Local GT is used only after model fitting to form official four-repeat groups and select evaluation rows."
+    },
+    "task3": {
+      "split_construction": "make_split(all_eight_blocks, 'task3', seed=s) for s in 20261126 and 20261127, in that order",
+      "fold_ids": ["20261126", "20261127"],
+      "training": "For each mouse independently, each block has exactly three disjoint training repeats per glyph. Fit separate block templates and pool only their within-block residuals into one covariance per mouse-fold.",
+      "validation": "Exactly one disjoint validation single trial per glyph per block. No target marginal, labels, or repeat aggregation enters fitting or scoring."
+    }
+  },
+  "arm": {
+    "name": "lowrank_gaussian",
+    "arms_in_this_experiment": ["lowrank_gaussian"],
+    "deterministic_fit_only": true,
+    "training_epochs": 0,
+    "epoch_field_adapter": "Result rows carry epoch=1 only for experiment 48 aggregation compatibility; it is not checkpoint selection.",
+    "ranks": {"task2": 4, "task3": 1},
+    "rank_search": false,
+    "hyperparameter_search": false
+  },
+  "transform_and_templates": {
+    "transform": "z=log1p(raw_count), computed in float64 for sufficient statistics; no log-count standardization and no image-prior regression.",
+    "task2_source_alignment": "For each of three source blocks, offset_b=mean(z over all its train trials). reference_offset=mean(offset_b over three blocks). aligned_z=z-offset_b+reference_offset. Each class template mu_c is the arithmetic mean of its 12 aligned source trials.",
+    "task2_target_alignment": "target_offset=mean(z over all 10992 unlabeled held-session trials), without targets. Each aligned validation value is z-target_offset+reference_offset. The query is the arithmetic mean of four aligned repeats; equivalently average the four raw z values before applying the same offset.",
+    "task2_residuals": "Every aligned source single trial minus its global class template; N=32976 and G=2748 per mouse-fold.",
+    "task3_templates": "For each block independently, mu_bc is the arithmetic mean of that block's three raw-z training trials for class c. No cross-block template pooling or target alignment.",
+    "task3_residuals": "Every raw-z source single trial minus its own block-class template; pool residuals across four blocks, with N=32976 and G=10992 per mouse-fold.",
+    "template_dtype": "float64 sufficient statistics; float32 copies only for CUDA scoring"
+  },
+  "residual_covariance": {
+    "formula": "C=(E^T E)/(N-G), where E contains the specified residuals and G is the number of fitted class or block-class templates.",
+    "eigendecomposition": "Descending float64 eigenpairs of C; retain exactly rank[task].",
+    "loading": "L=U_rank*sqrt(max(lambda_rank,0)), shape n_features by rank.",
+    "diagonal": "d=max(diag(C)-rowsum(L^2),1e-6), elementwise.",
+    "variance_floor": 0.000001,
+    "variance_floor_search": false,
+    "covariance_pooling": "Within each mouse-fold only; never across mice, folds, tasks, or validation trials."
+  },
+  "predictive_likelihood": {
+    "model": "query mean given class is Gaussian with mean mu_c and covariance kappa*(L L^T+diag(d)); kappa is identical across classes.",
+    "task2": {"n_template_repeats": 12, "n_query_repeats": 4, "kappa": "1/4+1/12=1/3"},
+    "task3": {"n_template_repeats": 3, "n_query_repeats": 1, "kappa": "1+1/3=4/3"},
+    "finite_template_posterior": "The 1/n_template_repeats term is mandatory; no plug-in-only likelihood.",
+    "woodbury": "A=L/sqrt(d); H=I+A^T A. For residual r=(query-mu_c)/sqrt(d), squared Mahalanobis q=r^T r-(A^T r)^T H^-1(A^T r).",
+    "score": "score=-0.5*q/kappa. Omit log determinant because Sigma and kappa are shared by every class.",
+    "candidate_matrix": "Expand q using only two-dimensional query-by-class and rank-sized matrices and GEMMs. Never construct query-by-class-by-feature or query-by-class-by-rank tensors.",
+    "scoring_device": "CUDA float32 GEMMs with TF32 disabled; CPU float64 is permitted for synthetic hand-checks.",
+    "score_modification": "None: no production logits, top-32 restriction, fusion, temperature, calibration weights, or reranking."
+  },
+  "evaluation": {
+    "implementation": "Import experiment 48 OcfPairCache, evaluate_logits, subset_positions and corrected aggregate_rows unchanged.",
+    "rows": "Use local GT only to construct Task2 official groups and select the same sorted 256 development targets. Score those queries against all 2748 classes. Task3 evaluates one 256x2748 single-trial matrix per block.",
+    "metrics": ["raw_top1_accuracy", "raw_recall_at_32", "raw_top1_official_ocf", "assigned_final_ocf"],
+    "hungarian": "Experiment 48 evaluate_logits/src.retrieval.unique_assignment independently on every raw 256x2748 score matrix.",
+    "aggregation": "Block rows -> mouse_fold -> mouse/fold/macro using the corrected n_evaluation_rows propagation.",
+    "ocf_scale": "Native official score scale; the +3 gate is an absolute assigned_final_ocf difference."
+  },
+  "reference48": {
+    "required_sources": [
+      "test/48_high_capacity_generalization/development_results.json",
+      "test/48_high_capacity_generalization/selection.json"
+    ],
+    "comparator": "production_recipe at its own already-selected best macro epoch independently in Task2 and Task3; do not retrain or re-select it.",
+    "integrity": "Before cache/CUDA access, validate both hashes, selection linkage, preregistration linkage, subset, selected epochs, and expected evaluation row counts.",
+    "parameter_independence": "No candidate constant, rank, fold, or model choice is derived from experiment 48, 49, 50, or 51 metrics. Reference metrics are read only for comparison during --run, never during smoke."
+  },
+  "advancement_gate": {
+    "comparison": "lowrank_gaussian minus experiment 48 production_recipe at production's own selected epoch, independently within each task; the candidate has no epoch selection.",
+    "macro_minimum_absolute_gain": 3.0,
+    "per_mouse": "Both mouse-level assigned_final_ocf deltas must be >=0 in each task.",
+    "required_nonnegative_folds": {"task2": 2, "task3": 2},
+    "folds": "Fold-level assigned_final_ocf deltas averaged over two mice must be nonnegative for at least 2/3 Task2 folds and 2/2 Task3 folds.",
+    "outcome": "All per-task gates must pass for overall advance=true. Otherwise stop with no alternate rank, variance floor, template rule, covariance rule, or other hyperparameter search. Passing development still requires separately authorized pristine/final validation."
+  },
+  "audits": {
+    "per_mouse_fold": "Record train/validation roles and counts, N/G/df, n and R, kappa, rank, eigenvalues, diagonal floor counts, template/covariance/loading/diagonal hashes, and exact target-marginal label isolation.",
+    "isolation_smoke": "Changing held-out features cannot change train-derived templates or covariance; changing held-out labels cannot change Task2 target marginal or any fitted model; changing training features must change fitted statistics.",
+    "numerical_smoke": "Compare expanded Woodbury scores with direct dense inverse solves on a hand-sized example; verify finite scores, covariance diagonal reconstruction, kappa values, full candidate axis, and two-dimensional GEMMs only.",
+    "gate_smoke": "Exercise positive, macro-negative, mouse-negative and fold-negative selection cases."
+  },
+  "outputs": {
+    "development_results": "test/52_lowrank_gaussian/development_results.json",
+    "selection": "test/52_lowrank_gaussian/selection.json",
+    "model_artifacts": "none retained",
+    "overwrite_policy": "Refuse --run if either output already exists."
+  },
+  "prohibited": [
+    "Task2 session4 validation or final evaluation",
+    "Task3 split seed 42 evaluation",
+    "hidden test labels or sample-ID/target alignment",
+    "validation labels for template, covariance, offset, or score construction",
+    "repeat aggregation in Task3",
+    "rank, variance-floor, covariance, template, or score-weight search",
+    "dependence on experiment 49, 50, or 51 outputs",
+    "production changes or Kaggle submission"
+  ]
+}
