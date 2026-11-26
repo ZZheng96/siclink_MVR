@@ -1,0 +1,11 @@
+{
+  "rows": 211,
+  "top1_is_ocf_argmax_rate": 1.0,
+  "argmax_position_histogram": {
+    "0": 211
+  },
+  "top1_mean": 80.09683990478516,
+  "top32_rowmax_mean": 80.09683990478516,
+  "top1_equals_rowmax_rate": 1.0,
+  "elapsed_seconds": 17.483999999938533
+}
