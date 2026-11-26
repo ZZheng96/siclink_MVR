@@ -1,0 +1,74 @@
+[
+  {
+    "epoch": 1,
+    "train_loss": 7.835662331643584,
+    "train_correct": 1125,
+    "train_total": 43968,
+    "train_accuracy": 0.0255867903930131,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  },
+  {
+    "epoch": 2,
+    "train_loss": 6.811993256753536,
+    "train_correct": 6949,
+    "train_total": 43968,
+    "train_accuracy": 0.1580467612809316,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  },
+  {
+    "epoch": 3,
+    "train_loss": 5.428169816168461,
+    "train_correct": 19915,
+    "train_total": 43968,
+    "train_accuracy": 0.4529430494905386,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  },
+  {
+    "epoch": 4,
+    "train_loss": 3.742646121562308,
+    "train_correct": 31845,
+    "train_total": 43968,
+    "train_accuracy": 0.7242767467248908,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  },
+  {
+    "epoch": 5,
+    "train_loss": 2.099746619076014,
+    "train_correct": 39754,
+    "train_total": 43968,
+    "train_accuracy": 0.9041575691411936,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  },
+  {
+    "epoch": 6,
+    "train_loss": 0.9347688974771958,
+    "train_correct": 43152,
+    "train_total": 43968,
+    "train_accuracy": 0.9814410480349345,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  },
+  {
+    "epoch": 7,
+    "train_loss": 0.3193120981147716,
+    "train_correct": 43912,
+    "train_total": 43968,
+    "train_accuracy": 0.99872634643377,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  },
+  {
+    "epoch": 8,
+    "train_loss": 0.10279443906687927,
+    "train_correct": 43967,
+    "train_total": 43968,
+    "train_accuracy": 0.9999772561863173,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  },
+  {
+    "epoch": 9,
+    "train_loss": 0.044830457964882234,
+    "train_correct": 43968,
+    "train_total": 43968,
+    "train_accuracy": 1.0,
+    "evaluation": "model.eval exact top1 on every original single training trial"
+  }
+]

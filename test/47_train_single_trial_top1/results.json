@@ -1,0 +1,125 @@
+{
+  "experiment": "47_train_single_trial_top1",
+  "status": "passed",
+  "goal_met": true,
+  "protocol_status": "preregistered",
+  "is_preregistered_protocol": true,
+  "epochs_limit": 100,
+  "default_preregistered_epochs": 100,
+  "epochs_override_used": false,
+  "overall": {
+    "correct": 87936,
+    "total": 87936,
+    "correct_over_total": "87936/87936",
+    "accuracy": 1.0
+  },
+  "per_mouse": {
+    "mice1": {
+      "correct": 43968,
+      "total": 43968,
+      "accuracy": 1.0,
+      "epochs": 7,
+      "early_stopped_at_100_percent": true,
+      "checkpoint": "test/47_train_single_trial_top1/artifacts/models/mice1/classifier.pt",
+      "history": "test/47_train_single_trial_top1/artifacts/models/mice1/history.json",
+      "sessions": [
+        {
+          "block": "mice1/session1",
+          "train_trials": 10992,
+          "target_classes": 2748,
+          "original_trials_per_target": 4,
+          "normalizer_source": "all original public train trials in this session only"
+        },
+        {
+          "block": "mice1/session2",
+          "train_trials": 10992,
+          "target_classes": 2748,
+          "original_trials_per_target": 4,
+          "normalizer_source": "all original public train trials in this session only"
+        },
+        {
+          "block": "mice1/session3",
+          "train_trials": 10992,
+          "target_classes": 2748,
+          "original_trials_per_target": 4,
+          "normalizer_source": "all original public train trials in this session only"
+        },
+        {
+          "block": "mice1/session4",
+          "train_trials": 10992,
+          "target_classes": 2748,
+          "original_trials_per_target": 4,
+          "normalizer_source": "all original public train trials in this session only"
+        }
+      ]
+    },
+    "mice2": {
+      "correct": 43968,
+      "total": 43968,
+      "accuracy": 1.0,
+      "epochs": 9,
+      "early_stopped_at_100_percent": true,
+      "checkpoint": "test/47_train_single_trial_top1/artifacts/models/mice2/classifier.pt",
+      "history": "test/47_train_single_trial_top1/artifacts/models/mice2/history.json",
+      "sessions": [
+        {
+          "block": "mice2/session1",
+          "train_trials": 10992,
+          "target_classes": 2748,
+          "original_trials_per_target": 4,
+          "normalizer_source": "all original public train trials in this session only"
+        },
+        {
+          "block": "mice2/session2",
+          "train_trials": 10992,
+          "target_classes": 2748,
+          "original_trials_per_target": 4,
+          "normalizer_source": "all original public train trials in this session only"
+        },
+        {
+          "block": "mice2/session3",
+          "train_trials": 10992,
+          "target_classes": 2748,
+          "original_trials_per_target": 4,
+          "normalizer_source": "all original public train trials in this session only"
+        },
+        {
+          "block": "mice2/session4",
+          "train_trials": 10992,
+          "target_classes": 2748,
+          "original_trials_per_target": 4,
+          "normalizer_source": "all original public train trials in this session only"
+        }
+      ]
+    }
+  },
+  "protocol": {
+    "bin_ms": 25,
+    "hidden": 1024,
+    "dropout": 0.0,
+    "label_smoothing": 0.0,
+    "weight_decay": 0.0,
+    "learning_rate": 0.0003,
+    "batch_size": 256,
+    "seed": 42,
+    "validation_fold_used": false,
+    "split_manifest_used": false,
+    "mean_augmentation_used": false,
+    "hungarian_assignment_used": false,
+    "image_or_image_index_prior_used": false
+  },
+  "cache": {
+    "path": "test/.cache/shared_preprocessing_v1",
+    "manifest_sha256": "aa1553fe8f313de3fd8738c6682d7878d6366e92743a3d504547e04db5d80903",
+    "source_root": "D:\\WORK\\siclink\\data\\siclink-mouse-visual-reconstruction-bci-challenge\\siclink_chinese_character_decoding_dataset"
+  },
+  "preregistration_sha256": "60b7626ae942f0c7f25ff2be75bae3d1bb2f5781b5a0bf63d009e1f6745c164e",
+  "environment": {
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU"
+  },
+  "elapsed_seconds": 18.70330950000789,
+  "interpretation": "Training-set capacity and label-pipeline acceptance only; no generalization claim."
+}
