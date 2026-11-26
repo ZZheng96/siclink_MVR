@@ -109,6 +109,12 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 - **实验 60 多任务**：回归 + 0.1×2473 类分类共享 trunk，mice1 +0.23、mice2 −0.32（平均 −0.04），**无改善**。
 - **Task1 结论**：字库、检索、时间分辨率、多任务均非杠杆；唯一杠杆是连续重建 R²，而它在 25/50ms counts + MLP/ridge 上稳定在 0.47–0.5。历史 07/17 DDPM、21 方向损失、24/26 CNN/attention、33 时序候选均未突破。
 
+## 6.2 补充排除（实验 61-62）
+
+- **实验 61 repeat 缩放**：Task1 检索 OCF 1→4 repeat 为 16.15→17.33→17.79→18.07，收益递减；按平方根外推到 test 的 20 repeat 仅约 +0.5。因此真实 Kaggle Task1 不会显著高于本地 18.44。
+- **实验 62 Task3 连续重建**：50ms pooled ridge 预测 DCT32 后 directional 检索，macro OCF **15.43**，低于分类单视图 15.86；DCT **R²≈0.00**（−0.0008~0.0046）。单 trial 重建无法解释任何字形方差，分类已是最优利用方式。
+- **合并结论**：三任务共 15 个以上结构性方向全部排除（生成式、低秩噪声、集成、转导、结构重排、时间分辨率、多任务、连续检索、DDPM 历史、CNN/attention、对比学习、方向损失、噪声加权、dropout）。唯一稳定的正增益是集成与转导的部分叠加（Task2 +1.97、Task3 +0.74）。
+
 ## 7. 建议的下一项可证伪工作
 
 **已完成的系统性排除（2026-11-26）**：实验 48-60 与历史 21/26/35/39/40-45 覆盖了高容量、正则、分位传输、DCT 全字库头、分层 Poisson、低秩相关噪声、多分辨率集成、转导、结构推理、时间分辨率、多任务、方向损失、CNN/attention、对比学习。三任务的最终瓶颈一致指向**神经信号单次呈现的信息量**：Task3 单 trial top1 1.76%，Task1 连续重建 R²≈0.47。综合 40 分在当前数据与合法方法下不可达。
@@ -121,8 +127,8 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 ## 8. Git 与当前运行状态
 
-- 最近结果提交：**`2f5676a test: reject multitask auxiliary head for Task1 reconstruction`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
-- 实验 59：`ecae7fb`；实验 58：`a85b915`；实验 57：`4be8f17`；实验 56：`a57df61`；实验 55：`bb65d8d` / 协议 `dbd6c11`；实验 54：`7a1e4bf`；实验 53：`f1baae7` / `a591bcc`；实验 52：`2dd2209`/`09c539f`。
+- 最近结果提交：**`b77b11a test: reject Task3 continuous reconstruction retrieval`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
+- 实验 61：`7f61925`；实验 60：`2f5676a`；实验 59：`ecae7fb`；实验 58：`a85b915`；实验 57：`4be8f17`；实验 56：`a57df61`；实验 55：`bb65d8d` / `dbd6c11`；实验 54：`7a1e4bf`；实验 53：`f1baae7` / `a591bcc`。
 - 本交接文档创建前工作树干净，实验 44、45 的后台 agent 均已结束。没有待处理的模型训练或自动 Kaggle 提交。
 - 新对话开始后先运行 `git status --short`、`git log -3 --oneline`，并检查是否有新增后台任务；以磁盘实际状态为准。
 - 大模型 checkpoint、预测 NPZ、缓存通常被 `.gitignore` 排除；轻量 preregistration、selection、results、manifest、training_summary 等按白名单入库。不要为提交而打包大型缓存。
