@@ -82,6 +82,16 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 实验 22 的 repeat 均值增广已经失败，不要重复。实验 40–45 均未修改 v5 生产提交，也没有产生新的 Kaggle 成绩。
 
+- **实验 46**：共享 NPZ 预处理缓存 `test/.cache/shared_preprocessing_v1`（8 个 train 块、25ms uint16 计数、只读）。
+- **实验 47**：train 集 87,936 条单 trial 的 target-ID 拟合，两鼠各 43,968/43,968 = 100%，无泄露。
+- **实验 48**：高容量无正则对照，未通过；其 `production_recipe` 开发结果（Task2 epoch5、Task3 epoch12）作为后续实验的固定比较器。
+- **实验 49**：特征分位传输，未通过。
+- **实验 50**：固定 DCT16 全字库 cosine 分类头。Task2 18.371881→17.860802（Δ−0.511），Task3 15.695588→15.771780（Δ+0.076），未通过。
+- **实验 51**：分层 DCT-Ridge 图像先验 + 经验 Poisson + 无标签边际校准。Task2 Δ−0.667、Task3 Δ−1.582，双鼠与所有折为负，未通过。
+- **实验 52**：低秩相关噪声高斯模型（log1p、类模板、C=EᵀE/(N−G)、秩 Task2=4/Task3=1、Woodbury 全字库评分、有限 repeat 预测协方差）。Task2 18.371881→16.697472（Δ−1.674），Task3 15.695588→13.368808（Δ−2.327），双鼠与所有折为负，未通过。结果在 `test/52_lowrank_gaussian/selection.json`。
+
+**重要结论**：纯生成式/原型式全字库分类（51、52）在开发协议上系统性低于 v5 的判别式 MLP 配方约 1.5–2.3 分，且 Task3 单 trial 的 raw recall@32 只有 4.3%（v5 为 13.0%）。继续在“类模板 + 噪声模型”族内换参数不会带来大幅提升；下一步应转向判别式表征或候选生成的结构性改变，而不是再包装同一族模型。
+
 ## 7. 建议的下一项可证伪工作
 
 优先顺序不是必须机械执行，但不能把失败路线换参数重复包装：
@@ -95,8 +105,8 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 ## 8. Git 与当前运行状态
 
-- 最近结果提交：**`9853af3 test: record score-mixture reconstruction gate failure`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
-- 此前实验 45 提交：`64afe19`；评估复盘文档提交：`705403a`；v5 分数记录：`8e5694a`。
+- 最近结果提交：**`09c539f test: reject low-rank correlated-noise model on development gates`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
+- 实验 52 实现提交：`2dd2209`；此前实验 51 提交：`bef877c`；实验 50 提交：`98278c5`。
 - 本交接文档创建前工作树干净，实验 44、45 的后台 agent 均已结束。没有待处理的模型训练或自动 Kaggle 提交。
 - 新对话开始后先运行 `git status --short`、`git log -3 --oneline`，并检查是否有新增后台任务；以磁盘实际状态为准。
 - 大模型 checkpoint、预测 NPZ、缓存通常被 `.gitignore` 排除；轻量 preregistration、selection、results、manifest、training_summary 等按白名单入库。不要为提交而打包大型缓存。
