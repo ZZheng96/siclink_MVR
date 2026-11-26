@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>SiClink 神经放电 ↔ 字形 交互查看器</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font:13px/1.45 "Microsoft YaHei","PingFang SC",sans-serif;color:#222;background:#f3f4f6;height:100vh;display:flex;flex-direction:column}
+header{background:#1f2937;color:#eee;padding:6px 12px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header b{font-size:15px}
+.tabs button{background:#374151;color:#ddd;border:0;padding:5px 12px;cursor:pointer;border-radius:3px}
+.tabs button.on{background:#f59e0b;color:#111;font-weight:bold}
+#app{flex:1;display:flex;min-height:0}
+#side{width:330px;background:#fff;border-right:1px solid #ddd;display:flex;flex-direction:column;min-height:0}
+#filters{padding:8px;border-bottom:1px solid #eee;display:grid;grid-template-columns:auto 1fr;gap:4px 6px;align-items:center}
+#filters select,#filters input{width:100%;font:inherit;padding:2px}
+#stats{padding:6px 8px;font-size:12px;color:#444;border-bottom:1px solid #eee;background:#fafafa}
+#list{flex:1;overflow-y:auto;position:relative}
+.item{position:absolute;left:0;right:0;height:46px;display:flex;align-items:center;gap:6px;padding:0 6px;border-bottom:1px solid #f0f0f0;cursor:pointer;font-size:12px}
+.item:hover{background:#f5f8ff}.item.sel{background:#fde68a}
+.item img{width:40px;height:40px;image-rendering:pixelated;border:1px solid #ddd;background:#fff}
+.item .t{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#main{flex:1;overflow:auto;padding:10px 14px}
+.card{background:#fff;border:1px solid #e3e3e3;border-radius:4px;padding:10px;margin-bottom:10px}
+.imgs{display:flex;gap:14px;flex-wrap:wrap}
+.imgs figure{margin:0;text-align:center;font-size:12px}
+.imgs img{width:160px;height:160px;image-rendering:pixelated;border:1px solid #ccc;background:#fff;display:block}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12px}
+.kv span:nth-child(odd){color:#777}
+.ok{color:#15803d;font-weight:bold}.bad{color:#b91c1c;font-weight:bold}.warn{color:#b45309;font-weight:bold}
+.ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+.ctl select,.ctl input{font:inherit}
+canvas{display:block}
+#tip{position:fixed;pointer-events:none;background:rgba(17,24,39,.92);color:#fff;padding:3px 7px;border-radius:3px;font-size:12px;display:none;z-index:10;white-space:pre}
+.grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.grid div{font-size:11px;text-align:center;cursor:pointer;border:2px solid transparent}
+.grid div.sel{border-color:#f59e0b}
+.blocks{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:10px}
+.legend i{display:inline-block;width:11px;height:11px;vertical-align:-1px;margin:0 3px 0 8px;border:1px solid #999}
+.muted{color:#888;font-size:12px}
+button.sm{font:inherit;padding:1px 8px;cursor:pointer}
+</style>
+</head>
+<body>
+<header>
+  <b>SiClink 神经放电 ↔ 字形 查看器</b>
+  <span class="tabs"><button data-mode="heldout" class="on">留出集（有 GT）</button><button data-mode="test">测试集（无 GT）</button><button data-mode="train">训练集浏览</button></span>
+  <span class="muted" style="color:#aaa">↑/↓ 或 ←/→ 切换样本 · 鼠标悬停查看 unit / 时间</span>
+</header>
+<div id="app">
+  <div id="side">
+    <div id="filters"></div>
+    <div id="stats"></div>
+    <div id="list"><div id="spacer"></div></div>
+  </div>
+  <div id="main"><div class="card">加载中…（首次启动需计算留出集逐行 OCF，约 1 分钟，之后缓存）</div></div>
+</div>
+<div id="tip"></div>
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, attrs = {}, html = "") => { const e = document.createElement(tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (html) e.innerHTML = html; return e; };
+const api = async (path) => { const r = await fetch(path); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; };
+const tip = $("#tip");
+function showTip(ev, text) { tip.textContent = text; tip.style.display = "block"; tip.style.left = (ev.clientX + 14) + "px"; tip.style.top = (ev.clientY + 12) + "px"; }
+function hideTip() { tip.style.display = "none"; }
+const SR = 30, WIN = 250;  // samples per ms, window ms
+const PALETTE = ["#111827", "#dc2626", "#2563eb", "#16a34a", "#9333ea", "#ea580c", "#0891b2", "#be185d", "#65a30d", "#7c3aed",
+  "#b45309", "#0f766e", "#e11d48", "#4f46e5", "#a16207", "#059669", "#c026d3", "#0284c7", "#ca8a04", "#57534e"];
+function heat(v) { // 0..1 -> white->orange->dark red
+  v = Math.max(0, Math.min(1, v));
+  const stops = [[255, 255, 255], [254, 217, 118], [253, 141, 60], [227, 26, 28], [128, 0, 38]];
+  const x = v * (stops.length - 1), i = Math.min(stops.length - 2, Math.floor(x)), f = x - i;
+  return stops[i].map((c, k) => Math.round(c + (stops[i + 1][k] - c) * f));
+}
+function binCounts(events, nUnits, binMs) { // -> Float32Array[nUnits*nBins], summed over given trials
+  const nb = Math.ceil(WIN / binMs), out = new Float32Array(nUnits * nb);
+  for (const tr of events) for (let i = 0; i < tr.t.length; i++) { const b = Math.min(nb - 1, Math.floor(tr.t[i] / (SR * binMs))); out[tr.u[i] * nb + b] += 1; }
+  return { counts: out, nb };
+}
+
+/* ---------------- Spike panel ---------------- */
+class SpikePanel {
+  constructor(root) {
+    this.root = root;
+    root.innerHTML = `<div class="ctl">
+      视图 <select class="view"><option value="raster">光栅图（spike 点）</option><option value="heat">分箱计数热图（模型输入）</option></select>
+      trial <select class="trial"></select>
+      热图/PSTH 分箱 <select class="bin"><option>5</option><option>10</option><option>25</option><option>50</option></select> ms
+      <span class="info muted"></span></div>
+      <canvas class="cv"></canvas><div class="grid"></div>`;
+    this.cv = $(".cv", root); this.ctx = this.cv.getContext("2d");
+    for (const s of [".view", ".trial", ".bin"]) $(s, root).onchange = () => this.draw();
+    this.cv.onmousemove = (e) => this.hover(e); this.cv.onmouseleave = hideTip;
+  }
+  set(data) { // {events:[{trial,t,u}], n_units, bin_ms, label}
+    this.d = data;
+    const ts = $(".trial", this.root); ts.innerHTML = "";
+    const n = data.events.length;
+    ts.append(el("option", { value: "all" }, n > 1 ? `全部 ${n} 个（光栅按 trial 着色叠加 / 热图取平均）` : "唯一 trial"));
+    data.events.forEach((tr, k) => ts.append(el("option", { value: k }, `#${k + 1}（trial 索引 ${tr.trial}，${tr.t.length} spikes）`)));
+    $(".bin", this.root).value = String(data.bin_ms);
+    this.draw(); this.drawGrid();
+  }
+  sel() { const v = $(".trial", this.root).value; return v === "all" ? this.d.events.map((_, k) => k) : [Number(v)]; }
+  draw() {
+    const d = this.d; if (!d) return;
+    const view = $(".view", this.root).value, binMs = Number($(".bin", this.root).value), ks = this.sel();
+    const nU = d.n_units, rowH = Math.max(3, Math.floor(480 / nU));
+    const L = 46, T = 8, W = 750, H = nU * rowH, BW = 110, PH = 90, gap = 26;
+    const cw = L + W + 12 + BW + 10, ch = T + H + gap + PH + 24;
+    this.cv.width = cw; this.cv.height = ch;
+    this.geo = { L, T, W, H, rowH, BW, PH, gap, nU, binMs, view, ks };
+    const c = this.ctx; c.fillStyle = "#fff"; c.fillRect(0, 0, cw, ch);
+    const evs = ks.map(k => d.events[k]);
+    const nb = Math.ceil(WIN / binMs);
+    const { counts } = binCounts(evs, nU, binMs);
+    const m = evs.length;
+    if (view === "raster") {
+      c.fillStyle = "#fafafa"; c.fillRect(L, T, W, H);
+      ks.forEach((k, j) => {
+        const tr = d.events[k]; c.fillStyle = ks.length > 1 ? PALETTE[k % PALETTE.length] : "#111";
+        const sub = ks.length > 1 ? Math.max(1, Math.floor((rowH - 1) / ks.length)) : rowH - 1;
+        const off = ks.length > 1 ? (j * sub) % Math.max(1, rowH - 1) : 0;
+        for (let i = 0; i < tr.t.length; i++) c.fillRect(L + tr.t[i] / (SR * WIN) * W, T + tr.u[i] * rowH + off, 1.6, sub);
+      });
+    } else {
+      let mx = 0; for (const v of counts) mx = Math.max(mx, v / m);
+      this.geo.heatMax = mx;
+      const bw = W / nb;
+      for (let u = 0; u < nU; u++) for (let b = 0; b < nb; b++) {
+        const [r, g, bl] = heat(mx ? counts[u * nb + b] / m / mx : 0); c.fillStyle = `rgb(${r},${g},${bl})`;
+        c.fillRect(L + b * bw, T + u * rowH, Math.ceil(bw), rowH);
+      }
+      c.fillStyle = "#555"; c.font = "11px sans-serif"; c.fillText(`颜色上限 = ${mx.toFixed(2)} spikes/bin${m > 1 ? "（trial 平均）" : ""}`, L + W - 210, T + H + 12);
+    }
+    // axes
+    c.strokeStyle = "#999"; c.strokeRect(L, T, W, H); c.fillStyle = "#444"; c.font = "11px sans-serif";
+    for (let u = 0; u < nU; u += 10) c.fillText(String(u), 6, T + u * rowH + rowH);
+    c.fillText("unit", 6, T + H + 12);
+    // per-unit bar
+    const per = new Float32Array(nU); for (let u = 0; u < nU; u++) { let s = 0; for (let b = 0; b < nb; b++) s += counts[u * nb + b]; per[u] = s / m; }
+    const pmx = Math.max(1e-9, ...per); this.geo.per = per;
+    const bx = L + W + 12; c.fillStyle = "#6b7280";
+    for (let u = 0; u < nU; u++) c.fillRect(bx, T + u * rowH, per[u] / pmx * BW, Math.max(1, rowH - 1));
+    c.strokeStyle = "#ccc"; c.strokeRect(bx, T, BW, H); c.fillStyle = "#444";
+    c.fillText(`每 unit spikes${m > 1 ? "/trial" : ""}`, bx, T + H + 12); c.fillText(`max ${pmx.toFixed(1)}`, bx + 50, T + 10);
+    // PSTH
+    const py = T + H + gap, ps = new Float32Array(nb);
+    for (let b = 0; b < nb; b++) { let s = 0; for (let u = 0; u < nU; u++) s += counts[u * nb + b]; ps[b] = s / m; }
+    const psmx = Math.max(1e-9, ...ps); this.geo.ps = ps; this.geo.py = py;
+    c.fillStyle = "#2563eb"; const bw2 = W / nb;
+    for (let b = 0; b < nb; b++) { const h = ps[b] / psmx * PH; c.fillRect(L + b * bw2 + 0.5, py + PH - h, Math.max(1, bw2 - 1), h); }
+    c.strokeStyle = "#999"; c.strokeRect(L, py, W, PH); c.fillStyle = "#444";
+    c.fillText(`PSTH（全部 unit，${binMs}ms/bin${m > 1 ? "，trial 平均" : ""}） max ${psmx.toFixed(1)}`, L + 4, py + 11);
+    for (let t = 0; t <= WIN; t += 25) { const x = L + t / WIN * W; c.fillText(String(t), x - 6, py + PH + 13); c.strokeStyle = "#e5e7eb"; c.beginPath(); c.moveTo(x, T + H); c.lineTo(x, T + H + 4); c.stroke(); }
+    c.fillText("ms", L + W + 2, py + PH + 13);
+    let total = 0; for (const e of evs) total += e.t.length;
+    $(".info", this.root).textContent = `${nU} units · 选中 ${m} 个 trial · 共 ${total} spikes · 模型分箱 ${d.bin_ms}ms`;
+  }
+  hover(e) {
+    const g = this.geo; if (!g) return;
+    const r = this.cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    const t = (x - g.L) / g.W * WIN;
+    if (y >= g.T && y < g.T + g.H) {
+      const u = Math.floor((y - g.T) / g.rowH);
+      if (x >= g.L && x <= g.L + g.W) {
+        const b = Math.min(Math.floor(t / g.binMs), Math.ceil(WIN / g.binMs) - 1);
+        const evs = g.ks.map(k => this.d.events[k]); let n = 0;
+        for (const tr of evs) for (let i = 0; i < tr.t.length; i++) if (tr.u[i] === u && Math.floor(tr.t[i] / (SR * g.binMs)) === b) n++;
+        return showTip(e, `unit ${u}\n时间 ${t.toFixed(1)} ms\nbin ${b}（${b * g.binMs}-${(b + 1) * g.binMs} ms）: ${(n / evs.length).toFixed(2)} spikes${evs.length > 1 ? "/trial" : ""}`);
+      }
+      if (x > g.L + g.W + 12) return showTip(e, `unit ${u}: ${g.per[u].toFixed(2)} spikes${g.ks.length > 1 ? "/trial" : ""}`);
+    }
+    if (y >= g.py && y <= g.py + g.PH && x >= g.L && x <= g.L + g.W) {
+      const b = Math.min(Math.floor(t / g.binMs), g.ps.length - 1);
+      return showTip(e, `${b * g.binMs}-${(b + 1) * g.binMs} ms\n全部 unit 合计 ${g.ps[b].toFixed(2)} spikes`);
+    }
+    hideTip();
+  }
+  drawGrid() {
+    const grid = $(".grid", this.root); grid.innerHTML = "";
+    const d = this.d; if (d.events.length < 2) return;
+    d.events.forEach((tr, k) => {
+      const w = el("div"); const cv = miniRaster(tr, d.n_units, 140, PALETTE[k % PALETTE.length]);
+      w.append(cv, el("span", {}, `#${k + 1} · ${tr.t.length}`));
+      w.onclick = () => { $(".trial", this.root).value = k; this.draw(); grid.querySelectorAll("div").forEach(x => x.classList.remove("sel")); w.classList.add("sel"); };
+      grid.append(w);
+    });
+  }
+}
+function miniRaster(tr, nU, w, color = "#111") {
+  const rh = Math.max(1, Math.floor(110 / nU)), cv = el("canvas"); cv.width = w; cv.height = nU * rh;
+  const c = cv.getContext("2d"); c.fillStyle = "#fafafa"; c.fillRect(0, 0, w, cv.height); c.fillStyle = color;
+  for (let i = 0; i < tr.t.length; i++) c.fillRect(tr.t[i] / (SR * WIN) * w, tr.u[i] * rh, 1, rh);
+  c.strokeStyle = "#ccc"; c.strokeRect(0, 0, w, cv.height); cv.title = `${tr.t.length} spikes`; return cv;
+}
+function heatCanvas(events, nU, binMs, w) {
+  const { counts, nb } = binCounts(events, nU, binMs), m = Math.max(1, events.length), rh = Math.max(1, Math.floor(110 / nU));
+  let mx = 0; for (const v of counts) mx = Math.max(mx, v / m);
+  const cv = el("canvas"); cv.width = w; cv.height = nU * rh; const c = cv.getContext("2d"), bw = w / nb;
+  for (let u = 0; u < nU; u++) for (let b = 0; b < nb; b++) { const [r, g, bl] = heat(mx ? counts[u * nb + b] / m / mx : 0); c.fillStyle = `rgb(${r},${g},${bl})`; c.fillRect(b * bw, u * rh, Math.ceil(bw), rh); }
+  cv.title = `trial 平均计数，${binMs}ms/bin，上限 ${mx.toFixed(2)}`; return cv;
+}
+
+/* ---------------- state ---------------- */
+const S = { mode: "heldout", meta: null, task: "task2", lists: {}, view: [], cur: -1, test: { task: "task2", block: 0 }, glyph: 0 };
+const ROW_H = 46;
+const list = $("#list"), spacer = $("#spacer");
+list.onscroll = () => renderList();
+
+function setFilters(html) { $("#filters").innerHTML = html; $("#filters").querySelectorAll("select,input").forEach(x => x.oninput = () => applyFilter()); }
+
+async function modeHeldout() {
+  setFilters(`<label>任务</label><select id="f-task"><option value="task1">Task1 新字（字体渲染重建）</option><option value="task2" selected>Task2 跨天（4 次重复平均）</option><option value="task3">Task3 单 trial</option></select>
+   <label>小鼠</label><select id="f-mouse"><option value="">全部</option><option>mice1</option><option>mice2</option></select>
+   <label>session</label><select id="f-sess"><option value="">全部</option><option>session1</option><option>session2</option><option>session3</option><option>session4</option></select>
+   <label>top1</label><select id="f-ok"><option value="">全部</option><option value="1">正确</option><option value="0">错误</option></select>
+   <label>排序</label><select id="f-sort"><option value="row">行号</option><option value="ocf-desc">OCF 高→低</option><option value="ocf-asc">OCF 低→高</option><option value="gap-desc">oracle−v5 差距 大→小</option></select>
+   <label>搜索</label><input id="f-q" placeholder="target 编号 或 sample_id">`);
+  $("#f-task").value = S.task;
+  $("#f-task").oninput = async () => { S.task = $("#f-task").value; await loadHeldout(); };
+  await loadHeldout();
+}
+async function loadHeldout() {
+  $("#stats").textContent = "加载中…";
+  if (!S.lists[S.task]) S.lists[S.task] = await api(`/api/heldout?task=${S.task}`);
+  S.cur = -1; applyFilter();
+}
+function applyFilter() {
+  if (S.mode === "heldout") {
+    const L = S.lists[S.task]; if (!L) return;
+    const m = $("#f-mouse").value, s = $("#f-sess").value, ok = $("#f-ok").value, q = $("#f-q").value.trim(), so = $("#f-sort").value;
+    let rows = L.rows.filter(r => (!m || r.mouse === m) && (!s || r.session === s) && (!ok || S.task === "task1" || String(Number(r.correct)) === ok));
+    if (q) rows = /^\d+$/.test(q) ? rows.filter(r => r.target === Number(q)) : rows.filter(r => (r.sample_ids || []).some(x => x.includes(q)));
+    if (so === "ocf-desc") rows.sort((a, b) => b.ocf - a.ocf); else if (so === "ocf-asc") rows.sort((a, b) => a.ocf - b.ocf);
+    else if (so === "gap-desc") rows.sort((a, b) => (b.oracle_ocf - b.ocf) - (a.oracle_ocf - a.ocf));
+    S.view = rows;
+    const mean = rows.length ? rows.reduce((x, r) => x + r.ocf, 0) / rows.length : 0;
+    const acc = S.task === "task1" ? "不适用" : (rows.length ? (100 * rows.filter(r => r.correct).length / rows.length).toFixed(1) + "%" : "-");
+    $("#stats").innerHTML = `${rows.length} / ${L.rows.length} 行 · 筛选后平均 OCF <b>${mean.toFixed(3)}</b> · top1 准确率 ${acc}<br>
+      全量平均 OCF ${L.mean.toFixed(4)}（记录值 ${L.recorded_mean.toFixed(4)}）· oracle ${L.oracle_mean ? L.oracle_mean.toFixed(2) : "-"}<br>
+      来源 trial 映射：${L.sequence_ok && !L.unresolved ? '<span class="ok">全部已验证</span>' : `<span class="bad">${L.unresolved} 行无法确定</span>`}`;
+  } else if (S.mode === "test") {
+    const L = S.testList; if (!L) return; const q = $("#f-q").value.trim();
+    S.view = q ? L.samples.filter(x => x.sample_id.includes(q)) : L.samples;
+    $("#stats").innerHTML = `${S.view.length} / ${L.samples.length} 个样本 · ${L.n_units} units · 每样本 ${L.samples[0].n_trials} 个 trial · 无 GT`;
+  }
+  list.scrollTop = 0; renderList(true);
+  if (S.view.length) select(0);
+}
+function renderList(force) {
+  const n = S.view.length; spacer.style.height = n * ROW_H + "px";
+  const a = Math.max(0, Math.floor(list.scrollTop / ROW_H) - 5), b = Math.min(n, a + Math.ceil(list.clientHeight / ROW_H) + 10);
+  if (!force && S._range && S._range[0] === a && S._range[1] === b) return markSel();
+  S._range = [a, b];
+  list.querySelectorAll(".item").forEach(x => x.remove());
+  for (let i = a; i < b; i++) {
+    const it = el("div", { class: "item" }); it.style.top = i * ROW_H + "px"; it.dataset.i = i;
+    if (S.mode === "heldout") {
+      const r = S.view[i], t = S.task;
+      const mark = t === "task1" ? "" : (r.correct ? ' <span class="ok">✓</span>' : ' <span class="bad">✗</span>');
+      it.innerHTML = `<img loading="lazy" src="/img/gt?task=${t}&row=${r.row}"><img loading="lazy" src="/img/pred?task=${t}&row=${r.row}">
+        <div class="t">#${r.row} · 字 ${r.target}${mark}<br><span class="muted">${r.mouse}/${r.session.replace("session", "s")} · OCF ${r.ocf.toFixed(1)}${r.resolved ? "" : ' <span class="bad">无来源</span>'}</span></div>`;
+    } else {
+      const s = S.view[i];
+      it.innerHTML = `${s.has_png ? `<img loading="lazy" src="/img/submission?task=${S.testList.task}&sid=${s.sample_id}">` : "<span>无PNG</span>"}<div class="t">${s.sample_id}<br><span class="muted">样本 ${s.index} · ${s.n_trials} trials</span></div>`;
+    }
+    it.onclick = () => select(i); list.append(it);
+  }
+  markSel();
+}
+function markSel() { list.querySelectorAll(".item").forEach(x => x.classList.toggle("sel", Number(x.dataset.i) === S.cur)); }
+function select(i) {
+  if (i < 0 || i >= S.view.length) return; S.cur = i;
+  const top = i * ROW_H; if (top < list.scrollTop || top > list.scrollTop + list.clientHeight - ROW_H) list.scrollTop = top - list.clientHeight / 2;
+  renderList(); S.mode === "heldout" ? showHeldout(S.view[i]) : showTest(S.view[i]);
+}
+let reqId = 0;
+async function showHeldout(r) {
+  const id = ++reqId, t = S.task, L = S.lists[t];
+  const d = await api(`/api/heldout_row?task=${t}&row=${r.row}`); if (id !== reqId) return;
+  const q = `task=${t}&row=${r.row}`;
+  const predLabel = t === "task1" ? "v5 重建（Task1：字体库渲染）" : `v5 预测（检索到字 ${d.pred_index}）`;
+  const corr = t === "task1" ? '<span class="muted">Task1 为字体渲染重建，不做 top1 判定</span>' : (d.correct ? '<span class="ok">✓ top1 正确</span>' : '<span class="bad">✗ top1 错误</span>');
+  const src = d.trials ? `${d.trials.length} 个：${d.trials.map((x, k) => `trial ${x}（${d.sample_ids[k]}）`).join("，")}` : '<span class="bad">无法确定来源 trial</span>';
+  $("#main").innerHTML = `<div class="card"><div class="imgs">
+      <figure><img src="/img/gt?${q}"><figcaption>GT 字形（字 ${d.target}）</figcaption></figure>
+      <figure><img src="/img/pred?${q}"><figcaption>${predLabel}</figcaption></figure>
+      <figure><img src="/img/diff?${q}"><figcaption>GT vs v5 差异</figcaption></figure>
+      ${L.has_oracle ? `<figure><img src="/img/oracle?${q}"><figcaption>oracle 最佳候选（OCF ${d.oracle_ocf.toFixed(1)}）</figcaption></figure>
+      <figure><img src="/img/odiff?${q}"><figcaption>GT vs oracle 差异</figcaption></figure>` : ""}
+      <div class="kv" style="align-self:center;min-width:280px">
+        <span>任务 / 行号</span><span>${t} / #${d.row}</span>
+        <span>小鼠 / session</span><span>${d.mouse} / ${d.session}</span>
+        <span>OCF（v5）</span><span><b style="font-size:16px">${d.ocf.toFixed(2)}</b></span>
+        <span>top1</span><span>${corr}</span>
+        <span>来源 train trial</span><span>${src}</span>
+        <span>模型输入</span><span>${d.bin_ms} ms 分箱计数${d.trials && d.trials.length > 1 ? `，${d.trials.length} 次重复聚合` : "，单 trial"}</span>
+        <span></span><span><button class="sm" id="go-train">在训练集浏览中查看字 ${d.target} 的全部 trial</button></span>
+      </div></div>
+      <div class="legend muted" style="margin-top:6px">差异图：<i style="background:#141414"></i>重合笔画<i style="background:#e63c3c"></i>GT 有、预测漏画<i style="background:#286ef0"></i>预测多画<i style="background:#fff"></i>都为背景
+       ${L.has_oracle ? " · oracle = 该行 top-32 候选中 OCF 最高者（用到 GT 挑选，仅作诊断上限）；缓存中没有完整 top-k 列表" : ""}</div></div>
+    <div class="card" id="sp"></div>`;
+  $("#go-train").onclick = () => { S.glyph = d.target; switchMode("train"); };
+  if (!d.events) { $("#sp").innerHTML = `<b class="bad">${d.message}</b>`; return; }
+  new SpikePanel($("#sp")).set({ events: d.events, n_units: d.n_units, bin_ms: d.bin_ms });
+}
+
+async function modeTest() {
+  const tb = S.meta.test;
+  setFilters(`<label>任务</label><select id="t-task">${Object.keys(tb).sort().map(t => `<option>${t}</option>`).join("")}</select>
+    <label>小鼠/session</label><select id="t-block"></select><label>搜索</label><input id="f-q" placeholder="sample_id">`);
+  const fill = () => { $("#t-block").innerHTML = tb[S.test.task].map((b, i) => `<option value="${i}">${b.mouse} / ${b.session}（${b.n_samples} 样本）</option>`).join(""); $("#t-block").value = S.test.block; };
+  $("#t-task").value = S.test.task; fill();
+  $("#t-task").oninput = () => { S.test.task = $("#t-task").value; S.test.block = 0; fill(); loadTest(); };
+  $("#t-block").oninput = () => { S.test.block = Number($("#t-block").value); loadTest(); };
+  await loadTest();
+}
+async function loadTest() {
+  const b = S.meta.test[S.test.task][S.test.block];
+  $("#stats").textContent = "加载中…";
+  S.testList = await api(`/api/test?task=${S.test.task}&mouse=${b.mouse}&session=${b.session}`);
+  S.cur = -1; applyFilter();
+}
+async function showTest(s) {
+  const id = ++reqId, L = S.testList;
+  const d = await api(`/api/test_sample?task=${L.task}&mouse=${L.mouse}&session=${L.session}&index=${s.index}`); if (id !== reqId) return;
+  $("#main").innerHTML = `<div class="card"><div class="imgs">
+     <figure>${d.png ? `<img src="${d.png}">` : '<div class="bad">无提交 PNG</div>'}<figcaption>v5 提交的 PNG（原样，白=笔画）</figcaption></figure>
+     <div class="kv" style="align-self:center"><span>sample_id</span><span><b>${d.sample_id}</b></span><span>任务</span><span>${d.task}</span>
+     <span>小鼠 / session</span><span>${d.mouse} / ${d.session}</span><span>样本序号</span><span>${d.index}</span>
+     <span>trial</span><span>${d.trials.length} 个（索引 ${d.trials[0]}–${d.trials[d.trials.length - 1]}）</span>
+     <span>模型输入</span><span>${d.bin_ms} ms 分箱计数</span><span>GT</span><span class="muted">测试集无 GT</span></div></div></div><div class="card" id="sp"></div>`;
+  new SpikePanel($("#sp")).set({ events: d.events, n_units: d.n_units, bin_ms: d.bin_ms });
+}
+
+function modeTrain() {
+  $("#filters").innerHTML = `<label>字形编号</label><input id="g-i" type="number" min="0" max="${S.meta.n_pictures - 1}" value="${S.glyph}">
+   <label></label><span><button class="sm" id="g-prev">上一个</button> <button class="sm" id="g-next">下一个</button> <button class="sm" id="g-rnd">随机</button></span>
+   <label>平均热图分箱</label><select id="g-bin"><option>25</option><option selected>50</option><option>10</option></select>`;
+  $("#stats").innerHTML = "每个字在 mice1/mice2 的 session1–4 各有若干 trial。<br>对比同一字的 trial 间差异。";
+  list.querySelectorAll(".item").forEach(x => x.remove()); spacer.style.height = "0px";
+  const go = (g) => { S.glyph = Math.max(0, Math.min(S.meta.n_pictures - 1, g)); $("#g-i").value = S.glyph; showTrain(); };
+  $("#g-i").onchange = () => go(Number($("#g-i").value));
+  $("#g-prev").onclick = () => go(S.glyph - 1); $("#g-next").onclick = () => go(S.glyph + 1);
+  $("#g-rnd").onclick = () => go(Math.floor(Math.random() * S.meta.n_pictures));
+  $("#g-bin").onchange = () => showTrain();
+  S.trainGo = go; showTrain();
+}
+async function showTrain() {
+  const id = ++reqId, g = S.glyph, binMs = Number($("#g-bin").value);
+  const d = await api(`/api/train_glyph?glyph=${g}`); if (id !== reqId) return;
+  const tot = d.blocks.reduce((x, b) => x + b.trials.length, 0);
+  $("#main").innerHTML = `<div class="card"><div class="imgs"><figure><img src="/img/glyph?i=${g}"><figcaption>字形 ${g}</figcaption></figure>
+    <div class="kv" style="align-self:center"><span>训练 trial 总数</span><span>${tot}</span><span>说明</span><span>每块：左为 trial 平均分箱计数（${binMs}ms），右为各 trial 光栅；点击查看大图</span></div></div></div>
+    <div class="blocks" id="blks"></div><div class="card" id="sp" style="margin-top:10px"><span class="muted">点击上方任一块查看大图</span></div>`;
+  for (const b of d.blocks) {
+    const card = el("div", { class: "card" });
+    card.innerHTML = `<b>${b.mouse} / ${b.session}</b> <span class="muted">${b.trials.length} trials · ${b.sample_ids.join(", ")}</span><div class="grid"></div>`;
+    const grid = $(".grid", card);
+    if (b.trials.length) {
+      const h = el("div"); h.append(heatCanvas(b.events, b.n_units, binMs, 120), el("span", {}, "平均")); grid.append(h);
+      b.events.forEach((tr, k) => { const w = el("div"); w.append(miniRaster(tr, b.n_units, 120, PALETTE[k % PALETTE.length]), el("span", {}, `#${k + 1} · ${tr.t.length}`)); grid.append(w); });
+    } else grid.innerHTML = '<span class="muted">此 session 无该字</span>';
+    card.style.cursor = "pointer";
+    card.onclick = () => { if (!b.trials.length) return; $("#sp").innerHTML = `<b>${b.mouse} / ${b.session} · 字 ${g}</b>`; const div = el("div"); $("#sp").append(div); new SpikePanel(div).set({ events: b.events, n_units: b.n_units, bin_ms: binMs }); $("#sp").scrollIntoView({ behavior: "smooth" }); };
+    $("#blks").append(card);
+  }
+}
+
+function switchMode(m) {
+  S.mode = m; document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.mode === m));
+  S.view = []; S._range = null; $("#main").innerHTML = '<div class="card">加载中…</div>';
+  (m === "heldout" ? modeHeldout() : m === "test" ? modeTest() : modeTrain()).catch(err => $("#main").innerHTML = `<div class="card bad">错误：${err.message}</div>`);
+}
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => switchMode(b.dataset.mode));
+document.addEventListener("keydown", (e) => {
+  if (["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+  const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key]; if (!d) return;
+  e.preventDefault();
+  if (S.mode === "train") S.trainGo(S.glyph + d); else select(S.cur + d);
+});
+(async () => { S.meta = await api("/api/meta"); const h = location.hash.slice(1); switchMode(["test", "train"].includes(h) ? h : "heldout"); })().catch(err => $("#main").innerHTML = `<div class="card bad">错误：${err.message}</div>`);
+</script>
+</body>
+</html>
