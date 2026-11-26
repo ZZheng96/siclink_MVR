@@ -1,0 +1,67 @@
+{
+  "scope": "exploratory; v5 Task1 frozen regressors; 64 held-out pictures x 8 blocks",
+  "gt_dct32_coefficients": {
+    "name": "gt_coeff",
+    "shape": [
+      64,
+      1024
+    ],
+    "min": -10.764026641845703,
+    "mean": 0.0010307461606133828,
+    "max": 15.265623092651367,
+    "std_overall": 0.8562314453125797,
+    "row_norm_mean": 27.36893585675903,
+    "row_norm_p10": 25.498464566200497,
+    "row_norm_p90": 28.898936998924057
+  },
+  "pred_dct32_coefficients": {
+    "name": "pred_coeff",
+    "shape": [
+      512,
+      1024
+    ],
+    "min": -9.375,
+    "mean": 0.0009364393761259748,
+    "max": 15.375,
+    "std_overall": 0.5822896749104703,
+    "row_norm_mean": 18.576498079235506,
+    "row_norm_p10": 16.747286930746636,
+    "row_norm_p90": 20.23754212629417
+  },
+  "gt_dct32_roundtrip_image": {
+    "name": "gt_recon",
+    "shape": [
+      64,
+      64,
+      64
+    ],
+    "min": -0.3913668096065521,
+    "mean": 0.200141895599982,
+    "max": 1.4183224439620972,
+    "std_overall": 0.378452829160825,
+    "row_norm_mean": 27.3689347089366,
+    "row_norm_p10": 25.49846366070086,
+    "row_norm_p90": 28.898935893189645
+  },
+  "pred_dct32_image": {
+    "name": "pred_recon",
+    "shape": [
+      512,
+      64,
+      64
+    ],
+    "min": -0.23977535963058472,
+    "mean": 0.1943769391524218,
+    "max": 1.1454107761383057,
+    "std_overall": 0.21675593244698826,
+    "row_norm_mean": 18.576497326663613,
+    "row_norm_p10": 16.747286264913367,
+    "row_norm_p90": 20.237541754193234
+  },
+  "coefficient_mse": 0.3876647651195526,
+  "coefficient_gt_variance": 0.7331322431564331,
+  "image_mse": 0.09691620618104935,
+  "pred_image_nonnegative_fraction": 0.7314143180847168,
+  "pred_image_gt_half_fraction": 0.09910154342651367,
+  "gt_image_foreground_fraction": 0.19956588745117188
+}
