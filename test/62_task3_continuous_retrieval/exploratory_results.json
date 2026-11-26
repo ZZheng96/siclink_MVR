@@ -1,0 +1,61 @@
+{
+  "scope": "exploratory; Task3 continuous DCT regression + directional retrieval; fixed alpha=1.0, cutoff=32; compared to 15.86 classification",
+  "bin_ms": 50,
+  "folds": [
+    "20261126",
+    "20261127"
+  ],
+  "subset_size": 256,
+  "results": {
+    "20261126/mice1": {
+      "n": 1024,
+      "rows": 1024,
+      "dct_r2_approx": -0.0008225371253345326,
+      "retrieval_ocf": {
+        "mean": 15.717318495222916,
+        "median": 14.070541666511904,
+        "p10": 8.966707397786465,
+        "p90": 24.54306396506294
+      },
+      "predicted_image_std": 0.22383853793144226
+    },
+    "20261126/mice2": {
+      "n": 1024,
+      "rows": 1024,
+      "dct_r2_approx": 0.004318583686633404,
+      "retrieval_ocf": {
+        "mean": 15.443067625465668,
+        "median": 14.10955887789823,
+        "p10": 8.667134217138846,
+        "p90": 23.336401146261057
+      },
+      "predicted_image_std": 0.21664397418498993
+    },
+    "20261127/mice1": {
+      "n": 1024,
+      "rows": 1024,
+      "dct_r2_approx": -0.0001310602951216655,
+      "retrieval_ocf": {
+        "mean": 15.584885307061974,
+        "median": 14.21231943269468,
+        "p10": 8.401619842193517,
+        "p90": 23.62328767000522
+      },
+      "predicted_image_std": 0.2234543263912201
+    },
+    "20261127/mice2": {
+      "n": 1024,
+      "rows": 1024,
+      "dct_r2_approx": 0.004622682761282859,
+      "retrieval_ocf": {
+        "mean": 14.980964326753734,
+        "median": 13.710088956480323,
+        "p10": 8.634096478486706,
+        "p90": 23.614375820466872
+      },
+      "predicted_image_std": 0.21692556142807007
+    }
+  },
+  "macro_retrieval_ocf": 15.431558938626074,
+  "classification_baseline_single_view": 15.8648
+}
