@@ -1,0 +1,49 @@
+{
+  "experiment": "76_feature_effectiveness",
+  "freeze_revision": 1,
+  "date": "2026-11-27",
+  "status": "preregistered_before_any_metric",
+  "purpose": "Decompose 'what is an effective feature' into measurable transforms and test each with one fixed linear probe, so differences are attributable to the feature only.",
+  "scope": "Only test/03_task3_single_trial/76_feature_effectiveness. src/ is read-only.",
+  "data": {
+    "eeg": "public train only, 50 ms log1p counts, per-session z-score fitted on the three training repeats",
+    "folds": "leave-one-presentation-ordinal-out k=1..4, identical to experiments 69/70/73/74",
+    "mice": ["mice1", "mice2"]
+  },
+  "probe": {
+    "model": "nearest class mean, Euclidean, per session, centroids from the three training repeats",
+    "rationale": "fixed capacity so that feature transforms, not model capacity, drive the difference; after whitening Euclidean nearest-centroid equals LDA scoring",
+    "no_learning_rate_no_epochs": true
+  },
+  "transforms": {
+    "base": "per-session z-score only",
+    "l2": "base then L2 normalise each trial vector",
+    "trial_z": "base then z-score across features within each trial",
+    "common_mode": "base minus the trial mean across all features, then per-session z-score",
+    "pca_white": "base then PCA fitted on training repeats, whiten by inverse square root eigenvalues, keep 256 components",
+    "wccn": "base then within-class covariance whitening with shrinkage 0.1, fitted on training repeats",
+    "unit_top128": "base then zero all but the 128 units with the highest ANOVA F on training repeats, per session"
+  },
+  "noise_structure": {
+    "residual": "trial minus its class mean, computed on training repeats per session",
+    "report": ["residual PC1 variance share", "mean absolute unit-pair correlation", "in-sample between-class variance share"]
+  },
+  "metrics": {
+    "top1": "held argmax identity accuracy",
+    "recall32": "fraction of held trials whose character is in the probe top-32",
+    "recall100": "same at 100"
+  },
+  "pass_rule": {
+    "effective_feature": "a transform is effective if recall32 exceeds base for both mice and in at least 3 of 4 folds for each mouse",
+    "no_selection_on_metric": "no transform parameter (components, shrinkage, k) may be tuned on the held repeat; values are fixed in this file"
+  },
+  "prohibited": [
+    "hidden test data or targets",
+    "tuning transform hyperparameters on the held repeat",
+    "reporting training-set fit as generalisation"
+  ],
+  "outputs": {
+    "run": "test/03_task3_single_trial/76_feature_effectiveness/run.py",
+    "results": "test/03_task3_single_trial/76_feature_effectiveness/results.json"
+  }
+}
