@@ -1,0 +1,48 @@
+{
+  "experiment": "74_feature_rerank_verifier",
+  "freeze_revision": 1,
+  "date": "2026-11-27",
+  "status": "preregistered_before_any_training_or_metric",
+  "purpose": "Test whether the predicted glyph-feature likelihood, used only as a ranking term, improves a 50 ms MLP classifier on Task 3. Experiment 73 showed the feature likelihood cannot generate candidates; this asks whether it can verify them.",
+  "scope": "Only test/03_task3_single_trial/74_feature_rerank_verifier. src/ is read-only.",
+  "data": {
+    "eeg": "public train only, data/derived repeat ordinals via experiment 70 loader",
+    "features": "40 handcrafted glyph features from experiment 70 (z-scored over the 2748-image public library)",
+    "folds": "leave-one-presentation-ordinal-out k=1..4, identical to experiments 69/70/73"
+  },
+  "base": {
+    "model": "src.neural.SpikeClassifier, 2748 classes, hidden 1024, dropout 0, apply_log False",
+    "training": "AdamW lr 3e-4, weight decay 0, batch 256, gradient clip 5, seed 42, fixed 10 epochs, per-session z-scored 50 ms log1p counts",
+    "note": "matches the 50 ms single view of experiment 69; no early stopping and no held-repeat information"
+  },
+  "feature_term": {
+    "predictor": "closed-form ridge from the same 50 ms inputs, alpha chosen on the inner repeat, targets = 40 z-scored glyph features",
+    "likelihood": "negative diagonal-Gaussian distance to each library feature vector, per-feature error variance from the inner repeat",
+    "normalisation": "per-row z-score before fusion"
+  },
+  "arms": {
+    "base": "z(logits)",
+    "fused_full": "z(logits) + lambda * z(likelihood), lambda = 0.25 fixed a priori",
+    "fused_top32": "same fused score, but candidates restricted to the base argmax top-32; only the order inside that set changes",
+    "sensitivity": "lambda in {0.1, 0.5, 1.0} reported descriptively, no OCF, never used for selection"
+  },
+  "metrics": {
+    "top1": "held argmax identity accuracy over all 10992 held rows per mouse-fold",
+    "ocf": "official OCF on fold k=4 only, whole 2748-trial session block assigned by Hungarian before picture subsetting, RNG123 heldout pictures [256:768]",
+    "note": "oracle@32 is not computed in this experiment; it is diagnostic only and not part of any rule"
+  },
+  "pass_rule": {
+    "advance": "top1 increases for both mice AND fold-4 OCF increases for both mice AND at least 5 of the 8 mouse x session groups have non-negative OCF change",
+    "reject": "otherwise the feature likelihood is not a usable verifier for Task 3 and the route is closed"
+  },
+  "prohibited": [
+    "selecting lambda on the held repeat or on the heldout pictures",
+    "changing the base model or epochs after seeing results",
+    "hidden test data, image-index priors, or sample-ID alignment"
+  ],
+  "outputs": {
+    "run": "test/03_task3_single_trial/74_feature_rerank_verifier/run.py",
+    "preregistration": "test/03_task3_single_trial/74_feature_rerank_verifier/preregistration.json",
+    "results": "test/03_task3_single_trial/74_feature_rerank_verifier/results.json"
+  }
+}
