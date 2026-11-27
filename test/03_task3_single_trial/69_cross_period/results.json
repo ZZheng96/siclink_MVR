@@ -1,0 +1,602 @@
+{
+  "preregistration_sha256": "7c264d473f10a1b49ea7392f794f9f0f7bf7e19d9e330d378163375b0720b630",
+  "torch": "2.5.1+cu121",
+  "numpy": "1.26.4",
+  "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+  "audit": "Verified 87936 globally unique source IDs and all 32 derived target/ID/chronological mappings",
+  "rows": [
+    {
+      "fold": "all",
+      "mouse": "mice1",
+      "branches": {
+        "10": {
+          "epoch": 5,
+          "train_correct": 43968,
+          "train_total": 43968
+        },
+        "25": {
+          "epoch": 7,
+          "train_correct": 43968,
+          "train_total": 43968
+        },
+        "50": {
+          "epoch": 10,
+          "train_correct": 43968,
+          "train_total": 43968
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 43968,
+            "total": 43968
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 43968,
+            "total": 43968
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 43968,
+            "total": 43968
+          }
+        }
+      }
+    },
+    {
+      "fold": "all",
+      "mouse": "mice2",
+      "branches": {
+        "10": {
+          "epoch": 6,
+          "train_correct": 43968,
+          "train_total": 43968
+        },
+        "25": {
+          "epoch": 9,
+          "train_correct": 43968,
+          "train_total": 43968
+        },
+        "50": {
+          "epoch": 10,
+          "train_correct": 43968,
+          "train_total": 43968
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 43968,
+            "total": 43968
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 43968,
+            "total": 43968
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 43968,
+            "total": 43968
+          }
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "mouse": "mice1",
+      "branches": {
+        "10": {
+          "epoch": 5,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "25": {
+          "epoch": 7,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "50": {
+          "epoch": 8,
+          "train_correct": 32976,
+          "train_total": 32976
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 171,
+            "total": 10992
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 165,
+            "total": 10992
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 224,
+            "total": 10992
+          }
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "mouse": "mice2",
+      "branches": {
+        "10": {
+          "epoch": 6,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "25": {
+          "epoch": 8,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "50": {
+          "epoch": 10,
+          "train_correct": 32976,
+          "train_total": 32976
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 75,
+            "total": 10992
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 94,
+            "total": 10992
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 109,
+            "total": 10992
+          }
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "mouse": "mice1",
+      "branches": {
+        "10": {
+          "epoch": 5,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "25": {
+          "epoch": 7,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "50": {
+          "epoch": 8,
+          "train_correct": 32976,
+          "train_total": 32976
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 161,
+            "total": 10992
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 173,
+            "total": 10992
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 238,
+            "total": 10992
+          }
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "mouse": "mice2",
+      "branches": {
+        "10": {
+          "epoch": 6,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "25": {
+          "epoch": 8,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "50": {
+          "epoch": 10,
+          "train_correct": 32976,
+          "train_total": 32976
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 71,
+            "total": 10992
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 71,
+            "total": 10992
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 106,
+            "total": 10992
+          }
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "mouse": "mice1",
+      "branches": {
+        "10": {
+          "epoch": 5,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "25": {
+          "epoch": 7,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "50": {
+          "epoch": 8,
+          "train_correct": 32976,
+          "train_total": 32976
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 168,
+            "total": 10992
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 168,
+            "total": 10992
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 250,
+            "total": 10992
+          }
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "mouse": "mice2",
+      "branches": {
+        "10": {
+          "epoch": 6,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "25": {
+          "epoch": 8,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "50": {
+          "epoch": 10,
+          "train_correct": 32976,
+          "train_total": 32976
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 80,
+            "total": 10992
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 85,
+            "total": 10992
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 117,
+            "total": 10992
+          }
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "mouse": "mice1",
+      "branches": {
+        "10": {
+          "epoch": 5,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "25": {
+          "epoch": 7,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "50": {
+          "epoch": 8,
+          "train_correct": 32976,
+          "train_total": 32976
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 132,
+            "total": 10992
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 176,
+            "total": 10992
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 230,
+            "total": 10992
+          }
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "mouse": "mice2",
+      "branches": {
+        "10": {
+          "epoch": 6,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "25": {
+          "epoch": 8,
+          "train_correct": 32976,
+          "train_total": 32976
+        },
+        "50": {
+          "epoch": 10,
+          "train_correct": 32976,
+          "train_total": 32976
+        }
+      },
+      "arms": {
+        "25ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 80,
+            "total": 10992
+          }
+        },
+        "50ms": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 89,
+            "total": 10992
+          }
+        },
+        "fusion": {
+          "train": {
+            "correct": 32976,
+            "total": 32976
+          },
+          "held": {
+            "correct": 125,
+            "total": 10992
+          }
+        }
+      }
+    }
+  ],
+  "folds": {
+    "all": {
+      "25ms": {
+        "correct": 87936,
+        "total": 87936
+      },
+      "50ms": {
+        "correct": 87936,
+        "total": 87936
+      },
+      "fusion": {
+        "correct": 87936,
+        "total": 87936
+      }
+    },
+    "1": {
+      "25ms": {
+        "correct": 246,
+        "total": 21984
+      },
+      "50ms": {
+        "correct": 259,
+        "total": 21984
+      },
+      "fusion": {
+        "correct": 333,
+        "total": 21984
+      }
+    },
+    "2": {
+      "25ms": {
+        "correct": 232,
+        "total": 21984
+      },
+      "50ms": {
+        "correct": 244,
+        "total": 21984
+      },
+      "fusion": {
+        "correct": 344,
+        "total": 21984
+      }
+    },
+    "3": {
+      "25ms": {
+        "correct": 248,
+        "total": 21984
+      },
+      "50ms": {
+        "correct": 253,
+        "total": 21984
+      },
+      "fusion": {
+        "correct": 367,
+        "total": 21984
+      }
+    },
+    "4": {
+      "25ms": {
+        "correct": 212,
+        "total": 21984
+      },
+      "50ms": {
+        "correct": 265,
+        "total": 21984
+      },
+      "fusion": {
+        "correct": 355,
+        "total": 21984
+      }
+    }
+  },
+  "status": "completed",
+  "held_pooled": {
+    "25ms": {
+      "correct": 938,
+      "total": 87936
+    },
+    "50ms": {
+      "correct": 1021,
+      "total": 87936
+    },
+    "fusion": {
+      "correct": 1399,
+      "total": 87936
+    }
+  }
+}

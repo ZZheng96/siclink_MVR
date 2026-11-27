@@ -1,0 +1,10 @@
+{
+  "experiment": "69_cross_period",
+  "status": "frozen_before_training",
+  "arms": ["25ms: experiment 47 capacity recipe", "50ms: same recipe, previously supported by 50ms development evidence", "fusion: experiment 53 inspired, arithmetic mean of 10/25/50ms per-trial logits z-scored across all 2748 candidates (population std floor 1e-6); same capacity recipe, reuse exact same-fold branches"],
+  "inputs": "Only public train spike events and target, and derived/repeat_split_v1 mapping. Check each source trial index, sample ID, target and chronological per-target occurrence against original train; each session has each target once per repeat. No images, metadata predictors, assignment, pooled trial features or test access.",
+  "features": "250ms from onset at 30kHz; flatten unit then time bins. Session log1p then featurewise train-row mean and population std (floor 1e-5); second experiment 47 normalization fitted on concatenated normalized training rows only.",
+  "training": "Per mouse joint sessions 1..4, separately initialized per view and fold with seed 42. Experiment 47 SpikeClassifier apply_log=False, two hidden layers width 1024, dropout=0; AdamW lr=0.0003 weight_decay=0, cross entropy smoothing=0, gradient norm clip 5, batch 256, CUDA bfloat16 autocast. Session/source row order then numpy default_rng(42+epoch) permutations. Evaluate every training trial in eval mode each epoch; stop at first integer-perfect training top1, else use epoch 100. Never select on held-out scores.",
+  "order": "First fit all four repeats, evaluate actual raw argmax of all three arms including fused scores. Proceed only if each achieves 87936/87936. Next run four folds k=1..4, all mice/sessions hold the same chronological repeat k, fit on the remaining three repeats per session. No warm-start across folds. Verify disjoint IDs and 21984 held-out rows per fold per arm.",
+  "report": "Integer correct and total on train and held-out by mouse/fold/arm; pooled counts per fold and overall. No tuning, inferential claim or official test estimate. No disk checkpoints, counts or logits."
+}
