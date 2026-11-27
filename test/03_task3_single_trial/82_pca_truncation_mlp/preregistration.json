@@ -1,0 +1,31 @@
+{
+  "experiment": "82_pca_truncation_mlp",
+  "freeze_revision": 1,
+  "date": "2026-11-27",
+  "status": "preregistered_before_any_training",
+  "purpose": "Check whether the PCA truncation that helped the centroid probe (experiment 81: mice1 7.31% versus 5.84% full) also helps the MLP readout, or whether it again only compensates for a weak probe.",
+  "scope": "Only test/03_task3_single_trial/82_pca_truncation_mlp.",
+  "data": {
+    "eeg": "public train only, 50 ms log1p counts, per-session z-score on the three training repeats",
+    "folds": "leave-one-presentation-ordinal-out k=1..4, identical to experiments 69/76/77",
+    "mice": ["mice1", "mice2"]
+  },
+  "arms": {
+    "base": "full 670 dimensions",
+    "pca128": "PCA fitted per session on the three training repeats, project to 128 components without whitening"
+  },
+  "readout": {
+    "model": "SpikeClassifier, 2748 classes, hidden 1024, dropout 0, apply_log False",
+    "training": "AdamW lr 3e-4, weight decay 0, batch 256, clip 5, seed 42, fixed 10 epochs, identical to experiment 77"
+  },
+  "metrics": {
+    "top1": "held argmax identity accuracy",
+    "recall32": "held character inside top-32",
+    "ocf": "official OCF, fold k=4 only, Hungarian per session block, RNG123 heldout pictures [256:768], reported with the canonical row-z scores used in production"
+  },
+  "pass_rule": {
+    "advance": "pca128 improves recall32 over base for BOTH mice in at least 3 of 4 folds each AND fold-4 OCF improves for both mice",
+    "note": "k=128 is fixed here because it was near-optimal for both mice in experiment 81; no other k is tried in this experiment"
+  },
+  "prohibited": ["hidden test data", "fitting PCA on the held repeat", "changing epochs or seed between arms"]
+}
