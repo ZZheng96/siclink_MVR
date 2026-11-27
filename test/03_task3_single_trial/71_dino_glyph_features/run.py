@@ -32,6 +32,10 @@ MODELS = {
     "dinov3_b16": "vit_base_patch16_dinov3.lvd1689m",
     "dinov2_b14": "vit_base_patch14_dinov2.lvd142m",
 }
+WEIGHTS = {
+    "vit_base_patch16_dinov3.lvd1689m": ROOT / "models/dinov3_vitb16/model.safetensors",
+    "vit_base_patch14_dinov2.lvd142m": ROOT / "models/dinov2_vitb14/model.safetensors",
+}
 MEAN = torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1).cuda()
 STD = torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1).cuda()
 ALPHAS = (1e2, 1e3, 1e4, 1e5, 1e6)
@@ -46,7 +50,10 @@ def to_input(binary64):
 def extract(name, x):
     import timm
 
-    model = timm.create_model(name, pretrained=True, num_classes=0, img_size=224).cuda().eval()
+    path = WEIGHTS[name]
+    overlay = {"file": str(path)} if path.is_file() else None
+    model = timm.create_model(name, pretrained=True, num_classes=0, img_size=224,
+                              pretrained_cfg_overlay=overlay).cuda().eval()
     out = []
     with torch.no_grad():
         for part in x.split(32):

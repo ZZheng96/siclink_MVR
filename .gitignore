@@ -4,7 +4,7 @@ SiClink Mouse Visual Reconstruction BCI Competition - Kaggle.url
 siclink-mouse-visual-reconstruction-bci-challenge-publicleaderboard-2026-11-23T14_53_20.csv
 
 # 本地缓存与生成产物（体积大或可重建，不纳入版本控制）
-
+models/
 
 # 实验中间产物：保留脚本、结果与轻量复现清单，排除缓存和大文件
 test/.cache/
