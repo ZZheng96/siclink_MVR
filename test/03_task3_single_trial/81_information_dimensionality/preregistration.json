@@ -1,0 +1,21 @@
+{
+  "experiment": "81_information_dimensionality",
+  "freeze_revision": 1,
+  "date": "2026-11-27",
+  "status": "preregistered_before_any_metric",
+  "purpose": "Measure how many dimensions the character information actually occupies, both in the between-class structure and in what a fixed probe can use. This bounds whether dimensionality reduction or stronger regularisation can still help.",
+  "scope": "Only test/03_task3_single_trial/81_information_dimensionality.",
+  "data": {
+    "eeg": "public train only, 50 ms log1p counts, per-session z-score fitted on the three training repeats",
+    "folds": "leave-one-presentation-ordinal-out k=1..4, identical to experiments 69/76",
+    "mice": ["mice1", "mice2"]
+  },
+  "measurements": {
+    "between_class_spectrum": "per session, SVD of the 2748 class means (3 training repeats each), cumulative variance share at k = 1,2,4,8,16,32,64,128",
+    "decoding_curve": "per session-fold, PCA fitted on the training repeats, projection without whitening, nearest-centroid probe (train centroids, Euclidean), recall@32 on the held repeat, for k in 8,16,32,64,128,256 and full",
+    "no_whitening": "experiment 76 showed whitening hurts, so the curve uses plain projection"
+  },
+  "interpretation_rule": "if recall@32 at k=32 is already close to the full-dimension value, the usable signal is low-dimensional and further dimensionality work is pointless; if it keeps rising to full dimension, the signal is spread out and truncation only loses information",
+  "no_rule": "measurement experiment, nothing is adopted",
+  "prohibited": ["hidden test data", "fitting PCA on the held repeat", "tuning k on the held repeat"]
+}
