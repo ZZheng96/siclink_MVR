@@ -1,0 +1,41 @@
+{
+  "experiment": "77_trial_normalisation_mlp",
+  "freeze_revision": 1,
+  "date": "2026-11-27",
+  "status": "preregistered_before_any_training_or_metric",
+  "purpose": "Check whether the trial-wise normalisation that helped the fixed centroid probe (experiment 76) also helps a learnable MLP readout, or whether it only compensates for the weak probe.",
+  "scope": "Only test/03_task3_single_trial/77_trial_normalisation_mlp. src/ is read-only.",
+  "data": {
+    "eeg": "public train only, 50 ms log1p counts",
+    "folds": "leave-one-presentation-ordinal-out k=1..4, identical to experiments 69/74/76",
+    "mice": ["mice1", "mice2"]
+  },
+  "arms": {
+    "base": "per-session z-score, fitted on the three training repeats",
+    "trial_z": "base, then each trial z-scored across its own features"
+  },
+  "readout": {
+    "model": "src.neural.SpikeClassifier, 2748 classes, hidden 1024, dropout 0, apply_log False",
+    "training": "AdamW lr 3e-4, weight decay 0, batch 256, gradient clip 5, seed 42, fixed 10 epochs",
+    "note": "identical for both arms and identical to the experiment-74 base, so any difference is due to the input transform"
+  },
+  "metrics": {
+    "top1": "held argmax identity accuracy over 10992 held rows per mouse-fold",
+    "recall32": "held character inside the top-32 logits",
+    "recall100": "held character inside the top-100 logits",
+    "ocf": "official OCF, fold k=4 only, Hungarian over each 2748-trial session block, RNG123 heldout pictures [256:768]"
+  },
+  "pass_rule": {
+    "advance": "trial_z improves recall32 over base for BOTH mice in at least 3 of 4 folds each AND fold-4 OCF improves for both mice",
+    "reject": "otherwise the transform only compensates for the centroid probe and is not adopted"
+  },
+  "prohibited": [
+    "hidden test data or targets",
+    "changing epochs, hidden size, or seed between arms",
+    "selecting on the held repeat or on heldout pictures"
+  ],
+  "outputs": {
+    "run": "test/03_task3_single_trial/77_trial_normalisation_mlp/run.py",
+    "results": "test/03_task3_single_trial/77_trial_normalisation_mlp/results.json"
+  }
+}
