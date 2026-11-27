@@ -1,0 +1,2232 @@
+{
+ "updated": "2026-11-27",
+ "families": [
+  {
+   "key": "infra",
+   "label": "基础设施"
+  },
+  {
+   "key": "task1_recon",
+   "label": "Task1 重建/检索"
+  },
+  {
+   "key": "task2_crossday",
+   "label": "Task2 跨日/rerank"
+  },
+  {
+   "key": "task3_single",
+   "label": "Task3 单 trial"
+  },
+  {
+   "key": "representation",
+   "label": "表征/结构"
+  },
+  {
+   "key": "architecture",
+   "label": "模型架构"
+  },
+  {
+   "key": "fusion",
+   "label": "融合/转导"
+  },
+  {
+   "key": "protocol",
+   "label": "协议/评分"
+  }
+ ],
+ "experiments": [
+  {
+   "id": "00",
+   "dir": "test/00_infra/00_sanity",
+   "title": "OCF 评分自检",
+   "family": "infra",
+   "method": "用 GT 二值图、空白图、随机字等已知输入检验官方 OCF 实现",
+   "tasks": [],
+   "outcome": "infra",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "16 张公开字图；baseline=空白图，candidate=GT 二值图（理论满分）",
+     "baseline": 0.0,
+     "candidate": 100.0,
+     "delta": 100.0,
+     "kind": "ceiling"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "16 张公开字图；baseline=空白图，candidate=随机清晰字",
+     "baseline": 0.0,
+     "candidate": 13.846509,
+     "delta": 13.846509,
+     "kind": "other"
+    }
+   ],
+   "note": "OCF 实现通过 PASS：GT=100、空白=0、随机字约 13.85、抗锯齿原图 70.53。",
+   "source": "test/00_infra/00_sanity/results.json"
+  },
+  {
+   "id": "01",
+   "dir": "test/01_task1_reconstruction/01_ridge_task1",
+   "title": "Task1 Ridge 基线",
+   "family": "task1_recon",
+   "method": "50ms 计数 Ridge 回归 DCT32/64 系数后直接重建",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=DCT64 log，candidate=DCT32 raw",
+     "baseline": 10.802,
+     "candidate": 11.26,
+     "delta": 0.458,
+     "kind": "final"
+    }
+   ],
+   "note": "确立 Task1 回归基线约 11.2；DCT32 略优于 DCT64，生产沿用 DCT32 基底。",
+   "source": "test/01_task1_reconstruction/01_ridge_task1/results_bin50_dct32_raw.json"
+  },
+  {
+   "id": "02",
+   "dir": "test/02_task2_cross_day/02_seen_baselines",
+   "title": "已见字质心基线",
+   "family": "task2_crossday",
+   "method": "log 计数类质心最近邻，加/不加整块唯一分配",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=质心独立预测，candidate=质心+唯一分配",
+     "baseline": 14.647,
+     "candidate": 17.024,
+     "delta": 2.377,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行）；baseline=质心独立预测，candidate=质心+唯一分配",
+     "baseline": 13.671,
+     "candidate": 13.43,
+     "delta": -0.241,
+     "kind": "final"
+    }
+   ],
+   "note": "唯一分配对 Task2 +2.38、Task3 −0.24；建立分类式基线。",
+   "source": "test/02_task2_cross_day/02_seen_baselines/results_task2_centroid_log_assign.json"
+  },
+  {
+   "id": "03",
+   "dir": "test/02_task2_cross_day/03_seen_ridge",
+   "title": "已见字 Ridge 检索",
+   "family": "task2_crossday",
+   "method": "Ridge 回归图像后直接输出或在字库中检索",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=Ridge 直接重建，candidate=Ridge+检索",
+     "baseline": 10.448,
+     "candidate": 15.37,
+     "delta": 4.922,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行）；baseline=Ridge 直接重建，candidate=Ridge+检索",
+     "baseline": 10.621,
+     "candidate": 11.633,
+     "delta": 1.012,
+     "kind": "final"
+    }
+   ],
+   "note": "检索优于直接重建，但仍低于质心分类（T2 17.02），回归路线不用于 Task2/3。",
+   "source": "test/02_task2_cross_day/03_seen_ridge/results_task2_ridge_log.json"
+  },
+  {
+   "id": "04",
+   "dir": "test/02_task2_cross_day/04_neural_seen",
+   "title": "MLP+会话归一化",
+   "family": "task2_crossday",
+   "method": "50ms/25ms 计数 MLP 分类，比较 session 归一化与时序模型",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行），唯一分配；baseline=MLP bin50 无归一化，candidate=MLP bin50+session_norm",
+     "baseline": 19.899,
+     "candidate": 20.102,
+     "delta": 0.203,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行），唯一分配；baseline=MLP bin50 pooled，candidate=+session_norm",
+     "baseline": 15.617,
+     "candidate": 15.979,
+     "delta": 0.362,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行），唯一分配；baseline=质心+分配（实验02），candidate=MLP bin50+session_norm",
+     "baseline": 17.024,
+     "candidate": 20.102,
+     "delta": 3.078,
+     "kind": "final"
+    }
+   ],
+   "note": "MLP 50ms + session_norm 成为 v5 Task2/3 主分支；25ms 与时序模型更差。",
+   "source": "test/02_task2_cross_day/04_neural_seen/results_task2_mlp_bin50_sessionnorm_assign.json"
+  },
+  {
+   "id": "05",
+   "dir": "test/01_task1_reconstruction/05_task1_pooled",
+   "title": "Task1 合并 MLP",
+   "family": "task1_recon",
+   "method": "跨 session 合并训练 MLP/Ridge 回归 DCT32，再字库检索",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行），字库检索；baseline=pooled Ridge bin25，candidate=pooled MLP bin25 singles",
+     "baseline": 17.164,
+     "candidate": 18.385,
+     "delta": 1.221,
+     "kind": "final"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=实验01 Ridge 直接重建 DCT32 raw，candidate=pooled MLP bin25 singles 直接重建",
+     "baseline": 11.26,
+     "candidate": 13.129,
+     "delta": 1.869,
+     "kind": "final"
+    }
+   ],
+   "note": "pooled MLP bin25 回归 + 检索成为 v5 Task1 神经端（实验15 复用其 checkpoint）。",
+   "source": "test/01_task1_reconstruction/05_task1_pooled/results_task1_pooled_mlp_bin25_singles.json"
+  },
+  {
+   "id": "06",
+   "dir": "test/02_task2_cross_day/06_encoding_seen",
+   "title": "encoding 分支",
+   "family": "task2_crossday",
+   "method": "DCT16 图像编码模型（图像→神经）作为分类分支",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=质心+分配（实验02），candidate=encoding DCT16+分配",
+     "baseline": 17.024,
+     "candidate": 19.415,
+     "delta": 2.391,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行）；baseline=质心+分配（实验02），candidate=encoding DCT16+分配",
+     "baseline": 13.43,
+     "candidate": 15.286,
+     "delta": 1.856,
+     "kind": "final"
+    }
+   ],
+   "note": "单独略低于 MLP，但在实验09 中与 MLP 融合，成为 v5 encoding 分支。",
+   "source": "test/02_task2_cross_day/06_encoding_seen/results_task2_encoding_dct16.json"
+  },
+  {
+   "id": "07",
+   "dir": "test/05_model_architecture/07_ddpm",
+   "title": "DDPM 短训",
+   "family": "architecture",
+   "method": "条件 DDPM 由 spike 生成字图（10 epoch）",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行），字库检索；baseline=实验05 pooled MLP 检索，candidate=DDPM bin50 e10 检索",
+     "baseline": 18.385,
+     "candidate": 12.536,
+     "delta": -5.849,
+     "kind": "final"
+    }
+   ],
+   "note": "扩散生成远低于回归检索。",
+   "source": "test/05_model_architecture/07_ddpm/results_task1_ddpm_bin50_e10.json"
+  },
+  {
+   "id": "08",
+   "dir": "test/02_task2_cross_day/08_repeat_aggregation",
+   "title": "repeat 聚合方式",
+   "family": "task2_crossday",
+   "method": "多 repeat 预测按均值或中位数聚合",
+   "tasks": [
+    "T1",
+    "T2"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=中位数聚合，candidate=均值聚合",
+     "baseline": 17.713,
+     "candidate": 18.392,
+     "delta": 0.679,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行），独立预测；baseline=中位数聚合，candidate=均值聚合",
+     "baseline": 19.321,
+     "candidate": 20.412,
+     "delta": 1.091,
+     "kind": "final"
+    }
+   ],
+   "note": "均值聚合优于中位数；是否即生产聚合方式未在配置中单列，标为 positive。",
+   "source": "test/02_task2_cross_day/08_repeat_aggregation/results_task2_repeat_mean.json"
+  },
+  {
+   "id": "09",
+   "dir": "test/02_task2_cross_day/09_ensemble",
+   "title": "MLP+编码融合",
+   "family": "fusion",
+   "method": "MLP 与 encoding 分支打分融合并整块唯一分配",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=MLP+session_norm+分配（实验04），candidate=MLP+encoding 融合+分配",
+     "baseline": 20.102,
+     "candidate": 23.329,
+     "delta": 3.227,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行）；baseline=MLP+session_norm+分配（实验04），candidate=MLP+encoding 融合+分配",
+     "baseline": 15.979,
+     "candidate": 16.575,
+     "delta": 0.596,
+     "kind": "final"
+    }
+   ],
+   "note": "Task2 +3.23、Task3 +0.60，对应 v5 的 mlp_weight=0.5 融合。",
+   "source": "test/02_task2_cross_day/09_ensemble/results_task2_ensemble.json"
+  },
+  {
+   "id": "10",
+   "dir": "test/01_task1_reconstruction/10_task1_ensemble",
+   "title": "Task1 集成",
+   "family": "task1_recon",
+   "method": "多个 Task1 回归模型输出集成后检索",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=实验05 pooled MLP singles 检索，candidate=集成",
+     "baseline": 18.385,
+     "candidate": 18.392,
+     "delta": 0.007,
+     "kind": "final"
+    }
+   ],
+   "note": "+0.007，可忽略，未作为独立组件。",
+   "source": "test/01_task1_reconstruction/10_task1_ensemble/results_task1_ensemble.json"
+  },
+  {
+   "id": "11",
+   "dir": "test/01_task1_reconstruction/11_retrieval_ablation",
+   "title": "方向场检索",
+   "family": "task1_recon",
+   "method": "比较 6 种检索度量，tune 选出方向场 directional2",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=实验10 集成检索，candidate=directional2 检索",
+     "baseline": 18.392,
+     "candidate": 18.483,
+     "delta": 0.091,
+     "kind": "final"
+    }
+   ],
+   "note": "directional2 成为 v5 Task1 检索度量（font_directional2）；结果文件未直接给出旧度量的评估集分数，基线取实验10。",
+   "source": "test/01_task1_reconstruction/11_retrieval_ablation/results_task1_retrieval.json"
+  },
+  {
+   "id": "12",
+   "dir": "test/06_fusion_transduction/12_structural_medoid",
+   "title": "结构 medoid",
+   "family": "fusion",
+   "method": "在候选中取结构相似度 medoid 代替 top1",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=实验09 融合+分配，candidate=medoid 独立预测",
+     "baseline": 23.329,
+     "candidate": 21.238,
+     "delta": -2.091,
+     "kind": "final"
+    }
+   ],
+   "note": "低于融合+分配基线。",
+   "source": "test/06_fusion_transduction/12_structural_medoid/results_task2_medoid.json"
+  },
+  {
+   "id": "13",
+   "dir": "test/06_fusion_transduction/13_iterative_alignment",
+   "title": "迭代对齐",
+   "family": "fusion",
+   "method": "测试集迭代对齐/自训练调整跨日分布",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=实验09，candidate=迭代对齐（tune 选择后）",
+     "baseline": 23.329,
+     "candidate": 23.329,
+     "delta": 0.0,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行）；baseline=实验09，candidate=迭代对齐（tune 选择后）",
+     "baseline": 16.575,
+     "candidate": 16.575,
+     "delta": 0.0,
+     "kind": "final"
+    }
+   ],
+   "note": "tune 选回基线，评估集分数与实验09 完全相同，无增益。",
+   "source": "test/06_fusion_transduction/13_iterative_alignment/results_task2_alignment.json"
+  },
+  {
+   "id": "14",
+   "dir": "test/01_task1_reconstruction/14_task1_consensus",
+   "title": "session 共识",
+   "family": "task1_recon",
+   "method": "跨 session 预测共识后检索",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=实验11 directional2，candidate=session 共识",
+     "baseline": 18.483,
+     "candidate": 18.143,
+     "delta": -0.34,
+     "kind": "final"
+    }
+   ],
+   "note": "−0.34，未采用。",
+   "source": "test/01_task1_reconstruction/14_task1_consensus/results_task1_consensus.json"
+  },
+  {
+   "id": "15",
+   "dir": "test/01_task1_reconstruction/15_font_calibration",
+   "title": "Noto 字体校准",
+   "family": "task1_recon",
+   "method": "GB2312 6763 字用公开字体渲染并 tune 校准字号/字重作为检索库",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=实验11 训练图字库 directional2，candidate=GB2312 字体库 directional2",
+     "baseline": 18.483,
+     "candidate": 18.624,
+     "delta": 0.141,
+     "kind": "final"
+    }
+   ],
+   "note": "成为 v5 Task1 字库（NotoSansSC-VF size52 Regular）。",
+   "source": "test/01_task1_reconstruction/15_font_calibration/results_task1_font.json"
+  },
+  {
+   "id": "16",
+   "dir": "test/06_fusion_transduction/16_topk_vote",
+   "title": "top-k 投票",
+   "family": "fusion",
+   "method": "分配感知的 top-k 候选投票",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=实验09，candidate=top-k 投票（tune 选择后）",
+     "baseline": 23.329,
+     "candidate": 23.329,
+     "delta": 0.0,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行）；baseline=实验09，candidate=top-k 投票（tune 选择后）",
+     "baseline": 16.575,
+     "candidate": 16.575,
+     "delta": 0.0,
+     "kind": "final"
+    }
+   ],
+   "note": "tune 选回基线，无增益。",
+   "source": "test/06_fusion_transduction/16_topk_vote/results_task2_topk.json"
+  },
+  {
+   "id": "17",
+   "dir": "test/05_model_architecture/17_ddpm_long",
+   "title": "DDPM 长训",
+   "family": "architecture",
+   "method": "可续训的 100 epoch 条件 DDPM",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行），字库检索；baseline=实验15 字体检索，candidate=DDPM 长训检索",
+     "baseline": 18.624,
+     "candidate": 13.645,
+     "delta": -4.979,
+     "kind": "final"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=实验07 DDPM e10 检索，candidate=DDPM 长训检索",
+     "baseline": 12.536,
+     "candidate": 13.645,
+     "delta": 1.109,
+     "kind": "final"
+    }
+   ],
+   "note": "比短训好 +1.1，但远低于回归检索。",
+   "source": "test/05_model_architecture/17_ddpm_long/results_task1_ddpm_long.json"
+  },
+  {
+   "id": "18",
+   "dir": "test/06_fusion_transduction/18_seed_ensemble",
+   "title": "三种子集成",
+   "family": "fusion",
+   "method": "种子 42/202/777 前缀集成",
+   "tasks": [
+    "T1",
+    "T2",
+    "T3"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=实验09 单种子，candidate=三种子",
+     "baseline": 23.329,
+     "candidate": 24.339,
+     "delta": 1.01,
+     "kind": "final"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=实验15，candidate=种子集成（tune 选择后）",
+     "baseline": 18.624,
+     "candidate": 18.624,
+     "delta": 0.0,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行）；baseline=实验09，candidate=种子集成（tune 选择后）",
+     "baseline": 16.575,
+     "candidate": 16.575,
+     "delta": 0.0,
+     "kind": "final"
+    }
+   ],
+   "note": "Task2 +1.01，进入生产（v4 起，v5 task2.seeds）；Task1/3 无增益。",
+   "source": "test/06_fusion_transduction/18_seed_ensemble/results_task2_seed_ensemble.json"
+  },
+  {
+   "id": "19",
+   "dir": "test/02_task2_cross_day/19_task2_fusion",
+   "title": "Task2 融合重标定",
+   "family": "task2_crossday",
+   "method": "重新标定 MLP/encoding 融合权重",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task2 留 session4，512 图×2 鼠=1024 行）；baseline=实验18 三种子，candidate=重标定权重",
+     "baseline": 24.339,
+     "candidate": 24.122,
+     "delta": -0.217,
+     "kind": "final"
+    }
+   ],
+   "note": "−0.22，保持原权重。",
+   "source": "test/02_task2_cross_day/19_task2_fusion/results_task2_fusion.json"
+  },
+  {
+   "id": "20",
+   "dir": "test/01_task1_reconstruction/20_task1_ocf_rerank",
+   "title": "Task1 OCF 重排",
+   "family": "task1_recon",
+   "method": "用候选间 OCF 一致性重排检索 top-k",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task1 留字 211 字×8 块=1688 行）；baseline=实验15，candidate=OCF 重排（tune 选择后）",
+     "baseline": 18.624,
+     "candidate": 18.624,
+     "delta": 0.0,
+     "kind": "final"
+    }
+   ],
+   "note": "无增益。",
+   "source": "test/01_task1_reconstruction/20_task1_ocf_rerank/results_task1_ocf_rerank.json"
+  },
+  {
+   "id": "21",
+   "dir": "test/01_task1_reconstruction/21_task1_directional_loss",
+   "title": "方向场损失",
+   "family": "task1_recon",
+   "method": "训练时加入方向场余弦损失",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 留字 split seed42，tune 16 字 / heldout 211 字；baseline=实验15 生产 Task1，candidate=方向损失",
+     "baseline": 18.624,
+     "candidate": 17.97,
+     "delta": -0.654,
+     "kind": "final"
+    }
+   ],
+   "note": "−0.65，否定。",
+   "source": "test/01_task1_reconstruction/21_task1_directional_loss/results_task1_directional_loss.json"
+  },
+  {
+   "id": "22",
+   "dir": "test/03_task3_single_trial/22_task3_mean_augmentation",
+   "title": "repeat 均值增广",
+   "family": "task3_single",
+   "method": "训练时加入 repeat 均值样本增广单 trial",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 split seed42/picture seed123 评估集（Task3 单 trial，512 图×8 块=4096 行）；baseline=实验09，candidate=均值增广（tune 选择后）",
+     "baseline": 16.575,
+     "candidate": 16.575,
+     "delta": 0.0,
+     "kind": "final"
+    }
+   ],
+   "note": "无增益，HANDOFF 明确不要重复。",
+   "source": "test/03_task3_single_trial/22_task3_mean_augmentation/results_task3_mean_augmentation.json"
+  },
+  {
+   "id": "23",
+   "dir": "test/06_fusion_transduction/23_candidate_oracle",
+   "title": "候选 oracle 上界",
+   "family": "fusion",
+   "method": "用 GT 在 top-k 候选中选最优，测排序上界",
+   "tasks": [
+    "T1",
+    "T2",
+    "T3"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "当时生产预测（collect_results 未记划分）；baseline=实际 top1，candidate=oracle@32",
+     "baseline": 19.576,
+     "candidate": 35.954,
+     "delta": 16.378,
+     "kind": "oracle"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "当时生产预测；baseline=实际 top1，candidate=oracle@32",
+     "baseline": 23.987,
+     "candidate": 76.618,
+     "delta": 52.631,
+     "kind": "oracle"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "当时生产预测；baseline=实际 top1，candidate=oracle@32",
+     "baseline": 13.667,
+     "candidate": 44.514,
+     "delta": 30.847,
+     "kind": "oracle"
+    }
+   ],
+   "note": "候选内排序空间大，oracle 只作诊断。",
+   "source": "test/06_fusion_transduction/23_candidate_oracle/results.json"
+  },
+  {
+   "id": "24",
+   "dir": "test/05_model_architecture/24_forward_cnn",
+   "title": "前向 CNN",
+   "family": "architecture",
+   "method": "图像→神经前向 CNN（Poisson 损失）作为候选打分",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 留 session4，RNG123 tune[:256]/heldout[256:768]，heldout；baseline=ridge_mse 前向模型，candidate=cnn_poisson",
+     "baseline": 24.339,
+     "candidate": 25.946,
+     "delta": 1.607,
+     "kind": "final"
+    }
+   ],
+   "note": "tune 通过门槛 advance=true，后续作为实验31 reranker 的基础。",
+   "source": "test/05_model_architecture/24_forward_cnn/results.json"
+  },
+  {
+   "id": "25",
+   "dir": "test/07_protocol_and_scoring/25_rotating_sessions",
+   "title": "留日轮换",
+   "family": "protocol",
+   "method": "轮换留出 session 评估前向 CNN 跨日稳定性",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "轮换留日（新 macro 均值，heldout）；baseline=ridge_mse，candidate=cnn_poisson",
+     "baseline": 22.279,
+     "candidate": 22.667,
+     "delta": 0.388,
+     "kind": "final"
+    }
+   ],
+   "note": "CNN 跨日仍优，但幅度小于单 session4。",
+   "source": "test/07_protocol_and_scoring/25_rotating_sessions/results.json"
+  },
+  {
+   "id": "26",
+   "dir": "test/05_model_architecture/26_temporal_attention",
+   "title": "时序 attention",
+   "family": "architecture",
+   "method": "对时间 bin 做 attention 读出，对照 MLP 与打乱时序",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 tune；baseline=MLP，candidate=attention",
+     "baseline": 17.135,
+     "candidate": 14.635,
+     "delta": -2.5,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 tune；baseline=MLP，candidate=attention",
+     "baseline": 17.336,
+     "candidate": 15.263,
+     "delta": -2.073,
+     "kind": "final"
+    }
+   ],
+   "note": "attention 低于 MLP 2–2.5 分。",
+   "source": "test/05_model_architecture/26_temporal_attention/results.json"
+  },
+  {
+   "id": "27",
+   "dir": "test/05_model_architecture/27_layout_teacher",
+   "title": "layout teacher",
+   "family": "architecture",
+   "method": "用字体布局作 teacher 辅助 Task1 重建",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "磁盘无结果文件，仅有 run.py",
+     "baseline": null,
+     "candidate": null,
+     "delta": null,
+     "kind": "final"
+    }
+   ],
+   "note": "目录内无结果 json，数值缺失；未进入生产，结论不确定。",
+   "source": "test/05_model_architecture/27_layout_teacher/run.py"
+  },
+  {
+   "id": "28",
+   "dir": "test/05_model_architecture/28_latent_denoising",
+   "title": "潜空间对齐/去噪",
+   "family": "architecture",
+   "method": "潜表征跨日对齐（align）与去噪（denoise）",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "留 session4 折，mice1，heldout；baseline=base，candidate=align",
+     "baseline": 19.539,
+     "candidate": 24.794,
+     "delta": 5.255,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "留 session4 折，mice2，heldout；baseline=base，candidate=align",
+     "baseline": 13.676,
+     "candidate": 13.567,
+     "delta": -0.109,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 mice1/session4，heldout；baseline=base，candidate=align",
+     "baseline": 15.444,
+     "candidate": 18.371,
+     "delta": 2.927,
+     "kind": "final"
+    }
+   ],
+   "note": "align 多数块为正但 mice2 不稳；denoise 无益；未进入生产。",
+   "source": "test/05_model_architecture/28_latent_denoising/results_task2_session4.json"
+  },
+  {
+   "id": "29",
+   "dir": "test/07_protocol_and_scoring/29_repeat_day",
+   "title": "重复与跨日效应",
+   "family": "protocol",
+   "method": "无拟合余弦解码，比较同日/跨日参考的 top1 与 recall@32",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "recall32",
+     "protocol": "公开 train 256 字，pooled 2048 查询；baseline=同日 1 参考，candidate=跨日 1 参考",
+     "baseline": 0.0551758,
+     "candidate": 0.0410156,
+     "delta": -0.01416,
+     "kind": "other"
+    }
+   ],
+   "note": "跨日使 recall@32 下降，量化了 session 漂移。",
+   "source": "test/07_protocol_and_scoring/29_repeat_day/results.json"
+  },
+  {
+   "id": "30",
+   "dir": "test/06_fusion_transduction/30_candidate_audit",
+   "title": "top32 候选审计",
+   "family": "fusion",
+   "method": "审计生产 top32 候选的 oracle 上界",
+   "tasks": [
+    "T1",
+    "T2",
+    "T3"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "当时生产候选（未记划分）；baseline=final top1，candidate=oracle@32",
+     "baseline": 19.84,
+     "candidate": 31.346,
+     "delta": 11.506,
+     "kind": "oracle"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "当时生产候选；baseline=final top1，candidate=oracle@32",
+     "baseline": 27.936,
+     "candidate": 62.805,
+     "delta": 34.869,
+     "kind": "oracle"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "当时生产候选；baseline=final top1，candidate=oracle@32",
+     "baseline": 18.853,
+     "candidate": 42.771,
+     "delta": 23.918,
+     "kind": "oracle"
+    }
+   ],
+   "note": "三任务 oracle@32 均远高于 final，排序仍是瓶颈。",
+   "source": "test/06_fusion_transduction/30_candidate_audit/results.json"
+  },
+  {
+   "id": "31",
+   "dir": "test/02_task2_cross_day/31_task2_rerank",
+   "title": "OOF CNN 重排",
+   "family": "task2_crossday",
+   "method": "session1-3 OOF 训练 listwise CNN 在 top32 内重排，k=8 后全局分配",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 留 session4，RNG123 tune[:256]/heldout[256:768]，tune；baseline=原始+全局分配，candidate=cnn_k8+全局分配",
+     "baseline": 25.831,
+     "candidate": 26.748,
+     "delta": 0.917,
+     "kind": "final"
+    }
+   ],
+   "note": "进入 v5 Task2（reranker top_n=32,k=8）；该文件未记 cnn_k8 的 heldout。",
+   "source": "test/02_task2_cross_day/31_task2_rerank/results.json"
+  },
+  {
+   "id": "32",
+   "dir": "test/03_task3_single_trial/32_task3_retrieval",
+   "title": "softmax 原型融合",
+   "family": "task3_single",
+   "method": "softmax 加权 DCT 原型连续检索分支，与 MLP/encoding 融合",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "adopted",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 留同字其他 trial，RNG123 tune[:256]/heldout[256:768]，整块分配，heldout；baseline=v3 Task3，candidate=prototype_continuous",
+     "baseline": 16.575,
+     "candidate": 17.024,
+     "delta": 0.449,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 留同字其他 trial，RNG123 tune[:256]/heldout[256:768]，heldout；baseline=v3，candidate=prototype_continuous",
+     "baseline": 41.818,
+     "candidate": 41.207,
+     "delta": -0.611,
+     "kind": "oracle"
+    }
+   ],
+   "note": "+0.45 final，进入 v5 Task3；oracle 略降。",
+   "source": "test/03_task3_single_trial/32_task3_retrieval/results_full_assignment.json"
+  },
+  {
+   "id": "33",
+   "dir": "test/01_task1_reconstruction/33_task1_temporal_candidates",
+   "title": "Task1 时序候选",
+   "family": "task1_recon",
+   "method": "延迟 50ms/50ms 池化等时序特征产生候选",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 留字 split seed42，tune 16 字 / heldout 211 字，tune；baseline=生产，candidate=pool50",
+     "baseline": 16.812,
+     "candidate": 16.855,
+     "delta": 0.043,
+     "kind": "final"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 留字 split seed42，tune 16 字 / heldout 211 字，tune；baseline=生产，candidate=delay50",
+     "baseline": 16.812,
+     "candidate": 16.385,
+     "delta": -0.427,
+     "kind": "final"
+    }
+   ],
+   "note": "增益可忽略或为负，未评 heldout。",
+   "source": "test/01_task1_reconstruction/33_task1_temporal_candidates/results.json"
+  },
+  {
+   "id": "34",
+   "dir": "test/02_task2_cross_day/34_task2_nested_rerank",
+   "title": "嵌套留日 rerank",
+   "family": "task2_crossday",
+   "method": "三个外层留日折上嵌套验证 CNN reranker",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "三个外层留日 macro 均值，heldout；baseline=原始+全局分配，candidate=cnn_k8+全局分配",
+     "baseline": 19.292,
+     "candidate": 18.78,
+     "delta": -0.512,
+     "kind": "final"
+    }
+   ],
+   "note": "reranker 跨日不稳，−0.51；v5 仍保留 reranker。",
+   "source": "test/02_task2_cross_day/34_task2_nested_rerank/results.json"
+  },
+  {
+   "id": "35",
+   "dir": "test/04_representation_structure/35_task3_contrastive",
+   "title": "Task3 对比学习",
+   "family": "representation",
+   "method": "对比学习表征用于单 trial 检索",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 留同字其他 trial，RNG123 tune[:256]/heldout[256:768]，tune；baseline=原型连续（实验32），candidate=contrastive",
+     "baseline": 17.931,
+     "candidate": 17.412,
+     "delta": -0.519,
+     "kind": "final"
+    }
+   ],
+   "note": "低于原型分支，未采用。",
+   "source": "test/04_representation_structure/35_task3_contrastive/results.json"
+  },
+  {
+   "id": "36",
+   "dir": "test/03_task3_single_trial/36_task3_fusion",
+   "title": "Task3 对比融合",
+   "family": "task3_single",
+   "method": "对比分支以 blend 权重并入 v5 Task3",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 留同字其他 trial，RNG123 tune[:256]/heldout[256:768]，heldout；baseline=v5 Task3，candidate=blend_0.25",
+     "baseline": 17.024,
+     "candidate": 17.524,
+     "delta": 0.5,
+     "kind": "final"
+    }
+   ],
+   "note": "heldout +0.50，但实验38 复核未复现，未进入生产。",
+   "source": "test/03_task3_single_trial/36_task3_fusion/results.json"
+  },
+  {
+   "id": "37",
+   "dir": "test/01_task1_reconstruction/37_task1_quota",
+   "title": "Task1 候选配额",
+   "family": "task1_recon",
+   "method": "基线 24 + delay50 8 个候选配额混合",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 留字 split seed42，tune 16 字 / heldout 211 字，tune；baseline=生产，candidate=baseline24_delay50_raw8",
+     "baseline": 16.812,
+     "candidate": 16.812,
+     "delta": 0.0,
+     "kind": "final"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 留字 split seed42，tune 16 字 / heldout 211 字，tune；baseline=生产，candidate=配额混合",
+     "baseline": 30.362,
+     "candidate": 30.219,
+     "delta": -0.143,
+     "kind": "oracle"
+    }
+   ],
+   "note": "final 不变、oracle 下降，tune 即否决。",
+   "source": "test/01_task1_reconstruction/37_task1_quota/results.json"
+  },
+  {
+   "id": "38",
+   "dir": "test/03_task3_single_trial/38_task3_replication",
+   "title": "Task3 融合复核",
+   "family": "task3_single",
+   "method": "在不相交字子集上复核实验36 blend_0.25",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 不相交字图子集，heldout；baseline=v5，candidate=blend_0.25",
+     "baseline": 16.869,
+     "candidate": 16.925,
+     "delta": 0.056,
+     "kind": "final"
+    }
+   ],
+   "note": "仅 +0.056，增益未复现。",
+   "source": "test/03_task3_single_trial/38_task3_replication/results.json"
+  },
+  {
+   "id": "39",
+   "dir": "test/06_fusion_transduction/39_task3_noise_weighting",
+   "title": "Task3 噪声加权",
+   "family": "fusion",
+   "method": "原型 MSE 改为逐特征逆方差加权 MSE",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 留同字其他 trial，RNG123 tune[:256]/heldout[256:768]，tune；baseline=v5 Task3，candidate=noise_weighted",
+     "baseline": 17.930809,
+     "candidate": 17.978164,
+     "delta": 0.047355,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 留同字其他 trial，RNG123 tune[:256]/heldout[256:768]，heldout；baseline=v5 Task3，candidate=noise_weighted",
+     "baseline": 16.826837,
+     "candidate": 16.895366,
+     "delta": 0.068529,
+     "kind": "final"
+    }
+   ],
+   "note": "只在单一 holdout 小幅 +0.07，HANDOFF 列为未通过。",
+   "source": "test/06_fusion_transduction/39_task3_noise_weighting/results.json"
+  },
+  {
+   "id": "40",
+   "dir": "test/05_model_architecture/40_forward_cnn_day_readout",
+   "title": "日条件 CNN 读出",
+   "family": "architecture",
+   "method": "前向 CNN 加日条件读出层，适应跨日漂移",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "两鼠×四个留一日折 macro 均值，heldout 512 图，整块匈牙利；baseline=原 CNN，candidate=day_readout",
+     "baseline": 23.102247,
+     "candidate": 22.295107,
+     "delta": -0.80714,
+     "kind": "final"
+    }
+   ],
+   "note": "−0.81 且 recall 下降，advance=false。",
+   "source": "test/05_model_architecture/40_forward_cnn_day_readout/results.json"
+  },
+  {
+   "id": "41",
+   "dir": "test/05_model_architecture/41_forward_cnn_seed_ensemble",
+   "title": "CNN 三种子",
+   "family": "architecture",
+   "method": "前向 CNN 三种子预测率平均",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "两鼠×四个留一日折 macro 均值，heldout 512 图，整块匈牙利；baseline=单种子 CNN，candidate=三种子 CNN",
+     "baseline": 23.102247,
+     "candidate": 23.729064,
+     "delta": 0.626817,
+     "kind": "final"
+    }
+   ],
+   "note": "advance=true 但对照不是 v5，未接入生产。",
+   "source": "test/05_model_architecture/41_forward_cnn_seed_ensemble/results.json"
+  },
+  {
+   "id": "42",
+   "dir": "test/02_task2_cross_day/42_task2_production_paired",
+   "title": "全库 CNN 融合",
+   "family": "task2_crossday",
+   "method": "在 v5 Task2 上做全库 CNN 打分融合的配对评估",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 留 session4，mice1 512 图；baseline=v5，candidate=mixed",
+     "baseline": 29.395919,
+     "candidate": 31.696587,
+     "delta": 2.300668,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 留 session4，mice2 512 图；baseline=v5，candidate=mixed",
+     "baseline": 22.278761,
+     "candidate": 22.398045,
+     "delta": 0.119284,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "recall32",
+     "protocol": "Task2 留 session4，mice2；baseline=v5，candidate=mixed",
+     "baseline": 0.355469,
+     "candidate": 0.339844,
+     "delta": -0.015625,
+     "kind": "other"
+    }
+   ],
+   "note": "两鼠 OCF 上升，但 mice2 recall@32 182→174/512，不集成。",
+   "source": "test/02_task2_cross_day/42_task2_production_paired/results.json"
+  },
+  {
+   "id": "43",
+   "dir": "test/02_task2_cross_day/43_task2_within32_rerank",
+   "title": "top32 内 CNN 重排",
+   "family": "task2_crossday",
+   "method": "保留 v5 top32 集合，只用 CNN 改内部顺序",
+   "tasks": [
+    "T2"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 留 session4，mice1；baseline=v5，candidate=within32",
+     "baseline": 26.030092,
+     "candidate": 27.762526,
+     "delta": 1.732434,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 留 session4，mice2；baseline=v5，candidate=within32",
+     "baseline": 20.987102,
+     "candidate": 20.473192,
+     "delta": -0.51391,
+     "kind": "final"
+    }
+   ],
+   "note": "mice1 +1.73、mice2 −0.51，advance=false。",
+   "source": "test/02_task2_cross_day/43_task2_within32_rerank/results.json"
+  },
+  {
+   "id": "44",
+   "dir": "test/03_task3_single_trial/44_task3_score_mixtures",
+   "title": "双候选像素混合",
+   "family": "task3_single",
+   "method": "Task3 top2 候选按 k=2,T=0.5,阈值0.5 像素混合",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 留同字其他 trial，RNG123 tune[:256]/heldout[256:768]，heldout；baseline=v5，candidate=混合",
+     "baseline": 16.759832,
+     "candidate": 16.819239,
+     "delta": 0.059407,
+     "kind": "final"
+    }
+   ],
+   "note": "+0.06，8 个鼠×日组仅 4 组正，未达 5 组门槛。",
+   "source": "test/03_task3_single_trial/44_task3_score_mixtures/results.json"
+  },
+  {
+   "id": "45",
+   "dir": "test/03_task3_single_trial/45_task3_repeat_dropout",
+   "title": "计数 dropout",
+   "family": "task3_single",
+   "method": "训练计数以 0.5 概率 Binomial(x,0.5) 稀疏化",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "recall32",
+     "protocol": "Task3 留同字其他 trial，RNG123 tune[:256]/heldout[256:768]，tune，mice2；baseline=v5，candidate=dropout（188/1024→183/1024）",
+     "baseline": 0.183594,
+     "candidate": 0.178711,
+     "delta": -0.004883,
+     "kind": "other"
+    }
+   ],
+   "note": "mice2 recall 与 OCF 下降，按预注册停止，未评 heldout。",
+   "source": "test/03_task3_single_trial/45_task3_repeat_dropout/results.json"
+  },
+  {
+   "id": "46",
+   "dir": "test/00_infra/46_shared_preprocessing",
+   "title": "共享预处理缓存",
+   "family": "infra",
+   "method": "8 个 train 块 10/25/50ms 计数缓存为只读 NPZ",
+   "tasks": [],
+   "outcome": "infra",
+   "results": [],
+   "note": "等价性检查 status=passed，供 48 起实验复用。",
+   "source": "test/00_infra/46_shared_preprocessing/results.json"
+  },
+  {
+   "id": "47",
+   "dir": "test/02_task2_cross_day/47_train_single_trial_top1",
+   "title": "训练集拟合自检",
+   "family": "task2_crossday",
+   "method": "训练集 87,936 条单 trial 的 target-ID 拟合检查",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "top1",
+     "protocol": "公开 train 全部单 trial（两鼠各 43,968 条）；训练集自身拟合，无基线",
+     "baseline": null,
+     "candidate": 1.0,
+     "delta": null,
+     "kind": "other"
+    }
+   ],
+   "note": "train 上 100% 正确，确认无标签泄露问题。",
+   "source": "test/02_task2_cross_day/47_train_single_trial_top1/results.json"
+  },
+  {
+   "id": "48",
+   "dir": "test/06_fusion_transduction/48_high_capacity_generalization",
+   "title": "高容量无正则",
+   "family": "fusion",
+   "method": "去正则、加大容量的 MLP 对照",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 开发协议：留 session1/2/3 三折，baseline=实验48 production_recipe（50ms MLP，epoch5）；candidate=high_capacity_noreg epoch20",
+     "baseline": 18.371881,
+     "candidate": 18.750782,
+     "delta": 0.378901,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 开发协议：种子 20261126/20261127 两折，baseline=实验48 production_recipe（epoch12）；candidate=high_capacity_noreg epoch9",
+     "baseline": 15.695588,
+     "candidate": 15.468396,
+     "delta": -0.227192,
+     "kind": "final"
+    }
+   ],
+   "note": "Task2 +0.38、Task3 −0.23，未通过；production_recipe 成为后续固定比较器。",
+   "source": "test/06_fusion_transduction/48_high_capacity_generalization/selection.json"
+  },
+  {
+   "id": "49",
+   "dir": "test/06_fusion_transduction/49_feature_quantile_transport",
+   "title": "特征分位传输",
+   "family": "fusion",
+   "method": "跨日特征分位数映射替代 z-score",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 开发协议：留 session1/2/3 三折，baseline=实验48 production_recipe（50ms MLP，epoch5）",
+     "baseline": 18.371881,
+     "candidate": 18.331361,
+     "delta": -0.04052,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 开发协议：种子 20261126/20261127 两折，baseline=实验48 production_recipe（epoch12）",
+     "baseline": 15.695588,
+     "candidate": 15.457451,
+     "delta": -0.238137,
+     "kind": "final"
+    }
+   ],
+   "note": "两任务均为负，未通过。",
+   "source": "test/06_fusion_transduction/49_feature_quantile_transport/selection.json"
+  },
+  {
+   "id": "50",
+   "dir": "test/04_representation_structure/50_glyph_structured_classifier",
+   "title": "DCT16 字库分类头",
+   "family": "representation",
+   "method": "固定 DCT16 全字库 cosine 分类头",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 开发协议：留 session1/2/3 三折，baseline=实验48 production_recipe（50ms MLP，epoch5）",
+     "baseline": 18.371881,
+     "candidate": 17.860802,
+     "delta": -0.511079,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 开发协议：种子 20261126/20261127 两折，baseline=实验48 production_recipe（epoch12）",
+     "baseline": 15.695588,
+     "candidate": 15.77178,
+     "delta": 0.076192,
+     "kind": "final"
+    }
+   ],
+   "note": "Task2 −0.51、Task3 +0.08，未通过。",
+   "source": "test/04_representation_structure/50_glyph_structured_classifier/selection.json"
+  },
+  {
+   "id": "51",
+   "dir": "test/04_representation_structure/51_hierarchical_poisson",
+   "title": "分层 Poisson 生成式",
+   "family": "representation",
+   "method": "分层 DCT-Ridge 图像先验+经验 Poisson+边际校准",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 开发协议：留 session1/2/3 三折，baseline=实验48 production_recipe（50ms MLP，epoch5）",
+     "baseline": 18.371881,
+     "candidate": 17.704881,
+     "delta": -0.667,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 开发协议：种子 20261126/20261127 两折，baseline=实验48 production_recipe（epoch12）",
+     "baseline": 15.695588,
+     "candidate": 14.113588,
+     "delta": -1.582,
+     "kind": "final"
+    }
+   ],
+   "note": "双鼠所有折为负；candidate 由 HANDOFF 的 Δ−0.667/−1.582 与基线相加得出，未直接读文件。",
+   "source": "test/04_representation_structure/51_hierarchical_poisson/selection.json"
+  },
+  {
+   "id": "52",
+   "dir": "test/04_representation_structure/52_lowrank_gaussian",
+   "title": "低秩噪声高斯",
+   "family": "representation",
+   "method": "低秩相关噪声高斯模型+Woodbury 全字库评分",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 开发协议：留 session1/2/3 三折，baseline=实验48 production_recipe（50ms MLP，epoch5）",
+     "baseline": 18.371881,
+     "candidate": 16.697472,
+     "delta": -1.674409,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 开发协议：种子 20261126/20261127 两折，baseline=实验48 production_recipe（epoch12）",
+     "baseline": 15.695588,
+     "candidate": 13.368808,
+     "delta": -2.32678,
+     "kind": "final"
+    }
+   ],
+   "note": "−1.67/−2.33，生成式路线系统性落后判别式 MLP。",
+   "source": "test/04_representation_structure/52_lowrank_gaussian/selection.json"
+  },
+  {
+   "id": "53",
+   "dir": "test/06_fusion_transduction/53_multiresolution_ensemble",
+   "title": "三分辨率集成",
+   "family": "fusion",
+   "method": "10/25/50ms 三视图判别式 MLP 逐行 z-score 等权融合",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 开发协议：留 session1/2/3 三折，baseline=实验48 production_recipe（50ms MLP，epoch5）",
+     "baseline": 18.371881,
+     "candidate": 19.909159,
+     "delta": 1.537278,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 开发协议：种子 20261126/20261127 两折，baseline=实验48 production_recipe（epoch12）",
+     "baseline": 15.695588,
+     "candidate": 16.439417,
+     "delta": 0.743829,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "recall32",
+     "protocol": "Task2 开发协议：留 session1/2/3 三折，baseline=实验48 production_recipe（50ms MLP，epoch5）",
+     "baseline": 0.2565,
+     "candidate": 0.3405,
+     "delta": 0.084,
+     "kind": "other"
+    }
+   ],
+   "note": "双鼠所有折非负，但未达 +3 门槛 advance=false；实验63 在 v5 上配对为负。",
+   "source": "test/06_fusion_transduction/53_multiresolution_ensemble/selection.json"
+  },
+  {
+   "id": "54",
+   "dir": "test/03_task3_single_trial/54_exploratory_structure_inference",
+   "title": "Task3 推理策略诊断",
+   "family": "task3_single",
+   "method": "比较 zlogits+pS 等推理打分及 top32 结构相似度（探索性）",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 开发折，50ms epoch9，探索性未预注册；相对 logits 基线的增益（基线绝对值见文件，此处未读取）",
+     "baseline": null,
+     "candidate": null,
+     "delta": null,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "同上；argmax 错误行的 OCF 均值",
+     "baseline": null,
+     "candidate": 14.65,
+     "delta": null,
+     "kind": "other"
+    }
+   ],
+   "note": "最优 zlogits+pS 仅 +1.119（mice1 −0.12），不稳健；错误候选均值 14.65。数值取自 HANDOFF。",
+   "source": "test/03_task3_single_trial/54_exploratory_structure_inference/exploratory_results.json"
+  },
+  {
+   "id": "55",
+   "dir": "test/06_fusion_transduction/55_balanced_transductive",
+   "title": "Sinkhorn 平衡转导",
+   "family": "fusion",
+   "method": "Sinkhorn 平衡软伪标签转导微调",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "positive",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 开发协议：留 session1/2/3 三折，baseline=实验48 production_recipe（50ms MLP，epoch5）",
+     "baseline": 18.371881,
+     "candidate": 20.346,
+     "delta": 1.974119,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 开发协议：种子 20261126/20261127 两折，baseline=实验48 production_recipe（epoch12）",
+     "baseline": 15.695588,
+     "candidate": 16.117,
+     "delta": 0.421412,
+     "kind": "final"
+    }
+   ],
+   "note": "Task2 +1.97 双鼠 3/3 折正，但 advance=false；实验67 在 v5 上 heldout −0.29。candidate 取 HANDOFF 三位小数。",
+   "source": "test/06_fusion_transduction/55_balanced_transductive/selection.json"
+  },
+  {
+   "id": "56",
+   "dir": "test/01_task1_reconstruction/56_task1_font_ceiling",
+   "title": "Task1 字库上界",
+   "family": "task1_recon",
+   "method": "GT 字图作为查询在 NotoSansSC 6763 字库检索",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 heldout 51 行，全库完美检索；baseline=v5 heldout final",
+     "baseline": 18.43706,
+     "candidate": 79.42,
+     "delta": 60.98294,
+     "kind": "ceiling"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 heldout 211 行，GT 字图查询 + directional top1；baseline=v5 heldout final",
+     "baseline": 18.43706,
+     "candidate": 80.096845,
+     "delta": 61.659785,
+     "kind": "ceiling"
+    }
+   ],
+   "note": "字库与检索都不是瓶颈；79.42 来自 HANDOFF。",
+   "source": "test/01_task1_reconstruction/56_task1_font_ceiling/heldout_topk_ceiling.json"
+  },
+  {
+   "id": "57",
+   "dir": "test/01_task1_reconstruction/57_task1_continuous_gap",
+   "title": "连续重建差距",
+   "family": "task1_recon",
+   "method": "分析 DCT32 回归 R²、系数尺度与 gain 校准",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "r2",
+     "protocol": "Task1 heldout，DCT32 系数回归",
+     "baseline": null,
+     "candidate": 0.47,
+     "delta": null,
+     "kind": "other"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 heldout 二值化 OCF；baseline=原尺度，candidate=gain=1.2",
+     "baseline": 11.1,
+     "candidate": 13.15,
+     "delta": 2.05,
+     "kind": "other"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "二值化 OCF；baseline=heldout 字，candidate=训练字（检验过拟合）",
+     "baseline": 11.1,
+     "candidate": 15.19,
+     "delta": 4.09,
+     "kind": "other"
+    }
+   ],
+   "note": "R²≈0.47 为信号上限；gain 在生产 directional2 链中是恒等变换。数值取自 HANDOFF。",
+   "source": "test/01_task1_reconstruction/57_task1_continuous_gap/exploratory_results.json"
+  },
+  {
+   "id": "58",
+   "dir": "test/03_task3_single_trial/58_task3_wrong_candidate_ceiling",
+   "title": "错误候选上界",
+   "family": "task3_single",
+   "method": "211 个真实字图排除自身后选最相似候选的 OCF",
+   "tasks": [
+    "T1",
+    "T3"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 211 heldout 字，排除自身 directional_multi top1；baseline=全局平均字",
+     "baseline": 4.2,
+     "candidate": 42.67,
+     "delta": 38.47,
+     "kind": "ceiling"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "同上，top500 内最优",
+     "baseline": 4.2,
+     "candidate": 48.31,
+     "delta": 44.11,
+     "kind": "ceiling"
+    }
+   ],
+   "note": "41.67×R²≈20 与实测 18.44 吻合，40 分需 R²≈0.9。数值取自 HANDOFF。",
+   "source": "test/03_task3_single_trial/58_task3_wrong_candidate_ceiling/exploratory_results.json"
+  },
+  {
+   "id": "59",
+   "dir": "test/01_task1_reconstruction/59_task1_temporal_resolution",
+   "title": "Task1 时间分辨率",
+   "family": "task1_recon",
+   "method": "pooled ridge 检索比较 10/25/50ms bin",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 pooled ridge 检索；baseline=25ms，candidate=10ms",
+     "baseline": 16.79,
+     "candidate": 16.03,
+     "delta": -0.76,
+     "kind": "final"
+    },
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 pooled ridge 检索；baseline=25ms，candidate=50ms",
+     "baseline": 16.79,
+     "candidate": 16.93,
+     "delta": 0.14,
+     "kind": "final"
+    }
+   ],
+   "note": "更细 bin 更差，时间信息已饱和。数值取自 HANDOFF。",
+   "source": "test/01_task1_reconstruction/59_task1_temporal_resolution/exploratory_results.json"
+  },
+  {
+   "id": "60",
+   "dir": "test/01_task1_reconstruction/60_task1_multitask",
+   "title": "Task1 多任务",
+   "family": "task1_recon",
+   "method": "回归+0.1×2473 类分类共享 trunk",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 探索性，相对纯回归的两鼠平均增益（绝对值未读取）",
+     "baseline": null,
+     "candidate": null,
+     "delta": null,
+     "kind": "final"
+    }
+   ],
+   "note": "mice1 +0.23、mice2 −0.32，平均 −0.04，无改善。",
+   "source": "test/01_task1_reconstruction/60_task1_multitask/exploratory_results.json"
+  },
+  {
+   "id": "61",
+   "dir": "test/01_task1_reconstruction/61_task1_repeat_scaling",
+   "title": "Task1 重复缩放",
+   "family": "task1_recon",
+   "method": "检索 OCF 随 repeat 数 1→4 的变化",
+   "tasks": [
+    "T1"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "Task1 检索；baseline=1 repeat，candidate=4 repeat",
+     "baseline": 16.15,
+     "candidate": 18.07,
+     "delta": 1.92,
+     "kind": "other"
+    }
+   ],
+   "note": "收益递减，外推到 20 repeat 仅约 +0.5。数值取自 HANDOFF。",
+   "source": "test/01_task1_reconstruction/61_task1_repeat_scaling/exploratory_results.json"
+  },
+  {
+   "id": "62",
+   "dir": "test/03_task3_single_trial/62_task3_continuous_retrieval",
+   "title": "Task3 连续重建",
+   "family": "task3_single",
+   "method": "50ms pooled ridge 预测 DCT32 后 directional 检索",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 macro；baseline=分类单视图，candidate=连续重建检索",
+     "baseline": 15.86,
+     "candidate": 15.43,
+     "delta": -0.43,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "r2",
+     "protocol": "Task3 DCT32 系数回归",
+     "baseline": null,
+     "candidate": 0.0,
+     "delta": null,
+     "kind": "other"
+    }
+   ],
+   "note": "R²≈0.00，单 trial 重建无信息。数值取自 HANDOFF。",
+   "source": "test/03_task3_single_trial/62_task3_continuous_retrieval/exploratory_results.json"
+  },
+  {
+   "id": "63",
+   "dir": "test/07_protocol_and_scoring/63_v6_fixed",
+   "title": "v6 固定协议评分",
+   "family": "protocol",
+   "method": "v5 Task1 + 实验53 三视图融合 Task2/3 的固定协议配对",
+   "tasks": [
+    "T1",
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T1",
+     "metric": "ocf",
+     "protocol": "固定公开 heldout（evaluate_final 口径）；baseline=v5",
+     "baseline": 18.437062,
+     "candidate": 18.437062,
+     "delta": 0.0,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "固定公开 heldout，留 session4；baseline=v5",
+     "baseline": 23.824141,
+     "candidate": 20.964633,
+     "delta": -2.859508,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "固定公开 heldout；baseline=v5",
+     "baseline": 16.759832,
+     "candidate": 15.966224,
+     "delta": -0.793608,
+     "kind": "final"
+    }
+   ],
+   "note": "三任务均分 18.456 < v5 19.674，不提交。",
+   "source": "test/07_protocol_and_scoring/63_v6_fixed/results.json"
+  },
+  {
+   "id": "64",
+   "dir": "test/04_representation_structure/64_glyph_cluster_commonality",
+   "title": "字图族共性",
+   "family": "representation",
+   "method": "方向场 k-means 字族与神经相似度共性分析",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "diagnostic",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "top1",
+     "protocol": "固定 heldout 复用（探索性），k=8 族 top1；candidate 为族准确率",
+     "baseline": null,
+     "candidate": 0.323,
+     "delta": null,
+     "kind": "other"
+    },
+    {
+     "task": "T3",
+     "metric": "top1",
+     "protocol": "同上，k=8 族 top1",
+     "baseline": null,
+     "candidate": 0.253,
+     "delta": null,
+     "kind": "other"
+    }
+   ],
+   "note": "族信号显著但效应小、跨日不稳；数值取自 HANDOFF。",
+   "source": "test/04_representation_structure/64_glyph_cluster_commonality/results.json"
+  },
+  {
+   "id": "65",
+   "dir": "test/04_representation_structure/65_hierarchical_cluster_decoding",
+   "title": "族后验两阶段解码",
+   "family": "representation",
+   "method": "z(logits)+λ·z(log 族后验) 软融合或族内硬约束",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "Task2 留 session1/2/3 开发折，同一 50ms 单种子模型；相对 logits 基线的最好臂 soft_k8_λ0.25（绝对值未读取）",
+     "baseline": null,
+     "candidate": null,
+     "delta": null,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 种子 20261126/27 开发折；最好臂 soft_k32_λ0.25（绝对值未读取）",
+     "baseline": null,
+     "candidate": null,
+     "delta": null,
+     "kind": "final"
+    }
+   ],
+   "note": "Task2 全部臂为负（最好 −0.066），Task3 最好 +0.238，advance=false。",
+   "source": "test/04_representation_structure/65_hierarchical_cluster_decoding/development_results.json"
+  },
+  {
+   "id": "66",
+   "dir": "test/04_representation_structure/66_sub_bin_timing",
+   "title": "窗内 spike 时序",
+   "family": "representation",
+   "method": "25ms 计数+窗内平均偏移，对照同计数置换偏移",
+   "tasks": [
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "Task3 种子 20261126/27 开发折；baseline=shuffled 偏移，candidate=real 偏移",
+     "baseline": 14.927,
+     "candidate": 15.069,
+     "delta": 0.142,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "同上；baseline=仅计数，candidate=real 偏移",
+     "baseline": 15.578,
+     "candidate": 15.069,
+     "delta": -0.509,
+     "kind": "final"
+    }
+   ],
+   "note": "+0.14 远低于 +2 门槛，时间戳路线关闭。数值取自 HANDOFF。",
+   "source": "test/04_representation_structure/66_sub_bin_timing/development_results.json"
+  },
+  {
+   "id": "67",
+   "dir": "test/07_protocol_and_scoring/67_taskwise_best",
+   "title": "逐任务候选合并",
+   "family": "protocol",
+   "method": "在 evaluate_final 口径下对 v5 逐任务试 Sinkhorn/三视图",
+   "tasks": [
+    "T2",
+    "T3"
+   ],
+   "outcome": "negative",
+   "results": [
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "evaluate_final 固定 split，heldout；baseline=v5，candidate=Sinkhorn",
+     "baseline": 23.824141,
+     "candidate": 23.53324,
+     "delta": -0.290901,
+     "kind": "final"
+    },
+    {
+     "task": "T2",
+     "metric": "ocf",
+     "protocol": "同上 heldout；baseline=v5，candidate=三视图",
+     "baseline": 23.824141,
+     "candidate": 22.800674,
+     "delta": -1.023467,
+     "kind": "final"
+    },
+    {
+     "task": "T3",
+     "metric": "ocf",
+     "protocol": "同上 heldout；baseline=v5，candidate=三视图",
+     "baseline": 16.759832,
+     "candidate": 16.799157,
+     "delta": 0.039325,
+     "kind": "final"
+    }
+   ],
+   "note": "没有可合并的逐任务增益，v5 不变。",
+   "source": "test/07_protocol_and_scoring/67_taskwise_best/results_task2.json"
+  },
+  {
+   "id": "68",
+   "dir": "test/00_infra/68_repeat_split",
+   "title": "按 repeat 拆分数据",
+   "family": "infra",
+   "method": "按呈现顺序将每 session 拆为 4 个 repeat 单 trial 文件",
+   "tasks": [],
+   "outcome": "infra",
+   "results": [],
+   "note": "32 个文件、事件总数 38,100,565 与原始一致；无指标。",
+   "source": "test/00_infra/68_repeat_split/build.py"
+  }
+ ],
+ "production": [
+  {
+   "name": "v2",
+   "kaggle_public": null,
+   "note": "产物 test/90_submission/artifacts/mlp_encoding_directional_v2（MLP+encoding+directional 检索）；kaggle_scores.json 无该版本分数。"
+  },
+  {
+   "name": "v3",
+   "kaggle_public": 21.0959,
+   "note": "mlp_encoding_font_directional_v3：v2 基础上 Task1 改用 NotoSansSC 字体库；用户回报，未在线复核。"
+  },
+  {
+   "name": "v4",
+   "kaggle_public": null,
+   "note": "产物 mlp_encoding_task2_seed_ensemble_v4（Task2 三种子集成）；kaggle_scores.json 无该版本分数。"
+  },
+  {
+   "name": "v5",
+   "kaggle_public": 21.80563,
+   "heldout": {
+    "T1": 18.43706,
+    "T2": 23.824141,
+    "T3": 16.759832
+   },
+   "tune": {
+    "T1": 16.81193,
+    "T2": 25.007633,
+    "T3": 17.555726
+   },
+   "from_experiments": [
+    "04",
+    "05",
+    "06",
+    "09",
+    "11",
+    "15",
+    "18",
+    "31",
+    "32"
+   ],
+   "note": "mlp_encoding_task2_rerank_task3_soft_v5：MLP+session_norm+encoding 融合、三种子、Task2 OOF CNN reranker、Task3 softmax DCT 原型融合、Task1 字体 directional2 检索；用户回报 2026-11-25，未在线复核。"
+  }
+ ],
+ "ceilings": {
+  "T1": [
+   {
+    "label": "v5 final",
+    "value": 18.437
+   },
+   {
+    "label": "oracle@32",
+    "value": 33.018
+   },
+   {
+    "label": "错误候选上界",
+    "value": 42.67
+   },
+   {
+    "label": "字库完美检索上界",
+    "value": 79.42
+   }
+  ],
+  "T3_accuracy_model": {
+   "wrong_mean": 14.65,
+   "top1": 0.0176,
+   "target": 40
+  },
+  "T1_repeat_scaling": {
+   "repeats": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "ocf": [
+    16.15,
+    17.33,
+    17.79,
+    18.07
+   ]
+  }
+ }
+}

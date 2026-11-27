@@ -1,7 +1,11 @@
 """Build the self-contained SiClink visual report (Chinese) from public train data and local evaluation outputs.
 
-Usage: .venv\\Scripts\\python.exe -B test\\91_visual_report\\build_report.py [--device cuda]
+Usage: .venv\\Scripts\\python.exe -B test\\91_visual_report\\build_report.py [--device cuda] [--skip-predictions]
 Writes D:/WORK/siclink/siclink_visual_report.html. Hidden test targets are never read.
+
+To update after a new experiment: append/edit its entry in test/91_visual_report/roadmap.json
+(experiments / production / ceilings) and rerun. All roadmap charts in section E are derived from that file.
+Section C/D read v5 config and heldout caches; --skip-predictions skips the GPU re-scoring of section D.
 """
 
 import argparse
@@ -24,6 +28,7 @@ sys.path.insert(0, str(ROOT))
 
 DATASET = ROOT / "data" / "siclink-mouse-visual-reconstruction-bci-challenge" / "siclink_chinese_character_decoding_dataset"
 OUTPUT = ROOT / "siclink_visual_report.html"
+ROADMAP = Path(__file__).resolve().parent / "roadmap.json"
 LEADERBOARD = ROOT / "siclink-mouse-visual-reconstruction-bci-challenge-publicleaderboard-2026-11-23T14_53_20.csv"
 HELDOUT = {
     "task1": (ROOT / "test/.cache/evaluate_final_task1_v2/task1/heldout_final.npz",
@@ -391,124 +396,202 @@ def check_targets(pictures):
     return bad
 
 
-# ---------------------------------------------------------------- E. experiments
-EXPERIMENTS = [
-    # id, name, task, baseline, candidate, delta, pass, note
-    ("39", "Task3 噪声加权", "T3", 16.826837, 16.895366, None, False, "单一 holdout 小幅提升，需跨折复核"),
-    ("40", "日条件 CNN 读出", "T2", None, None, -0.807139, False, "四折平均 final 低 0.81，recall 下降"),
-    ("41", "三种子 CNN", "T2", None, None, None, False, "均值提高，但非 v5 对照，不接生产"),
-    ("42", "全库 CNN 融合", "T2", None, None, None, False, "两鼠 OCF 升，mice2 recall@32 182→174/512"),
-    ("43", "top32 内 CNN rerank", "T2", None, None, None, False, "mice1 升、mice2 降"),
-    ("44", "双候选像素混合", "T3", 16.759832, 16.819239, 0.059407, False, "8 组仅 4 组正，未达 ≥5 门槛"),
-    ("45", "计数 dropout", "T3", None, None, None, False, "mice2 recall@32 188→183/1024，按预注册停止"),
-    ("46", "共享预处理缓存", "—", None, None, None, None, "基础设施（25ms uint16 计数）"),
-    ("47", "train 单 trial 拟合检查", "—", None, None, None, None, "两鼠 100% 拟合，无泄露"),
-    ("48", "高容量无正则", "T2/T3", None, None, None, False, "成为后续固定比较器（T2 18.371881 / T3 15.695588）"),
-    ("49", "特征分位传输", "T2/T3", None, None, None, False, "未通过"),
-    ("50", "DCT16 cosine 全库头", "T2", 18.371881, 17.860802, -0.511079, False, "T3 +0.076"),
-    ("51", "分层 DCT-Ridge + Poisson", "T2", 18.371881, None, -0.667, False, "T3 −1.582，全负"),
-    ("52", "低秩相关噪声高斯", "T2", 18.371881, 16.697472, -1.674409, False, "T3 15.695588→13.368808 (−2.327)"),
-    ("53", "三分辨率 10/25/50ms 集成", "T2", 18.371881, 19.909159, 1.537278, False, "T3 +0.744；双鼠全折非负，但 macro 未达 +3"),
-    ("54", "Task3 推理策略诊断", "T3", None, None, 1.119, False, "探索性；mice1 −0.123 / mice2 +1.691"),
-    ("55", "Sinkhorn 软伪标签转导", "T2", 18.371881, 20.346, 1.975, False, "T3 +0.421（仅 1/2 折正）"),
-    ("56", "Task1 字库上界", "T1", None, 79.42, None, None, "完美检索上界 79.42；GT 查询 top1 80.10"),
-    ("57", "Task1 连续重建差距", "T1", None, None, None, None, "DCT32 R²≈0.47；gain=1.2 二值 +2.4"),
-    ("58", "错误候选上界", "T1/T3", None, 42.67, None, None, "排除自身 top1 = 42.67；全局平均字 4.20"),
-    ("59", "Task1 时间分辨率", "T1", 16.79, 16.03, -0.76, False, "10ms 16.03 < 25ms 16.79 < 50ms 16.93"),
-    ("60", "Task1 多任务", "T1", None, None, -0.04, False, "mice1 +0.23 / mice2 −0.32"),
-    ("61", "Task1 repeat 缩放", "T1", None, None, None, None, "1→4 repeat：16.15/17.33/17.79/18.07"),
-    ("62", "Task3 连续重建检索", "T3", 15.86, 15.43, -0.43, False, "DCT R²≈0.00"),
-    ("63", "v6 固定协议配对", "T2", 23.824141, 20.964633, -2.859508, False, "T3 −0.793607；三任务均值 −1.217705"),
-]
+# ---------------------------------------------------------------- E. roadmap (data-driven)
+OUTCOMES = {
+    "adopted": ("已进入生产", "#15803d"),
+    "positive": ("正增益未采纳", "#86efac"),
+    "negative": ("否定", "#dc2626"),
+    "diagnostic": ("诊断/上界", "#7c3aed"),
+    "infra": ("基础设施", "#94a3b8"),
+}
+TASKS = ("T1", "T2", "T3")
+TASK_NAMES = {"T1": "未见字重建（20 repeat）", "T2": "已见字跨日 session5（4 repeat）", "T3": "已见字单 trial"}
 
 
-def section_experiments():
-    def load_json(rel):
-        p = ROOT / rel
-        return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+def load_roadmap():
+    data = json.loads(ROADMAP.read_text(encoding="utf-8"))
+    fam = {f["key"] for f in data["families"]}
+    for e in data["experiments"]:
+        if e["family"] not in fam or e["outcome"] not in OUTCOMES:
+            raise ValueError(f"roadmap.json 实验 {e['id']} 的 family/outcome 非法")
+    data["experiments"].sort(key=lambda e: int(e["id"]))
+    return data
 
-    sources = {}
-    for d in sorted((ROOT / "test").glob("[3-6][0-9]_*")):
-        num = d.name.split("_")[0]
-        if 39 <= int(num) <= 63:
-            sources[num] = d.name
-    rows = []
-    for eid, name, task, base, cand, delta, ok, note in EXPERIMENTS:
-        if delta is None and base is not None and cand is not None:
-            delta = cand - base
-        status = {True: '<span class="pass">通过</span>', False: '<span class="fail">未通过</span>',
-                  None: '<span class="diag">诊断</span>'}[ok]
-        dtxt = "" if delta is None else (f'<span class="{"pos" if delta > 0 else "neg"}">{delta:+.3f}</span>')
-        rows.append([eid, esc(name), task, "" if base is None else f(base), "" if cand is None else f(cand), dtxt,
-                     status, esc(note), f"<code>{esc(sources.get(eid, ''))}</code>"])
 
-    chart = [(e[0], e[1], e[5] if e[5] is not None else (e[4] - e[3] if e[3] and e[4] else None), e[2])
-             for e in EXPERIMENTS if e[6] is False]
-    chart = [c for c in chart if c[2] is not None]
-    fig, ax = plt.subplots(figsize=(10, 3.2))
-    ax.bar([f"{c[0]}\n{c[3]}" for c in chart], [c[2] for c in chart],
-           color=[C3 if c[2] > 0 else "#dc2626" for c in chart])
-    ax.axhline(0, color="k", lw=0.8)
-    ax.axhline(3, color=CG, ls=":", lw=1)
-    ax.text(len(chart) - 0.5, 3.1, "+3 通过门槛（48–55 预注册）", ha="right", color=CG, fontsize=8)
-    ax.set_ylabel("Δ 本地 OCF")
-    ax.set_title("实验 39–63 相对各自基线的 Δ（基线不同，不可横向相加）")
-    delta_img = fig_to_img(fig, "实验 delta")
+def task_delta(e, t):
+    for r in e.get("results", []):
+        if r.get("task") == t and r.get("kind") == "final" and r.get("metric", "ocf") == "ocf":
+            d = r.get("delta")
+            if d is None and r.get("baseline") is not None and r.get("candidate") is not None:
+                d = r["candidate"] - r["baseline"]
+            if d is not None:
+                return d, r
+    return None, None
 
-    # ceilings
-    r63 = load_json("test/07_protocol_and_scoring/63_v6_fixed/results.json")
+
+def result_lines(e, task=None):
+    rows = [r for r in e.get("results", []) if task is None or r.get("task") == task]
+    return "".join(
+        f'<li>{esc(r.get("task", ""))} {esc(r.get("metric", "ocf"))} [{esc(r.get("kind", ""))}] '
+        + " → ".join(f(v) for v in (r.get("baseline"), r.get("candidate")) if v is not None)
+        + ("" if r.get("delta") is None else
+           f' <span class="{"pos" if r["delta"] > 0 else "neg"}">Δ{r["delta"]:+.3f}</span>')
+        + f'<br><span class="muted">{esc(r.get("protocol", ""))}</span></li>'
+        for r in rows)
+
+
+def outcome_dots(exps):
+    return "".join(f'<span class="chip o-{k}" title="{OUTCOMES[k][0]}">{n}</span>'
+                   for k in OUTCOMES if (n := sum(e["outcome"] == k for e in exps)))
+
+
+def roadmap_tree(data):
+    """Collapsible tree: task -> research direction -> experiment -> results/protocol."""
+    exps = data["experiments"]
+    roots = [(t, f"{t} · {TASK_NAMES[t]}", [e for e in exps if t in e.get("tasks", [])]) for t in TASKS]
+    roots.append(("通用", "通用 · 基础设施 / 协议 / 跨任务诊断", [e for e in exps if not e.get("tasks")]))
+    out = ['<div class="tree">']
+    for t, label, mine in roots:
+        adopted = [e for e in mine if e["outcome"] == "adopted"]
+        head = (f'<b>{esc(label)}</b> <span class="muted">{len(mine)} 项</span> {outcome_dots(mine)}'
+                + (f' <span class="muted">生产：{esc(", ".join(e["id"] for e in adopted))}</span>' if adopted else ""))
+        out.append(f'<details class="lv1" open><summary>{head}</summary>')
+        for fam in data["families"]:
+            sub = [e for e in mine if e["family"] == fam["key"]]
+            if not sub:
+                continue
+            deltas = [d for e in sub if (d := task_delta(e, t)[0] if t in TASKS else None) is not None]
+            best = f' <span class="muted">最大 Δ {max(deltas):+.2f}</span>' if deltas else ""
+            out.append(f'<details class="lv2"><summary>{esc(fam["label"])} <span class="muted">{len(sub)} 项</span> '
+                       f'{outcome_dots(sub)}{best}</summary>')
+            for e in sub:
+                d = task_delta(e, t)[0] if t in TASKS else None
+                dtxt = "" if d is None else f' <span class="{"pos" if d > 0 else "neg"}">{d:+.2f}</span>'
+                others = [x for x in e.get("tasks", []) if x != t]
+                also = f' <span class="muted">（亦涉及 {"/".join(others)}）</span>' if others else ""
+                out.append(
+                    f'<details class="lv3"><summary><span class="chip o-{e["outcome"]}">{OUTCOMES[e["outcome"]][0]}</span> '
+                    f'<b>{esc(e["id"])}</b> {esc(e["title"])}{dtxt}{also}</summary>'
+                    f'<div class="leaf"><div>{esc(e.get("method", ""))}</div>'
+                    f'<ul>{result_lines(e, t if t in TASKS else None)}</ul>'
+                    + (f'<div>{esc(e["note"])}</div>' if e.get("note") else "")
+                    + f'<div class="muted"><code>{esc(e.get("dir", ""))}</code></div></div></details>')
+            out.append("</details>")
+        out.append("</details>")
+    out.append("</div>")
+    return "".join(out)
+
+
+def roadmap_delta_chart(exps):
+    fig, axes = plt.subplots(1, 3, figsize=(12, 0.5 + 0.2 * max(
+        sum(task_delta(e, t)[0] is not None for e in exps) for t in TASKS)), sharex=False)
+    for ax, t in zip(axes, TASKS):
+        rows = [(e, task_delta(e, t)[0]) for e in exps if task_delta(e, t)[0] is not None]
+        y = np.arange(len(rows))[::-1]
+        ax.barh(y, [d for _, d in rows], color=[OUTCOMES[e["outcome"]][1] for e, _ in rows])
+        ax.set_yticks(y)
+        ax.set_yticklabels([f"{e['id']} {e['title']}" for e, _ in rows], fontsize=7)
+        ax.axvline(0, color="k", lw=0.8)
+        for yy, (_, d) in zip(y, rows):
+            ax.text(d, yy, f" {d:+.2f} ", va="center", ha="left" if d >= 0 else "right", fontsize=6.5)
+        ax.set_title(f"{t}：各实验 Δ 本地 OCF（{len(rows)} 项）")
+        ax.margins(x=0.25)
+    handles = [plt.Rectangle((0, 0), 1, 1, color=c) for _, c in OUTCOMES.values()]
+    fig.legend(handles, [n for n, _ in OUTCOMES.values()], loc="lower center", ncol=5, fontsize=8,
+               bbox_to_anchor=(0.5, -0.02))
+    fig.tight_layout(rect=(0, 0.03, 1, 1))
+    return fig_to_img(fig, "各任务实验增益")
+
+
+def roadmap_production_chart(prod):
+    rows = [p for p in prod if p.get("kaggle_public") is not None]
+    held = [p for p in prod if p.get("heldout")]
+    fig, axes = plt.subplots(1, 2, figsize=(11, 3.0))
+    ax = axes[0]
+    ax.plot([p["name"] for p in rows], [p["kaggle_public"] for p in rows], "o-", color=C1)
+    for p in rows:
+        ax.annotate(f"{p['kaggle_public']:.3f}", (p["name"], p["kaggle_public"]), (0, 6),
+                    textcoords="offset points", ha="center", fontsize=8)
+    ax.set_title("Kaggle Public OCF 演进（用户回报）")
+    ax = axes[1]
+    x = np.arange(len(TASKS))
+    width = 0.8 / max(1, len(held))
+    for k, p in enumerate(held):
+        ax.bar(x + k * width - 0.4 + width / 2, [p["heldout"].get(t) or 0 for t in TASKS], width, label=p["name"])
+    ax.set_xticks(x)
+    ax.set_xticklabels(TASKS)
+    ax.set_title("固定公开 heldout final（本地 OCF）")
+    ax.legend(fontsize=8)
+    return fig_to_img(fig, "生产版本演进")
+
+
+def roadmap_ceiling_chart(ceil):
     fig, axes = plt.subplots(1, 3, figsize=(11, 3.3))
     ax = axes[0]
-    names = ["v5 final", "oracle@32", "错误候选\n上界", "字库完美\n检索上界"]
-    vals = [18.437, 33.018, 42.67, 79.42]
-    ax.bar(names, vals, color=[C1, "#93c5fd", "#a78bfa", "#dc2626"])
-    for i, v in enumerate(vals):
-        ax.text(i, v + 1, f"{v:.2f}", ha="center", fontsize=8)
-    ax.set_title("Task1 上界（R²≈0.47；41.67×R²≈20）")
+    items = ceil["T1"]
+    ax.bar([i["label"] for i in items], [i["value"] for i in items], color=[C1, "#93c5fd", "#a78bfa", "#dc2626"][:len(items)])
+    for k, i in enumerate(items):
+        ax.text(k, i["value"] + 1, f"{i['value']:.2f}", ha="center", fontsize=8)
+    ax.set_xticks(range(len(items)))
+    ax.set_xticklabels([i["label"] for i in items], rotation=25, ha="right", fontsize=7)
+    ax.set_title("Task1 上界")
     ax.set_ylabel("本地 OCF")
     ax = axes[1]
+    m = ceil["T3_accuracy_model"]
+    w, p0, target = m["wrong_mean"], m["top1"], m["target"]
     p = np.linspace(0, 0.5, 200)
-    ax.plot(p * 100, 100 * p + 14.65 * (1 - p), color=C3)
-    ax.scatter([1.76], [100 * 0.0176 + 14.65 * (1 - 0.0176)], color="k", zorder=3)
-    ax.annotate("当前 top1 1.76% → ≈16.2", (1.76, 16.2), (8, 12), fontsize=8, arrowprops={"arrowstyle": "->"})
-    ax.axhline(40, color="#dc2626", ls="--", lw=1)
-    ax.axvline(29.7, color="#dc2626", ls=":", lw=1)
-    ax.text(31, 42, "40 分需 p≈30%", color="#dc2626", fontsize=8)
+    ax.plot(p * 100, 100 * p + w * (1 - p), color=C3)
+    ax.scatter([p0 * 100], [100 * p0 + w * (1 - p0)], color="k", zorder=3)
+    need = (target - w) / (100 - w)
+    ax.axhline(target, color="#dc2626", ls="--", lw=1)
+    ax.axvline(need * 100, color="#dc2626", ls=":", lw=1)
+    ax.text(need * 100 + 1, target + 2, f"{target} 分需 p≈{need * 100:.0f}%", color="#dc2626", fontsize=8)
+    ax.annotate(f"当前 top1 {p0 * 100:.2f}%", (p0 * 100, 100 * p0 + w * (1 - p0)), (25, 35), textcoords="offset points", fontsize=8,
+                arrowprops={"arrowstyle": "->"})
     ax.set_xlabel("top1 准确率 p (%)")
-    ax.set_ylabel("final OCF")
-    ax.set_title("Task3：final ≈ 100p + 14.65(1−p)")
+    ax.set_title(f"Task3：final ≈ 100p + {w}(1−p)")
     ax = axes[2]
-    reps = [1, 2, 3, 4]
-    vals = [16.15, 17.33, 17.79, 18.07]
+    reps, vals = ceil["T1_repeat_scaling"]["repeats"], ceil["T1_repeat_scaling"]["ocf"]
     ax.plot(reps, vals, "o-", color=C1, label="实测")
-    xs = np.linspace(1, 20, 100)
     a, b = np.polyfit(1 / np.sqrt(reps), vals, 1)
+    xs = np.linspace(1, 20, 100)
     ax.plot(xs, a / np.sqrt(xs) + b, ":", color=CG, label="a/√n + b 外推")
-    ax.scatter([20], [a / np.sqrt(20) + b], color=CG)
     ax.text(20, a / np.sqrt(20) + b - 0.4, f"{a / np.sqrt(20) + b:.2f}", ha="right", fontsize=8)
     ax.set_xlabel("repeat 数")
-    ax.set_title("Task1 repeat 缩放（实验 61）")
+    ax.set_title("Task1 repeat 缩放")
     ax.legend(fontsize=7)
-    ceil_img = fig_to_img(fig, "上界分析")
-    v6_note = ""
-    if r63:
-        v6_note = "<p class='muted'>实验 63 结果文件 <code>test/07_protocol_and_scoring/63_v6_fixed/results.json</code> 存在，表中数值与 HANDOFF 6.2 一致。</p>"
+    return fig_to_img(fig, "上界分析")
 
+
+def section_roadmap():
+    data = load_roadmap()
+    exps = data["experiments"]
+    counts = {k: sum(e["outcome"] == k for e in exps) for k in OUTCOMES}
+    legend = "".join(f'<span class="chip o-{k}">{n}：{counts[k]}</span>' for k, (n, _) in OUTCOMES.items())
+    summary = []
+    for t in TASKS:
+        mine = [e for e in exps if t in e.get("tasks", [])]
+        best = max(((task_delta(e, t)[0], e) for e in mine if task_delta(e, t)[0] is not None),
+                   key=lambda x: x[0], default=(None, None))
+        adopted = [e["id"] for e in mine if e["outcome"] == "adopted"]
+        summary.append([t, len(mine), sum(e["outcome"] == "negative" for e in mine), esc(", ".join(adopted) or "—"),
+                        "—" if best[1] is None else f"{best[1]['id']} {esc(best[1]['title'])}（{best[0]:+.3f}）"])
     return f"""
-<section id="sec-e"><h2>E. 实验演进（39–63）</h2>
-<p>数据来源：HANDOFF.md 第 6–6.2 节，以及对应目录下的 results / selection / exploratory_results JSON。不同实验基线不同（v5 heldout、实验 48 开发配方、单视图等），Δ 只在同一行内有意义。</p>
-<div class="warn">全部为本地公开数据 OCF，不是 Kaggle 分数；heldout 已复用。实验 39–63 均未修改 v5 生产提交。</div>
-{delta_img}
-{table(["#", "实验", "任务", "基线", "候选", "Δ", "结论", "备注", "目录"], rows, "small")}
-{v6_note}
-<h3>E.1 上界分析</h3>{ceil_img}
-<div class="cols3">
-<div class="card"><b>Task1</b><p>字库与检索不是瓶颈：完美检索上界 79.42，GT 查询 top1 80.10。错误但最相似的候选也有 42.67。
-DCT32 回归 R²≈0.47，预测系数范数只有 GT 的 68%；41.67×R² ≈ 20，接近实测 18.44。更细时间 bin、多任务都没有改善。</p></div>
-<div class="card"><b>Task2/3</b><p>预测来自库内字图，正确即 100。Task3 top1 1.76%，错误时均值 14.65。要到 40 分需 p≈30%（约 17 倍）。
-Task2 4-repeat top1 约 4.1%，按 √SNR 估计单 trial 达 30% 约需 290 repeat。</p></div>
-<div class="card"><b>repeat 缩放</b><p>1→4 repeat：16.15 → 17.33 → 17.79 → 18.07，收益递减；按 1/√n 外推到 20 repeat 只多约 0.5，
-所以 Kaggle Task1 不应显著高于本地 18.44。</p></div></div>
+<section id="sec-e"><h2>E. 实验探索路线图（00–{exps[-1]['id']}）</h2>
+<p class="muted">数据唯一来源：<code>test/91_visual_report/roadmap.json</code>（更新于 {esc(data.get('updated', ''))}）。
+新实验完成后在其中追加一条记录，再运行 <code>build_report.py --skip-predictions</code>（或完整运行）即可刷新本节全部图表。</p>
+<div class="warn">全部为本地公开数据 OCF，不是 Kaggle 分数；不同实验基线与协议不同，Δ 只在同一实验内有意义，不可横向相加。</div>
+<div>{legend}</div>
+<h3>E.1 各任务概览</h3>
+{table(["任务", "涉及实验", "否定", "进入生产的实验", "单项最大 Δ"], summary)}
+<h3>E.2 探索树：任务 → 方向 → 实验</h3>
+<p class="muted">点击节点折叠/展开；节点后的色块为各结论的实验数，数字为该任务下的 Δ 本地 OCF。跨任务实验在每个相关任务下各出现一次。
+<button onclick="document.querySelectorAll('.tree details').forEach(d=>d.open=true)">全部展开</button>
+<button onclick="document.querySelectorAll('.tree details.lv2,.tree details.lv3').forEach(d=>d.open=false)">折叠到任务</button></p>
+{roadmap_tree(data)}
+<h3>E.3 各任务实验增益</h3>{roadmap_delta_chart(exps)}
+<h3>E.4 生产版本演进</h3>{roadmap_production_chart(data["production"])}
+<h3>E.5 上界分析</h3>{roadmap_ceiling_chart(data["ceilings"])}
 </section>"""
 
 
@@ -537,6 +620,13 @@ th{background:#f1f5f9;position:sticky;top:0}table.small{font-size:12px}
 .formula{font-size:17px;text-align:center;font-weight:700;margin:10px 0}
 .pass{color:#16a34a;font-weight:700}.fail{color:#dc2626;font-weight:700}.diag{color:#7c3aed;font-weight:700}.pos{color:#16a34a}.neg{color:#dc2626}
 details summary{cursor:pointer;color:var(--acc);margin:8px 0}
+.chip{display:inline-block;border-radius:6px;padding:1px 6px;margin:2px;font-size:12px;border:1px solid transparent;cursor:default}
+.o-adopted{background:#15803d;color:#fff;box-shadow:0 0 0 2px #0f172a inset}.o-positive{background:#dcfce7;border-color:#86efac}
+.o-negative{background:#fee2e2;border-color:#fca5a5}.o-diagnostic{background:#ede9fe;border-color:#c4b5fd}.o-infra{background:#f1f5f9;border-color:#cbd5e1}
+.tree details{margin:2px 0}.tree summary{color:var(--fg,#0f172a);padding:3px 4px;border-radius:6px}.tree summary:hover{background:#f1f5f9}
+.tree .lv1{border:1px solid var(--line);border-radius:10px;padding:4px 8px;margin:8px 0}.tree .lv1>summary{font-size:15px}
+.tree .lv2,.tree .lv3{margin-left:18px;border-left:2px solid var(--line);padding-left:10px}
+.tree .leaf{margin:4px 0 8px 18px;font-size:13px}.tree .leaf ul{margin:4px 0;padding-left:18px}
 @media (max-width:900px){.wrap{grid-template-columns:1fr}nav{position:static}.cols,.cols3{grid-template-columns:1fr}}
 """
 
@@ -544,6 +634,7 @@ details summary{cursor:pointer;color:var(--acc);margin:8px 0}
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", default=None)
+    parser.add_argument("--skip-predictions", action="store_true", help="omit section D (no GPU re-scoring)")
     args = parser.parse_args()
     import torch
 
@@ -559,22 +650,24 @@ def main():
     sec_a = section_dataset(pictures)
     sec_b = section_tasks()
     sec_c = section_v5(config, kaggle, task_results)
-    bad = check_targets(pictures)
-    if bad:
+    bad = [] if args.skip_predictions else check_targets(pictures)
+    if args.skip_predictions:
+        sec_d, reason = None, "--skip-predictions"
+    elif bad:
         sec_d, reason = None, f"targets 与 pictures[target_indices] 不一致：{bad}"
     else:
         sec_d, reason = section_predictions(device, task_results)
     if sec_d is None:
-        sec_d = f'<section id="sec-d"><h2>D. 真实预测示例</h2><div class="warn">已省略：对齐校验未通过（{esc(reason)}）。</div></section>'
+        sec_d = f'<section id="sec-d"><h2>D. 真实预测示例</h2><div class="warn">已省略（{esc(reason)}）。</div></section>'
         print("section D omitted:", reason)
-    sec_e = section_experiments()
+    sec_e = section_roadmap()
 
     nav = """<nav><b>目录</b>
 <a href="#sec-a">A. 数据集</a><a class="sub" href="#sec-a">层级 / 分块 / raster / PSTH</a>
 <a href="#sec-b">B. 三个任务与 OCF</a>
 <a href="#sec-c">C. v5 方案与成绩</a><a class="sub" href="#sec-c">pipeline / Kaggle / heldout / 按鼠</a>
 <a href="#sec-d">D. 真实预测示例</a>
-<a href="#sec-e">E. 实验演进与上界</a></nav>"""
+<a href="#sec-e">E. 实验探索路线图</a><a class="sub" href="#sec-e">探索树 / 增益 / 版本 / 上界</a></nav>"""
     doc = f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>SiClink 小鼠视觉重建 BCI：技术复盘可视化报告</title>
 <style>{CSS}</style></head><body><div class="wrap">{nav}<main>
