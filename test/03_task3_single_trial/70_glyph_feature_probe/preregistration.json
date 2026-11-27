@@ -1,0 +1,68 @@
+{
+  "experiment": "70_glyph_feature_probe",
+  "freeze_revision": 1,
+  "date": "2026-11-27",
+  "status": "preregistered_before_any_training_or_metric",
+  "purpose": "Go/no-go probe for the hypothesis that glyph features (global ink statistics, local 4x4 block ink, low-frequency DCT) are linearly or MLP-decodable from a single 50 ms-binned trial, so that glyph-feature -> EEG association could drive Task 3 reconstruction.",
+  "scope": "Only test/03_task3_single_trial/70_glyph_feature_probe may be created or modified. src/ is read-only. No production config, submission, or other experiment is touched.",
+  "data": {
+    "eeg": "public train only: data/siclink-mouse-visual-reconstruction-bci-challenge/.../train/{mice1,mice2}/session{1..4}.npz",
+    "repeat_labels": "data/derived/repeat_split_v1 (repeat index = per-character presentation order, verified against source_trial_index, target and sample_ids)",
+    "images": "test/.cache/shared_preprocessing_v1/pictures.npy, 2748 public train glyphs, binarised at >=128",
+    "bin_ms": 50,
+    "hidden_test_used": false,
+    "test_labels_used": false
+  },
+  "folds": {
+    "rule": "leave-one-presentation-ordinal-out, k=1..4, identical to experiment 69; per mouse, all four sessions pooled for training with per-session normalisation fitted only on the three training repeats",
+    "train_rows_per_mouse_fold": 32976,
+    "held_rows_per_mouse_fold": 10992,
+    "held_rows_total": 87936
+  },
+  "features": {
+    "count": 40,
+    "global_8": ["ink_ratio", "edge_density", "centroid_x", "centroid_y", "variance_x", "variance_y", "log_elongation", "horizontal_symmetry_iou"],
+    "local_16": "ink ratio of each of the 16 cells of a 4x4 grid",
+    "dct_16": "the 4x4 lowest-frequency 2-D DCT coefficients (orthonormal)",
+    "standardisation": "every feature is z-scored over the 2748-image public library; the same statistics are applied to predictions and to the library bank"
+  },
+  "decoders": {
+    "ridge": "closed form, per-session z-scored inputs; alpha fixed per fold by an inner split inside the three training repeats (train on two, validate on the third), grid [1e1,1e2,1e3,1e4,1e5,1e6], objective = mean R2 over the 40 features",
+    "mlp": "src.neural.SpikeClassifier trunk reused as a 40-output regressor (hidden 1024, dropout 0, apply_log False, MSE loss, AdamW lr 3e-4, weight decay 0, batch 256, gradient clip 5, seed 42), fixed 10 epochs, no early stopping on held data",
+    "null": "ridge refit per mouse/fold with training feature rows permuted across characters (one replicate), used as the no-relation floor"
+  },
+  "metrics": {
+    "r2": "1 - SSE / SST, SST taken about the training-set mean of the held rows",
+    "spearman": "per-feature Spearman across the 10992 held rows",
+    "top1": "held argmax identity accuracy before and after whole-block assignment"
+  },
+  "ocf_readouts": {
+    "scope": "fold k=4 only (first three presentations -> fourth presentation), which is the only strictly forward fold",
+    "feature_nn": "nearest library glyph by Euclidean distance in the 40-d z-scored feature space, negative distance as score",
+    "template_nn": "per-session class-mean EEG template cosine similarity, same architecture-free linear reference",
+    "assignment": "src.retrieval.unique_assignment over each full 2748-trial mouse x session block before picture subsetting",
+    "subset": "RNG123 permutation of 2748 pictures, [256:768], the established public heldout images",
+    "metric": "official OCF via src.evaluation.score_predictions"
+  },
+  "secondary_arm": {
+    "name": "four_repeat_average",
+    "rule": "average the four presentations of each character within each session, 5-fold cross-validation by character index modulo 5, ridge only",
+    "purpose": "estimates how feature predictability grows when single-trial noise is averaged down; exploratory, not part of the pass rule"
+  },
+  "pass_rule": {
+    "go": "in both mice, at least 4 of the 8 global features have median held-out R2 > 0.02 across the four folds, median Spearman > 0.10, and median R2 above the 99th percentile of the permutation null",
+    "no_go": "otherwise the glyph-feature association route is closed for Task 3 single trial",
+    "ocf_rule": "if feature-NN OCF is more than 1.0 point below template-NN OCF on fold 4, reconstruction-then-retrieval is rejected for Task 3 even if the R2 rule passes"
+  },
+  "prohibited": [
+    "hidden test data or targets",
+    "image-index or sample-ID alignment priors",
+    "selecting features, folds, epochs, or alpha on the held fold or on the heldout picture subset",
+    "reporting training-set fit as generalisation"
+  ],
+  "outputs": {
+    "run": "test/03_task3_single_trial/70_glyph_feature_probe/run.py",
+    "preregistration": "test/03_task3_single_trial/70_glyph_feature_probe/preregistration.json",
+    "results": "test/03_task3_single_trial/70_glyph_feature_probe/results.json"
+  }
+}
