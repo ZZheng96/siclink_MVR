@@ -24,7 +24,7 @@ sys.path.insert(0, str(ROOT))
 from src.dataloader import load_catalog
 
 DATA = ROOT / "data/siclink-mouse-visual-reconstruction-bci-challenge/siclink_chinese_character_decoding_dataset"
-DEFAULT_OUTPUT = ROOT / "test/.cache/repeat_split_v1"
+DEFAULT_OUTPUT = ROOT / "data/derived/repeat_split_v1"
 REPEATS = 4
 
 
