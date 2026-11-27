@@ -1,6 +1,6 @@
 # SiClink 新对话交接
 
-更新日期：2026-11-26。工作区：`D:/WORK/siclink`，Windows / PowerShell 5，Python：`.venv/Scripts/python.exe`。
+更新日期：2026-11-27。工作区：`D:/WORK/siclink`，Windows / PowerShell 5，Python：`.venv/Scripts/python.exe`。
 
 ## 1. 当前目标与硬边界
 
@@ -57,6 +57,16 @@
 - `test/.cache/` 路径不变（`shared_preprocessing_v1`、`evaluate_final_*`），避免破坏已写死的缓存路径；它是缓存区，不是实验目录。
 - 移动后分组内脚本的仓库根由 `parents[2]` 改为 `parents[3]`；`90_submission`、`91_visual_report`、`92_viewer` 仍在顶层，继续使用 `parents[2]`。脚本内硬编码的 `test/<实验>` 路径已同步改写；82 个脚本全部通过 `py_compile`，`collect_results.py` 已重新生成 `results_summary.json`（320 条记录）。
 - `90_submission/artifacts/*/png/` 已删除（约 12 万张可再生的提交 PNG），保留 `kaggle_submission.zip`、`submission_png.zip` 与 JSON 清单。
+
+### 3.2 派生数据目录
+
+`data/derived/repeat_split_v1/`（`data/*` 被 `.gitignore` 排除，仅脚本入库）：
+
+- `mice{1,2}/session{1..4}_repeat{1..4}.npz`，共 32 个文件、约 320 MB；
+- 重复序号按每字在该 session 内的**呈现时间顺序**编号，所以 `repeat k` 是每个字第 k 次被看到的单 trial 记录；
+- 每个文件 2,748 个样本、每字恰好一次；schema 与官方块一致（`sample_ids, group_ptr, trial_ptr, spike_samples, unit_index, target`）外加 `repeat_index`、`source_trial_index`；
+- 4 个 repeat 文件的事件数之和等于原 session 总量（全部 38,100,565 个事件），抽查事件与 `target` 逐元素一致；
+- 构建脚本：`test/00_infra/68_repeat_split/build.py`。
 
 常用命令：
 
@@ -187,7 +197,7 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 ## 8. Git 与当前运行状态
 
-- 最近结果提交：**`41431b3 tools: store repeat split under data/derived`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`；`test/` 分组整理为后续一次提交。
+- 最近提交：**`7fc8587 chore: renumber test groups 00-07 and keep delivery folders at top level`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。前序：`f49f61c`（`test/` 分组整理与清理）、`41431b3`（repeat split 移到 `data/derived`）、`202eb41`（实验 66 否定窗内时序）、`107efb3`（实验 67 逐任务配对）。
 - 实验 63：`1918cee`；实验 62：`b77b11a`；实验 61：`7f61925`；实验 60：`2f5676a`；实验 59：`ecae7fb`；实验 58：`a85b915`；实验 57：`4be8f17`；实验 56：`a57df61`；实验 55：`bb65d8d` / `dbd6c11`；实验 54：`7a1e4bf`；实验 53：`f1baae7` / `a591bcc`。
 - 本交接文档创建前工作树干净，实验 44、45 的后台 agent 均已结束。没有待处理的模型训练或自动 Kaggle 提交。
 - 新对话开始后先运行 `git status --short`、`git log -3 --oneline`，并检查是否有新增后台任务；以磁盘实际状态为准。
