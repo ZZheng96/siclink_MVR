@@ -1,0 +1,59 @@
+{
+  "experiment": "80_multiseed_under_assignment_noise",
+  "protocol": {
+    "rule": "make_split seed42; RNG123 all-picture permutation: first256 tune, next512 heldout; Task2 holds out session4 and Task3 holds out one trial per picture",
+    "picture_seed": 123,
+    "split_seed": 42
+  },
+  "draws": 6,
+  "arms": {
+    "base": {
+      "canonical_mean": 16.7598316835003,
+      "neutral_mean": 16.738179957235992,
+      "per_session_neutral": {
+        "mice1/session1": 17.048692037296146,
+        "mice1/session2": 18.994184554548756,
+        "mice1/session3": 16.48842854684669,
+        "mice1/session4": 17.464262745754553,
+        "mice2/session1": 15.781219884371465,
+        "mice2/session2": 15.462917380607133,
+        "mice2/session3": 16.812754192644785,
+        "mice2/session4": 15.852980315818414
+      }
+    },
+    "seed3": {
+      "canonical_mean": 17.459413611006568,
+      "neutral_mean": 17.294313184436994,
+      "per_session_neutral": {
+        "mice1/session1": 18.2464502560011,
+        "mice1/session2": 19.253854810119705,
+        "mice1/session3": 17.883193082575172,
+        "mice1/session4": 18.545760939046474,
+        "mice2/session1": 15.807422398739506,
+        "mice2/session2": 15.684323210983257,
+        "mice2/session3": 16.782969806274817,
+        "mice2/session4": 16.150530971755924
+      }
+    }
+  },
+  "paired": {
+    "per_session": {
+      "mice1/session1": 1.197758218704955,
+      "mice1/session2": 0.25967025557094914,
+      "mice1/session3": 1.3947645357284806,
+      "mice1/session4": 1.081498193291921,
+      "mice2/session1": 0.026202514368041108,
+      "mice2/session2": 0.22140583037612416,
+      "mice2/session3": -0.029784386369968274,
+      "mice2/session4": 0.29755065593750984
+    },
+    "mean": 0.5561332272010016,
+    "positive_blocks": 7,
+    "canonical_delta": 0.6995819275062694,
+    "neutral_delta": 0.556133227201002
+  },
+  "pass_rule": {
+    "base_reproduces_recorded": true,
+    "retain": true
+  }
+}

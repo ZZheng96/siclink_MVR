@@ -1,0 +1,20 @@
+{
+  "experiment": "80_multiseed_under_assignment_noise",
+  "freeze_revision": 1,
+  "date": "2026-11-27",
+  "status": "preregistered_before_any_scoring",
+  "purpose": "Re-evaluate the adopted three-seed Task 3 decision under a scoring convention that is neutral to the assignment arbitrariness measured in experiment 79.",
+  "scope": "Only test/03_task3_single_trial/80_multiseed_under_assignment_noise. Models are reloaded read-only from experiment 75 artifacts.",
+  "protocol": {
+    "models": "experiment 75 cached checkpoints, arms base (seed 42) and seed3 (42/202/777)",
+    "scoring": "recompute the production Task 3 score (mlp + encoding + softmax-DCT, equal row-z) from src.final helpers, then verify the base arm reproduces the recorded heldout OCF 16.759832 within 1e-6",
+    "partition": "evaluate_final public_protocol, heldout pictures RNG123 [256:768]",
+    "noise_neutral_ocf": "average official OCF over 6 per-row positive weight draws U(0.6, 1.6), the SAME draws applied to both arms so the comparison is paired",
+    "reported": ["canonical OCF per arm", "noise-neutral OCF per arm", "paired difference per draw", "per-session paired difference"]
+  },
+  "pass_rule": {
+    "retain_decision": "mean paired difference (seed3 minus base) over the 6 draws is at least +0.30 AND positive in at least 6 of 8 mouse x session blocks",
+    "otherwise": "the earlier +0.70 is judged not separable from assignment noise and the Task 3 multi-seed adoption is withdrawn"
+  },
+  "prohibited": ["hidden test data", "choosing a favourable draw", "retraining or changing any checkpoint"]
+}
