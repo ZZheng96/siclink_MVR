@@ -23,10 +23,10 @@
 | v5 相对 v3 | **+0.70973** |
 | 本地榜首快照 | 54.01486；不等于 Private 榜 |
 | v5 距榜首快照 | **32.20923** |
-| v5 提交包 | `test/90_submission/artifacts/mlp_encoding_task2_rerank_task3_soft_v5/kaggle_submission.zip` |
+| v5 提交包 | `test/90_deliverables/90_submission/artifacts/mlp_encoding_task2_rerank_task3_soft_v5/kaggle_submission.zip` |
 | 压缩包 SHA256 | `2311a23d3423fc77ab6814d121a06df280dfc480e59b695a47d4d05e406e03c9` |
 
-真实分数和用户回报记录位于 `test/90_submission/kaggle_scores.json`。v5 同时改变 Task 2 reranker 和 Task 3 soft 融合，**不能把 +0.70973 单独归因于某任务**。不要用两个提交点拟合本地→Kaggle 的线性映射或固定比例。
+真实分数和用户回报记录位于 `test/90_deliverables/90_submission/kaggle_scores.json`。v5 同时改变 Task 2 reranker 和 Task 3 soft 融合，**不能把 +0.70973 单独归因于某任务**。不要用两个提交点拟合本地→Kaggle 的线性映射或固定比例。
 
 ## 3. 代码与评估入口
 
@@ -37,6 +37,26 @@
 - `test/collect_results.py`：按任务、协议、鼠/日分组汇总 final 与 oracle，区分未评估 heldout 和历史结果；不要把跨协议最佳值拼成虚拟提交分。
 - `test/results_summary.json`：当前机器可读汇总，含 `comparable_to_hidden_leaderboard=false` 和协议警告。
 - `test/.cache/evaluate_final_task23_v1/`：本地公开评估模型缓存，通常不入 Git；缓存不应被误当作 v5 全量测试模型。
+
+### 3.1 test 目录结构（2026-11-27 整理）
+
+`test/` 顶层只保留 9 个按技术方向分组的目录、3 个共享脚本和 `results_summary.json`；历史实验目录整体移入分组，实验编号与目录名不变。
+
+| 分组 | 内容 |
+|---|---|
+| `00_infra/` | 00_sanity、46_shared_preprocessing、68_repeat_split（按呈现次数拆分数据） |
+| `10_task1_reconstruction/` | 01、05、10、11、14、15、20、21、33、37、56、57、59、60、61（Task1 重建/字体/检索/损失） |
+| `20_task2_cross_day/` | 02、03、04、06、08、09、19、31、34、42、43、47（Task2 跨日与 reranker） |
+| `30_task3_single_trial/` | 22、32、36、38、44、45、54、58、62（Task3 单 trial、融合、诊断） |
+| `40_representation_structure/` | 35、50、51、52、64、65、66（对比学习、字形结构、族聚类、窗内时序） |
+| `50_model_architecture/` | 07、17、24、26、27、28、40、41（DDPM、CNN、attention、layout teacher） |
+| `60_fusion_transduction/` | 12、13、16、18、23、30、39、48、49、53、55（集成、转导、结构重排） |
+| `70_protocol_and_scoring/` | 25、29、63、67（留日轮换、固定协议评分、逐任务候选） |
+| `90_deliverables/` | 90_submission、91_visual_report、92_viewer |
+
+- `test/.cache/` 路径不变（`shared_preprocessing_v1`、`evaluate_final_*`），避免破坏已写死的缓存路径；它是缓存区，不是实验目录。
+- 移动后历史脚本的仓库根由 `parents[2]` 改为 `parents[3]`，脚本内部硬编码的 `test/<实验>` 路径已同步改写；82 个脚本全部通过 `py_compile`，`collect_results.py` 已重新生成 `results_summary.json`（320 条记录）。
+- `90_deliverables/90_submission/artifacts/*/png/` 已删除（约 12 万张可再生的提交 PNG），保留 `kaggle_submission.zip`、`submission_png.zip` 与 JSON 清单。
 
 常用命令：
 
@@ -163,9 +183,11 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 **修正（实验 63）**：上述 2 的三视图融合已按该要求做过固定协议 paired 对比，Task2/3 均低于完整 v5（−2.86 / −0.79），所以“直接接入生产”不再成立。1 尚未做过同样的 paired 对比；其 +1.975 也是相对实验 48 开发配方，而不是相对含编码分支与 reranker 的 v5。
 
+**修正（实验 67）**：1 已按 `evaluate_final` 口径在完整 v5 上补齐配对：Task2 Sinkhorn tune +0.411 / heldout **−0.291**，Task2 三视图 heldout −1.02，Task3 Sinkhorn heldout −0.040，Task3 三视图 heldout **+0.039**。按 tune 选优的三任务均分 19.5898，低于 v5 的 19.6737；只保留 Task3 三视图为 19.6868（+0.013，噪声）。**当前没有可合并的逐任务增益**，第 7 节的 1、2 两条不再构成待办。详见 `test/70_protocol_and_scoring/67_taskwise_best/`。
+
 ## 8. Git 与当前运行状态
 
-- 最近结果提交：**`098dcac docs: record raw train spike timestamp audit`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`。
+- 最近结果提交：**`41431b3 tools: store repeat split under data/derived`**，已通过 SSH 推送 `github.com:ZZheng96/siclink_MVR.git` 的 `main`；`test/` 分组整理为后续一次提交。
 - 实验 63：`1918cee`；实验 62：`b77b11a`；实验 61：`7f61925`；实验 60：`2f5676a`；实验 59：`ecae7fb`；实验 58：`a85b915`；实验 57：`4be8f17`；实验 56：`a57df61`；实验 55：`bb65d8d` / `dbd6c11`；实验 54：`7a1e4bf`；实验 53：`f1baae7` / `a591bcc`。
 - 本交接文档创建前工作树干净，实验 44、45 的后台 agent 均已结束。没有待处理的模型训练或自动 Kaggle 提交。
 - 新对话开始后先运行 `git status --short`、`git log -3 --oneline`，并检查是否有新增后台任务；以磁盘实际状态为准。
