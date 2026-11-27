@@ -423,7 +423,7 @@ def main():
             warnings.append(f"{path.relative_to(ROOT).as_posix()}: no supported task-level local OCF metrics; excluded from rankings.")
 
     summary = build_summary(records, warnings)
-    kaggle_path = TEST / "90_deliverables/90_submission/kaggle_scores.json"
+    kaggle_path = TEST / "90_submission/kaggle_scores.json"
     kaggle_scores = json.loads(kaggle_path.read_text(encoding="utf-8")) if kaggle_path.exists() else []
     best_kaggle = max((row["score"] for row in kaggle_scores), default=None)
     output = {
@@ -434,7 +434,7 @@ def main():
         "gap_to_rank_1_actual": None if best_kaggle is None else 54.01486 - best_kaggle,
         "score_sources": {
             "local": "summary contains only local OCF/top1 on public data; local OCF is not a Kaggle score.",
-            "kaggle": "kaggle_scores is copied verbatim from test/90_deliverables/90_submission/kaggle_scores.json; no local value is substituted.",
+            "kaggle": "kaggle_scores is copied verbatim from test/90_submission/kaggle_scores.json; no local value is substituted.",
             "ranking": "Best methods are ranked only within task + protocol + group + role. Tune is used when available; heldout-only groups are explicitly marked selection_split=heldout. Local scores are never mixed with Kaggle scores.",
         },
         "warnings": sorted(set(warnings)),

@@ -23,10 +23,10 @@
 | v5 相对 v3 | **+0.70973** |
 | 本地榜首快照 | 54.01486；不等于 Private 榜 |
 | v5 距榜首快照 | **32.20923** |
-| v5 提交包 | `test/90_deliverables/90_submission/artifacts/mlp_encoding_task2_rerank_task3_soft_v5/kaggle_submission.zip` |
+| v5 提交包 | `test/90_submission/artifacts/mlp_encoding_task2_rerank_task3_soft_v5/kaggle_submission.zip` |
 | 压缩包 SHA256 | `2311a23d3423fc77ab6814d121a06df280dfc480e59b695a47d4d05e406e03c9` |
 
-真实分数和用户回报记录位于 `test/90_deliverables/90_submission/kaggle_scores.json`。v5 同时改变 Task 2 reranker 和 Task 3 soft 融合，**不能把 +0.70973 单独归因于某任务**。不要用两个提交点拟合本地→Kaggle 的线性映射或固定比例。
+真实分数和用户回报记录位于 `test/90_submission/kaggle_scores.json`。v5 同时改变 Task 2 reranker 和 Task 3 soft 融合，**不能把 +0.70973 单独归因于某任务**。不要用两个提交点拟合本地→Kaggle 的线性映射或固定比例。
 
 ## 3. 代码与评估入口
 
@@ -40,23 +40,23 @@
 
 ### 3.1 test 目录结构（2026-11-27 整理）
 
-`test/` 顶层只保留 9 个按技术方向分组的目录、3 个共享脚本和 `results_summary.json`；历史实验目录整体移入分组，实验编号与目录名不变。
+`test/` 顶层为 8 个按技术方向编号的实验分组（00–07）、3 个交付目录和 3 个共享脚本；历史实验目录整体移入分组，实验编号与目录名不变。
 
 | 分组 | 内容 |
 |---|---|
 | `00_infra/` | 00_sanity、46_shared_preprocessing、68_repeat_split（按呈现次数拆分数据） |
-| `10_task1_reconstruction/` | 01、05、10、11、14、15、20、21、33、37、56、57、59、60、61（Task1 重建/字体/检索/损失） |
-| `20_task2_cross_day/` | 02、03、04、06、08、09、19、31、34、42、43、47（Task2 跨日与 reranker） |
-| `30_task3_single_trial/` | 22、32、36、38、44、45、54、58、62（Task3 单 trial、融合、诊断） |
-| `40_representation_structure/` | 35、50、51、52、64、65、66（对比学习、字形结构、族聚类、窗内时序） |
-| `50_model_architecture/` | 07、17、24、26、27、28、40、41（DDPM、CNN、attention、layout teacher） |
-| `60_fusion_transduction/` | 12、13、16、18、23、30、39、48、49、53、55（集成、转导、结构重排） |
-| `70_protocol_and_scoring/` | 25、29、63、67（留日轮换、固定协议评分、逐任务候选） |
-| `90_deliverables/` | 90_submission、91_visual_report、92_viewer |
+| `01_task1_reconstruction/` | 01、05、10、11、14、15、20、21、33、37、56、57、59、60、61（Task1 重建/字体/检索/损失） |
+| `02_task2_cross_day/` | 02、03、04、06、08、09、19、31、34、42、43、47（Task2 跨日与 reranker） |
+| `03_task3_single_trial/` | 22、32、36、38、44、45、54、58、62（Task3 单 trial、融合、诊断） |
+| `04_representation_structure/` | 35、50、51、52、64、65、66（对比学习、字形结构、族聚类、窗内时序） |
+| `05_model_architecture/` | 07、17、24、26、27、28、40、41（DDPM、CNN、attention、layout teacher） |
+| `06_fusion_transduction/` | 12、13、16、18、23、30、39、48、49、53、55（集成、转导、结构重排） |
+| `07_protocol_and_scoring/` | 25、29、63、67（留日轮换、固定协议评分、逐任务候选） |
+| `90_submission/`、`91_visual_report/`、`92_viewer/` | 交付物，保持顶层可见，不计入实验分组 |
 
 - `test/.cache/` 路径不变（`shared_preprocessing_v1`、`evaluate_final_*`），避免破坏已写死的缓存路径；它是缓存区，不是实验目录。
-- 移动后历史脚本的仓库根由 `parents[2]` 改为 `parents[3]`，脚本内部硬编码的 `test/<实验>` 路径已同步改写；82 个脚本全部通过 `py_compile`，`collect_results.py` 已重新生成 `results_summary.json`（320 条记录）。
-- `90_deliverables/90_submission/artifacts/*/png/` 已删除（约 12 万张可再生的提交 PNG），保留 `kaggle_submission.zip`、`submission_png.zip` 与 JSON 清单。
+- 移动后分组内脚本的仓库根由 `parents[2]` 改为 `parents[3]`；`90_submission`、`91_visual_report`、`92_viewer` 仍在顶层，继续使用 `parents[2]`。脚本内硬编码的 `test/<实验>` 路径已同步改写；82 个脚本全部通过 `py_compile`，`collect_results.py` 已重新生成 `results_summary.json`（320 条记录）。
+- `90_submission/artifacts/*/png/` 已删除（约 12 万张可再生的提交 PNG），保留 `kaggle_submission.zip`、`submission_png.zip` 与 JSON 清单。
 
 常用命令：
 
@@ -183,7 +183,7 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 
 **修正（实验 63）**：上述 2 的三视图融合已按该要求做过固定协议 paired 对比，Task2/3 均低于完整 v5（−2.86 / −0.79），所以“直接接入生产”不再成立。1 尚未做过同样的 paired 对比；其 +1.975 也是相对实验 48 开发配方，而不是相对含编码分支与 reranker 的 v5。
 
-**修正（实验 67）**：1 已按 `evaluate_final` 口径在完整 v5 上补齐配对：Task2 Sinkhorn tune +0.411 / heldout **−0.291**，Task2 三视图 heldout −1.02，Task3 Sinkhorn heldout −0.040，Task3 三视图 heldout **+0.039**。按 tune 选优的三任务均分 19.5898，低于 v5 的 19.6737；只保留 Task3 三视图为 19.6868（+0.013，噪声）。**当前没有可合并的逐任务增益**，第 7 节的 1、2 两条不再构成待办。详见 `test/70_protocol_and_scoring/67_taskwise_best/`。
+**修正（实验 67）**：1 已按 `evaluate_final` 口径在完整 v5 上补齐配对：Task2 Sinkhorn tune +0.411 / heldout **−0.291**，Task2 三视图 heldout −1.02，Task3 Sinkhorn heldout −0.040，Task3 三视图 heldout **+0.039**。按 tune 选优的三任务均分 19.5898，低于 v5 的 19.6737；只保留 Task3 三视图为 19.6868（+0.013，噪声）。**当前没有可合并的逐任务增益**，第 7 节的 1、2 两条不再构成待办。详见 `test/07_protocol_and_scoring/67_taskwise_best/`。
 
 ## 8. Git 与当前运行状态
 
