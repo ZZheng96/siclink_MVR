@@ -1,0 +1,22 @@
+{
+  "experiment": "78_run_to_run_noise",
+  "freeze_revision": 1,
+  "date": "2026-11-27",
+  "status": "preregistered_before_any_run",
+  "purpose": "Measure the run-to-run variability of the Task 3 pipeline under identical settings. Experiment 74 and 77 used the same base configuration but produced fold-4 OCF 16.126 and 15.889 for mice1, so single-run differences of that size cannot be interpreted without a noise floor.",
+  "scope": "Only test/03_task3_single_trial/78_run_to_run_noise.",
+  "protocol": {
+    "fold": "leave-one-presentation-ordinal-out k=4 only (the fold used for OCF reporting)",
+    "model": "50 ms MLP, hidden 1024, dropout 0, seed 42, 10 epochs, identical code path to experiments 74/77 base",
+    "repeats": 3,
+    "metrics": ["top1", "recall32", "fold-4 OCF on RNG123 heldout pictures [256:768]"],
+    "control": "for repeat 1 the official OCF is computed twice on the same logits to separate scoring determinism from training nondeterminism"
+  },
+  "report": [
+    "per-repeat values",
+    "mean, standard deviation, max-min range per mouse",
+    "implied minimum detectable effect for future single-run comparisons"
+  ],
+  "no_rule": "this is a measurement experiment; no candidate is adopted",
+  "prohibited": ["hidden test data", "tuning anything across repeats"]
+}

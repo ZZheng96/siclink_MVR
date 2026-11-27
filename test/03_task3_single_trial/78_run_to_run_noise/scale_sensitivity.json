@@ -1,0 +1,19 @@
+{
+  "experiment": "78_run_to_run_noise",
+  "added": "post-hoc diagnostic, run after the three preregistered repeats",
+  "why": "Experiments 74 and 77 reported fold-4 OCF 16.126 and 15.889 for mice1 with the same base model. The three preregistered repeats here were bit-identical (std = 0), so training is deterministic and the discrepancy had to come from the scoring path.",
+  "control": {
+    "design": "train the base model once per mouse; compute the official OCF twice on the same logits, once with raw scores and once after per-row z-scoring, with Hungarian assignment in both cases",
+    "mice1": {"raw": 15.8890, "row_z": 16.1264, "delta": 0.2374},
+    "mice2": {"raw": 14.5854, "row_z": 14.7255, "delta": 0.1401}
+  },
+  "finding": "A per-row monotone affine rescaling of identical scores changes the official OCF by 0.14-0.24. The 2748 x 2748 assignment is nearly degenerate at this signal level, so the solver can return different assignments that are numerically tied in total score.",
+  "implications": [
+    "training is deterministic under a fixed seed; run-to-run training noise is not the limiting factor",
+    "the OCF has an irreducible assignment-arbitrariness floor of roughly 0.25 at this signal level",
+    "any single-run OCF difference below about 0.25 is not interpretable, including small historical gains",
+    "the Task 3 multi-seed gain (+0.6996, experiment 75) was measured with one fixed scoring path and also raised top1, so it remains above this floor, but its magnitude is uncertain by the same order",
+    "v5 production scores are computed after row-z fusion, which fixes one arbitrary convention; changing score scaling changes the shipped OCF without changing the model"
+  ],
+  "recommendation": "canonicalise scores (always row-z, or a deterministic tie-break) before Hungarian in every experiment and in production, and treat sub-0.3 OCF differences as unresolved unless they repeat across mice and folds"
+}
