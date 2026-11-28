@@ -1,0 +1,33 @@
+{
+  "experiment": "85_task1_multiseed",
+  "freeze_revision": 1,
+  "date": "2026-11-28",
+  "status": "preregistered_before_any_training_or_metric",
+  "purpose": "Task 1, like Task 3 before experiment 75, is trained with a single seed while Task 2 uses three. Test whether seed averaging improves the Task 1 reconstruction+retrieval score under the frozen public protocol.",
+  "scope": "Only test/03_task1_reconstruction/85_task1_multiseed. src/ and src/final_config.json are read-only.",
+  "protocol": {
+    "split": "test/evaluate_final.py public_protocol, task1, split seed 42, RNG123 permutation of the 275 validation pictures: first 16 tune, next 48 unused, remaining 211 heldout",
+    "training": "src.final.train_task with the v5 config unchanged except task1.seeds",
+    "prediction": "src.final.predict_task: mean of per-seed DCT32 predictions, dct_decode, directional2 retrieval against the NotoSansSC 6763-glyph bank",
+    "metric": "official OCF on final predictions, per mouse and per block; no Hungarian step exists in Task 1, so no assignment ambiguity",
+    "no_oracle": "oracle is not computed"
+  },
+  "arms": {
+    "base": [42],
+    "seed3": [42, 202, 777]
+  },
+  "recorded_base": {
+    "tune_final_ocf": 16.81193,
+    "heldout_final_ocf": 18.43706,
+    "requirement": "the base arm must reproduce both within 1e-4 or the experiment is void"
+  },
+  "pass_rule": {
+    "advance": "heldout OCF higher than base for BOTH mice, tune OCF not lower than base minus 0.02, and at least 5 of 8 mouse x picture-holdout blocks non-negative versus base",
+    "no_further_sweeps": "no seed count beyond three is tried in this experiment"
+  },
+  "disclosure": {
+    "heldout_historically_reused": true,
+    "pristine_confirmation": false
+  },
+  "prohibited": ["hidden test data", "tuning epochs or seeds on the heldout pictures", "changing the base config"]
+}
