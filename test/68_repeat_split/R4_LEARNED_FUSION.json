@@ -1,0 +1,1268 @@
+{
+  "classes": 2748,
+  "readouts": [
+    "csls",
+    "ridge_dct16",
+    "ridge_hv",
+    "total250",
+    "bins50",
+    "early_minus_late125",
+    "column",
+    "mlp10",
+    "mlp25",
+    "mlp50",
+    "mlp250",
+    "encoding50",
+    "soft_dct50",
+    "ridge_dct32",
+    "ridge_pix16",
+    "ridge_stroke",
+    "corr25",
+    "corr10",
+    "lda50",
+    "softmax25",
+    "ridge_tsum50"
+  ],
+  "seeds": [
+    42,
+    202,
+    777
+  ],
+  "protocol": "Fit and select only on repeat 3 (models trained on repeats 1-2 into a cached scratch dir). Repeat 4 uses the saved repeat 1-3 checkpoints, verified by hash, and is scored once with locked weights and thresholds. Pooled over the 8 mouse-day blocks of each fold.",
+  "fitting": "Weights: multinomial logistic regression over the full 2748-class gallery of every R3 trial, features = row-z scores of the 21 readouts, L2=1e-2, L-BFGS-B from a csls-only start; leave-one-mouse-out sanity check. Candidate rerank (B) applies the same weights inside the CSLS top32.",
+  "transductive_note": "C and D use the other unlabelled trials of the same block (one glyph per block), so they are transductive unlike A and B. C fixes the most confident one-to-one pairs; D reassigns only rows that share their baseline glyph (dup) or accepts a Hungarian change only above a fused margin delta.  On R3 the D variant is chosen as the valid one with the highest hits (hits >= baseline and unique > baseline), i.e. the safest option; its delta is then locked for R4.",
+  "r3": {
+    "weights": [
+      0.4346662141238279,
+      -0.03258457600559169,
+      -0.06133682492404905,
+      -0.062083610021409344,
+      0.011632561162134653,
+      0.06504160049862903,
+      0.2443577024229311,
+      0.06210405870980103,
+      0.22893385792570697,
+      0.3911274211733893,
+      0.17120152865025196,
+      0.23323300094926838,
+      0.028812019841228553,
+      0.12444469427591434,
+      0.22905886049902283,
+      0.41942614117165855,
+      -0.005838845854751744,
+      0.011531769664953269,
+      -0.11887000410969115,
+      -0.03701609915646759,
+      0.10955431033014715
+    ],
+    "fit": {
+      "success": false,
+      "iterations": 40,
+      "loss": 6.723135935875363,
+      "message": "ABNORMAL_TERMINATION_IN_LNSRCH"
+    },
+    "loso": {
+      "mice1": {
+        "table": {
+          "hits": 282,
+          "baseline_hits": 282
+        },
+        "weights": [
+          0.3806999553180275,
+          -0.013974476023519408,
+          0.004507264267931681,
+          -0.06256873080151697,
+          -0.007923765910142877,
+          0.024460096151430338,
+          0.2233795504876882,
+          0.1280579218370397,
+          0.2806040037307395,
+          0.3610776413183952,
+          0.14879970316450794,
+          0.199713281148684,
+          -0.046078498198662214,
+          0.12488623598725752,
+          0.22438038962500076,
+          0.41028035166593724,
+          -0.059883420201272665,
+          -0.0015877651077517829,
+          -0.10246707606567992,
+          -0.00884969156491792,
+          0.07176714350047518
+        ]
+      },
+      "mice2": {
+        "table": {
+          "hits": 149,
+          "baseline_hits": 147
+        },
+        "weights": [
+          0.3752007620758342,
+          -0.04177635984991261,
+          -0.1109667844404696,
+          -0.05883928771632487,
+          0.010569959639224913,
+          0.10796431276322987,
+          0.2976332762134002,
+          0.03422259193844795,
+          0.2045967007813695,
+          0.41527053336181147,
+          0.20508726869446112,
+          0.2894769875598015,
+          0.07755594704110676,
+          0.11488228369356532,
+          0.2407013373418474,
+          0.42784768807171,
+          0.030224342692353877,
+          0.019338445071160563,
+          -0.12319900727940929,
+          -0.05262890616141249,
+          0.15343615443406505
+        ]
+      }
+    },
+    "tau": {
+      "fused": {
+        "tau": 0.05,
+        "unique": 359,
+        "hits": 439,
+        "table": [
+          {
+            "tau": 0.05,
+            "unique": 359,
+            "hits": 439
+          },
+          {
+            "tau": 0.1,
+            "unique": 359,
+            "hits": 439
+          },
+          {
+            "tau": 0.2,
+            "unique": 359,
+            "hits": 439
+          },
+          {
+            "tau": 0.3,
+            "unique": 359,
+            "hits": 439
+          },
+          {
+            "tau": 0.5,
+            "unique": 359,
+            "hits": 439
+          },
+          {
+            "tau": 1.01,
+            "unique": 359,
+            "hits": 439
+          },
+          {
+            "tau": 0.02,
+            "unique": 359,
+            "hits": 438
+          }
+        ]
+      },
+      "csls": {
+        "tau": 0.02,
+        "unique": 354,
+        "hits": 431,
+        "table": [
+          {
+            "tau": 0.02,
+            "unique": 354,
+            "hits": 431
+          },
+          {
+            "tau": 0.05,
+            "unique": 353,
+            "hits": 429
+          },
+          {
+            "tau": 0.1,
+            "unique": 353,
+            "hits": 429
+          },
+          {
+            "tau": 0.2,
+            "unique": 353,
+            "hits": 429
+          },
+          {
+            "tau": 0.3,
+            "unique": 353,
+            "hits": 429
+          },
+          {
+            "tau": 0.5,
+            "unique": 353,
+            "hits": 429
+          },
+          {
+            "tau": 1.01,
+            "unique": 353,
+            "hits": 429
+          }
+        ]
+      }
+    },
+    "pick": {
+      "baseline_hits": 429,
+      "baseline_unique": 353,
+      "picked": {
+        "name": "pred_g_0.5",
+        "hits": 466,
+        "unique": 387,
+        "baseline_hits": 429,
+        "baseline_unique": 353,
+        "gained": 49,
+        "lost": 15,
+        "passed": false
+      },
+      "table": [
+        {
+          "name": "pred_dup",
+          "hits": 444,
+          "unique": 388,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 143,
+          "lost": 108,
+          "passed": false
+        },
+        {
+          "name": "pred_g_0.5",
+          "hits": 466,
+          "unique": 387,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 49,
+          "lost": 15,
+          "passed": false
+        },
+        {
+          "name": "pred_g_1.0",
+          "hits": 441,
+          "unique": 362,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 12,
+          "lost": 3,
+          "passed": false
+        },
+        {
+          "name": "pred_g_1.5",
+          "hits": 431,
+          "unique": 354,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 2,
+          "lost": 1,
+          "passed": false
+        },
+        {
+          "name": "pred_g_2.0",
+          "hits": 428,
+          "unique": 352,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 0,
+          "lost": 1,
+          "passed": false
+        },
+        {
+          "name": "pred_g_3.0",
+          "hits": 429,
+          "unique": 353,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        {
+          "name": "pred_g_4.0",
+          "hits": 429,
+          "unique": 353,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        }
+      ]
+    },
+    "evaluation": {
+      "all": {
+        "base_pred": {
+          "hits": 429,
+          "unique": 353,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        "pred_a": {
+          "hits": 439,
+          "unique": 359,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 147,
+          "lost": 141,
+          "passed": false
+        },
+        "pred_b": {
+          "hits": 438,
+          "unique": 360,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 148,
+          "lost": 141,
+          "passed": false
+        },
+        "h_fused": {
+          "hits": 458,
+          "unique": 396,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 196,
+          "lost": 153,
+          "passed": false
+        },
+        "h_csls": {
+          "hits": 410,
+          "unique": 365,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 126,
+          "lost": 114,
+          "passed": false
+        },
+        "pred_dup": {
+          "hits": 444,
+          "unique": 388,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 143,
+          "lost": 108,
+          "passed": false
+        },
+        "pred_g_0.5": {
+          "hits": 466,
+          "unique": 387,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 49,
+          "lost": 15,
+          "passed": false
+        },
+        "pred_g_1.0": {
+          "hits": 441,
+          "unique": 362,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 12,
+          "lost": 3,
+          "passed": false
+        },
+        "pred_g_1.5": {
+          "hits": 431,
+          "unique": 354,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 2,
+          "lost": 1,
+          "passed": false
+        },
+        "pred_g_2.0": {
+          "hits": 428,
+          "unique": 352,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 0,
+          "lost": 1,
+          "passed": false
+        },
+        "pred_g_3.0": {
+          "hits": 429,
+          "unique": 353,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        "pred_g_4.0": {
+          "hits": 429,
+          "unique": 353,
+          "baseline_hits": 429,
+          "baseline_unique": 353,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        }
+      },
+      "mice1": {
+        "base_pred": {
+          "hits": 282,
+          "unique": 246,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        "pred_a": {
+          "hits": 291,
+          "unique": 254,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 100,
+          "lost": 92,
+          "passed": false
+        },
+        "pred_b": {
+          "hits": 290,
+          "unique": 254,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 100,
+          "lost": 92,
+          "passed": false
+        },
+        "h_fused": {
+          "hits": 303,
+          "unique": 275,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 134,
+          "lost": 105,
+          "passed": false
+        },
+        "h_csls": {
+          "hits": 277,
+          "unique": 255,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 86,
+          "lost": 77,
+          "passed": false
+        },
+        "pred_dup": {
+          "hits": 300,
+          "unique": 276,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 101,
+          "lost": 71,
+          "passed": false
+        },
+        "pred_g_0.5": {
+          "hits": 309,
+          "unique": 271,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 35,
+          "lost": 10,
+          "passed": false
+        },
+        "pred_g_1.0": {
+          "hits": 290,
+          "unique": 253,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 9,
+          "lost": 2,
+          "passed": false
+        },
+        "pred_g_1.5": {
+          "hits": 284,
+          "unique": 247,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 2,
+          "lost": 1,
+          "passed": false
+        },
+        "pred_g_2.0": {
+          "hits": 281,
+          "unique": 245,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 0,
+          "lost": 1,
+          "passed": false
+        },
+        "pred_g_3.0": {
+          "hits": 282,
+          "unique": 246,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        "pred_g_4.0": {
+          "hits": 282,
+          "unique": 246,
+          "baseline_hits": 282,
+          "baseline_unique": 246,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        }
+      },
+      "mice2": {
+        "base_pred": {
+          "hits": 147,
+          "unique": 132,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        "pred_a": {
+          "hits": 148,
+          "unique": 134,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 65,
+          "lost": 63,
+          "passed": false
+        },
+        "pred_b": {
+          "hits": 148,
+          "unique": 135,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 66,
+          "lost": 63,
+          "passed": false
+        },
+        "h_fused": {
+          "hits": 155,
+          "unique": 148,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 90,
+          "lost": 74,
+          "passed": false
+        },
+        "h_csls": {
+          "hits": 133,
+          "unique": 127,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 49,
+          "lost": 54,
+          "passed": false
+        },
+        "pred_dup": {
+          "hits": 144,
+          "unique": 134,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 58,
+          "lost": 56,
+          "passed": false
+        },
+        "pred_g_0.5": {
+          "hits": 157,
+          "unique": 144,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 20,
+          "lost": 8,
+          "passed": false
+        },
+        "pred_g_1.0": {
+          "hits": 151,
+          "unique": 135,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 4,
+          "lost": 1,
+          "passed": false
+        },
+        "pred_g_1.5": {
+          "hits": 147,
+          "unique": 132,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        "pred_g_2.0": {
+          "hits": 147,
+          "unique": 132,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        "pred_g_3.0": {
+          "hits": 147,
+          "unique": 132,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        },
+        "pred_g_4.0": {
+          "hits": 147,
+          "unique": 132,
+          "baseline_hits": 147,
+          "baseline_unique": 132,
+          "gained": 0,
+          "lost": 0,
+          "passed": false
+        }
+      }
+    },
+    "chains": {
+      "mice1s1": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice1s2": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice1s3": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice1s4": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice2s1": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice2s2": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice2s3": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice2s4": {
+        "fused": 2748,
+        "csls": 2748
+      }
+    },
+    "seconds": 263.8
+  },
+  "r4": {
+    "all": {
+      "base_pred": {
+        "hits": 572,
+        "unique": 462,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_a": {
+        "hits": 564,
+        "unique": 442,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 156,
+        "lost": 176,
+        "passed": false
+      },
+      "pred_b": {
+        "hits": 568,
+        "unique": 445,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 157,
+        "lost": 174,
+        "passed": false
+      },
+      "h_fused": {
+        "hits": 555,
+        "unique": 467,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 192,
+        "lost": 187,
+        "passed": false
+      },
+      "h_csls": {
+        "hits": 498,
+        "unique": 429,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 134,
+        "lost": 167,
+        "passed": false
+      },
+      "c_fused_0.05": {
+        "hits": 564,
+        "unique": 442,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 156,
+        "lost": 176,
+        "passed": false
+      },
+      "c_csls_0.02": {
+        "hits": 570,
+        "unique": 461,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 0,
+        "lost": 1,
+        "passed": false
+      },
+      "pred_g_0.5": {
+        "hits": 592,
+        "unique": 478,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 38,
+        "lost": 22,
+        "passed": true
+      },
+      "pred_dup": {
+        "hits": 515,
+        "unique": 420,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 123,
+        "lost": 165,
+        "passed": false
+      },
+      "pred_g_1.0": {
+        "hits": 582,
+        "unique": 471,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 11,
+        "lost": 2,
+        "passed": true
+      },
+      "pred_g_1.5": {
+        "hits": 576,
+        "unique": 466,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 4,
+        "lost": 0,
+        "passed": true
+      },
+      "pred_g_2.0": {
+        "hits": 573,
+        "unique": 463,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 1,
+        "lost": 0,
+        "passed": true
+      },
+      "pred_g_3.0": {
+        "hits": 572,
+        "unique": 462,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_4.0": {
+        "hits": 572,
+        "unique": 462,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      }
+    },
+    "mice1": {
+      "base_pred": {
+        "hits": 390,
+        "unique": 343,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_a": {
+        "hits": 374,
+        "unique": 320,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 113,
+        "lost": 136,
+        "passed": false
+      },
+      "pred_b": {
+        "hits": 374,
+        "unique": 320,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 113,
+        "lost": 136,
+        "passed": false
+      },
+      "h_fused": {
+        "hits": 367,
+        "unique": 333,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 134,
+        "lost": 144,
+        "passed": false
+      },
+      "h_csls": {
+        "hits": 333,
+        "unique": 310,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 88,
+        "lost": 121,
+        "passed": false
+      },
+      "c_fused_0.05": {
+        "hits": 374,
+        "unique": 320,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 113,
+        "lost": 136,
+        "passed": false
+      },
+      "c_csls_0.02": {
+        "hits": 388,
+        "unique": 342,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 0,
+        "lost": 1,
+        "passed": false
+      },
+      "pred_g_0.5": {
+        "hits": 394,
+        "unique": 346,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 23,
+        "lost": 20,
+        "passed": false
+      },
+      "pred_dup": {
+        "hits": 341,
+        "unique": 309,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 89,
+        "lost": 123,
+        "passed": false
+      },
+      "pred_g_1.0": {
+        "hits": 394,
+        "unique": 348,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 7,
+        "lost": 2,
+        "passed": false
+      },
+      "pred_g_1.5": {
+        "hits": 393,
+        "unique": 346,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 3,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_2.0": {
+        "hits": 390,
+        "unique": 343,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_3.0": {
+        "hits": 390,
+        "unique": 343,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_4.0": {
+        "hits": 390,
+        "unique": 343,
+        "baseline_hits": 390,
+        "baseline_unique": 343,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      }
+    },
+    "mice2": {
+      "base_pred": {
+        "hits": 182,
+        "unique": 154,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_a": {
+        "hits": 190,
+        "unique": 165,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 71,
+        "lost": 60,
+        "passed": false
+      },
+      "pred_b": {
+        "hits": 194,
+        "unique": 167,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 71,
+        "lost": 58,
+        "passed": false
+      },
+      "h_fused": {
+        "hits": 188,
+        "unique": 170,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 90,
+        "lost": 74,
+        "passed": false
+      },
+      "h_csls": {
+        "hits": 165,
+        "unique": 149,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 68,
+        "lost": 73,
+        "passed": false
+      },
+      "c_fused_0.05": {
+        "hits": 190,
+        "unique": 165,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 71,
+        "lost": 60,
+        "passed": false
+      },
+      "c_csls_0.02": {
+        "hits": 182,
+        "unique": 154,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_0.5": {
+        "hits": 198,
+        "unique": 170,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 19,
+        "lost": 3,
+        "passed": false
+      },
+      "pred_dup": {
+        "hits": 174,
+        "unique": 150,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 58,
+        "lost": 62,
+        "passed": false
+      },
+      "pred_g_1.0": {
+        "hits": 188,
+        "unique": 160,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 6,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_1.5": {
+        "hits": 183,
+        "unique": 155,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 1,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_2.0": {
+        "hits": 183,
+        "unique": 155,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 1,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_3.0": {
+        "hits": 182,
+        "unique": 154,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "pred_g_4.0": {
+        "hits": 182,
+        "unique": 154,
+        "baseline_hits": 182,
+        "baseline_unique": 154,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      }
+    },
+    "hungarian": {
+      "fused": {
+        "hits": 555,
+        "unique": 467,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 192,
+        "lost": 187,
+        "passed": false
+      },
+      "csls": {
+        "hits": 498,
+        "unique": 429,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 134,
+        "lost": 167,
+        "passed": false
+      }
+    },
+    "chains": {
+      "mice1s1": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice1s2": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice1s3": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice1s4": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice2s1": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice2s2": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice2s3": {
+        "fused": 2748,
+        "csls": 2748
+      },
+      "mice2s4": {
+        "fused": 2748,
+        "csls": 2748
+      }
+    },
+    "seconds": 148.4
+  },
+  "locked": {
+    "weights": [
+      0.4346662141238279,
+      -0.03258457600559169,
+      -0.06133682492404905,
+      -0.062083610021409344,
+      0.011632561162134653,
+      0.06504160049862903,
+      0.2443577024229311,
+      0.06210405870980103,
+      0.22893385792570697,
+      0.3911274211733893,
+      0.17120152865025196,
+      0.23323300094926838,
+      0.028812019841228553,
+      0.12444469427591434,
+      0.22905886049902283,
+      0.41942614117165855,
+      -0.005838845854751744,
+      0.011531769664953269,
+      -0.11887000410969115,
+      -0.03701609915646759,
+      0.10955431033014715
+    ],
+    "tau": {
+      "fused": 0.05,
+      "csls": 0.02
+    }
+  },
+  "acceptance": {
+    "baseline": {
+      "hits": 572,
+      "unique": 462
+    },
+    "methods": {
+      "A_full_gallery_stacking": {
+        "hits": 564,
+        "unique": 442,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 156,
+        "lost": 176,
+        "passed": false
+      },
+      "B_top32_rerank": {
+        "hits": 568,
+        "unique": 445,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 157,
+        "lost": 174,
+        "passed": false
+      },
+      "C_greedy_fused": {
+        "hits": 564,
+        "unique": 442,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 156,
+        "lost": 176,
+        "passed": false
+      },
+      "C_greedy_csls": {
+        "hits": 570,
+        "unique": 461,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 0,
+        "lost": 1,
+        "passed": false
+      },
+      "C_hungarian_fused": {
+        "hits": 555,
+        "unique": 467,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 192,
+        "lost": 187,
+        "passed": false
+      },
+      "baseline": {
+        "hits": 572,
+        "unique": 462,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "D_locked_pred_g_0.5": {
+        "hits": 592,
+        "unique": 478,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 38,
+        "lost": 22,
+        "passed": true
+      },
+      "D_gated_0.5": {
+        "hits": 592,
+        "unique": 478,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 38,
+        "lost": 22,
+        "passed": true
+      },
+      "D_gated_1.0": {
+        "hits": 582,
+        "unique": 471,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 11,
+        "lost": 2,
+        "passed": true
+      },
+      "D_gated_1.5": {
+        "hits": 576,
+        "unique": 466,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 4,
+        "lost": 0,
+        "passed": true
+      },
+      "D_gated_2.0": {
+        "hits": 573,
+        "unique": 463,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 1,
+        "lost": 0,
+        "passed": true
+      },
+      "D_gated_3.0": {
+        "hits": 572,
+        "unique": 462,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "D_gated_4.0": {
+        "hits": 572,
+        "unique": 462,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 0,
+        "lost": 0,
+        "passed": false
+      },
+      "D_dup": {
+        "hits": 515,
+        "unique": 420,
+        "baseline_hits": 572,
+        "baseline_unique": 462,
+        "gained": 123,
+        "lost": 165,
+        "passed": false
+      }
+    }
+  }
+}
