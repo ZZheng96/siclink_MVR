@@ -1,0 +1,51 @@
+{
+  "protocol": "Full r4_iterations comb3, fresh R1-2 fits for R3; manifest-checked R1-3 baseline for R4. Half-window refit each fold, lambda=.001. (1-w)*comb3 + w*row_z(half_logits), then per-session CSLS100, argmax. R3 maximize unique subject to hits>=baseline; smaller weight on tie. R4 historically used for feedback.",
+  "mouse_days": 8,
+  "classes": 2748,
+  "trials_per_repeat": 21984,
+  "r3": {
+    "0": {
+      "unique": 353,
+      "hits": 429,
+      "eligible": true
+    },
+    "0.1": {
+      "unique": 355,
+      "hits": 418,
+      "eligible": false
+    },
+    "0.25": {
+      "unique": 316,
+      "hits": 367,
+      "eligible": false
+    },
+    "0.5": {
+      "unique": 252,
+      "hits": 286,
+      "eligible": false
+    }
+  },
+  "locked_weight": 0,
+  "r4": {
+    "baseline": {
+      "unique": 462,
+      "hits": 572
+    },
+    "fusion": {
+      "unique": 462,
+      "hits": 572
+    },
+    "unique_changes": {
+      "gained": 0,
+      "lost": 0,
+      "net": 0
+    },
+    "trial_changes": {
+      "gained": 0,
+      "lost": 0,
+      "net": 0
+    },
+    "unique_at_least_500": false,
+    "hits_at_least_572": true
+  }
+}

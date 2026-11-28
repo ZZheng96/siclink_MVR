@@ -1,0 +1,252 @@
+{
+  "seed": 42,
+  "epochs": 12,
+  "pairs_per_batch": 64,
+  "hidden": 256,
+  "bin_ms": 50,
+  "optimizer": "AdamW(lr=.001, weight_decay=.01), constant LR, last epoch",
+  "train": "R1-3, one model per mouse, session-specific log1p z-score. Each epoch: one random distinct-repeat pair per session and glyph. Matched initialization and minibatches.",
+  "eval": "R4, independent MLP logits; historical current includes session CSLS100. Ties: lower class ID first.",
+  "supcon_weight": 0.1,
+  "temperature": 0.1,
+  "fusion": "0.8*row_z(current)+0.2*row_z(branch_logits), fixed",
+  "classes": 2748,
+  "trials": 21984,
+  "models": {
+    "current": {
+      "top1": {
+        "coverage": 462,
+        "trials": 572,
+        "new": 0,
+        "lost": 0,
+        "trial_new": 0,
+        "trial_lost": 0,
+        "hit_frequency_0_to_8": [
+          2286,
+          384,
+          57,
+          12,
+          7,
+          2,
+          0,
+          0,
+          0
+        ]
+      },
+      "top32": {
+        "coverage": 2217,
+        "trials": 5131,
+        "new": 0,
+        "lost": 0,
+        "trial_new": 0,
+        "trial_lost": 0,
+        "hit_frequency_0_to_8": [
+          531,
+          791,
+          630,
+          421,
+          191,
+          100,
+          45,
+          29,
+          10
+        ]
+      },
+      "best_rank_bins_1_2to5_6to32_33plus": [
+        462,
+        655,
+        1100,
+        531
+      ],
+      "top1_from_current_never_top32": 0
+    },
+    "ce": {
+      "top1": {
+        "coverage": 145,
+        "trials": 159,
+        "new": 70,
+        "lost": 387,
+        "trial_new": 92,
+        "trial_lost": 505,
+        "hit_frequency_0_to_8": [
+          2603,
+          131,
+          14,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "top32": {
+        "coverage": 1559,
+        "trials": 2467,
+        "new": 187,
+        "lost": 845,
+        "trial_new": 841,
+        "trial_lost": 3505,
+        "hit_frequency_0_to_8": [
+          1189,
+          981,
+          377,
+          122,
+          47,
+          18,
+          10,
+          4,
+          0
+        ]
+      },
+      "best_rank_bins_1_2to5_6to32_33plus": [
+        145,
+        390,
+        1024,
+        1189
+      ],
+      "top1_from_current_never_top32": 4
+    },
+    "supcon": {
+      "top1": {
+        "coverage": 177,
+        "trials": 194,
+        "new": 93,
+        "lost": 378,
+        "trial_new": 130,
+        "trial_lost": 508,
+        "hit_frequency_0_to_8": [
+          2571,
+          161,
+          15,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "top32": {
+        "coverage": 1629,
+        "trials": 2694,
+        "new": 197,
+        "lost": 785,
+        "trial_new": 955,
+        "trial_lost": 3392,
+        "hit_frequency_0_to_8": [
+          1119,
+          956,
+          435,
+          147,
+          48,
+          27,
+          12,
+          4,
+          0
+        ]
+      },
+      "best_rank_bins_1_2to5_6to32_33plus": [
+        177,
+        408,
+        1044,
+        1119
+      ],
+      "top1_from_current_never_top32": 7
+    },
+    "fusion_ce": {
+      "top1": {
+        "coverage": 429,
+        "trials": 538,
+        "new": 75,
+        "lost": 108,
+        "trial_new": 112,
+        "trial_lost": 146,
+        "hit_frequency_0_to_8": [
+          2319,
+          356,
+          47,
+          19,
+          5,
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      "top32": {
+        "coverage": 2208,
+        "trials": 5055,
+        "new": 104,
+        "lost": 113,
+        "trial_new": 500,
+        "trial_lost": 576,
+        "hit_frequency_0_to_8": [
+          540,
+          791,
+          645,
+          412,
+          183,
+          102,
+          38,
+          28,
+          9
+        ]
+      },
+      "best_rank_bins_1_2to5_6to32_33plus": [
+        429,
+        658,
+        1121,
+        540
+      ],
+      "top1_from_current_never_top32": 0
+    },
+    "fusion_supcon": {
+      "top1": {
+        "coverage": 447,
+        "trials": 552,
+        "new": 78,
+        "lost": 93,
+        "trial_new": 108,
+        "trial_lost": 128,
+        "hit_frequency_0_to_8": [
+          2301,
+          376,
+          48,
+          16,
+          4,
+          2,
+          1,
+          0,
+          0
+        ]
+      },
+      "top32": {
+        "coverage": 2227,
+        "trials": 5078,
+        "new": 108,
+        "lost": 98,
+        "trial_new": 484,
+        "trial_lost": 537,
+        "hit_frequency_0_to_8": [
+          521,
+          806,
+          655,
+          399,
+          195,
+          95,
+          38,
+          30,
+          9
+        ]
+      },
+      "best_rank_bins_1_2to5_6to32_33plus": [
+        447,
+        651,
+        1129,
+        521
+      ],
+      "top1_from_current_never_top32": 0
+    }
+  }
+}
