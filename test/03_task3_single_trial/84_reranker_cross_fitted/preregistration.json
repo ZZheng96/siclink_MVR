@@ -1,0 +1,29 @@
+{
+  "experiment": "84_reranker_cross_fitted",
+  "freeze_revision": 1,
+  "date": "2026-11-28",
+  "status": "preregistered_before_any_training_or_metric",
+  "purpose": "Give the experiment-83 reranker design a stable estimate by rotating the held fold four times. Experiment 83 trained on folds 1-3 and evaluated only fold 4, where mice2 gained +0.05 while mice1 gained +0.48.",
+  "scope": "Only test/03_task3_single_trial/84_reranker_cross_fitted. src/ is read-only.",
+  "design": {
+    "base": "identical to experiment 83: production-style three-branch Task 3 score (MLP hidden 1024 10 epochs seed 42, encoding prototypes, softmax-DCT continuous), equal row-z",
+    "cross_fitting": "for each held fold k in 1..4: reranker trained only on OOF rows of the other three folds, applied to fold k; every fold therefore serves once as an untouched evaluation fold",
+    "hyperparameters": {"top_n": 32, "k": 8, "epochs": 12, "batch_size": 32, "learning_rate": 0.001, "weight_decay": 0.001, "seed": 31},
+    "hyperparameter_source": "unchanged from experiments 83 and the Task 2 production reranker; no tuning",
+    "assignment": "Hungarian after the top-K permutation"
+  },
+  "metrics": {
+    "ocf": "official OCF per fold, RNG123 heldout pictures [256:768], aggregated as the mean of the four fold means and separately per mouse x session",
+    "top1": "held argmax accuracy, aggregated the same way",
+    "recall32": "must stay identical between arms"
+  },
+  "pass_rule": {
+    "advance": "aggregated fold-mean OCF gain over base is at least +0.30 for BOTH mice, at least 5 of 8 mouse x session groups show a non-negative aggregated gain, and aggregated top1 is not lower for either mouse",
+    "otherwise": "the Task 3 reranker route is closed"
+  },
+  "prohibited": [
+    "hidden test data or targets",
+    "tuning any hyperparameter",
+    "using a fold's own rows to train the reranker that scores it"
+  ]
+}
