@@ -1,0 +1,53 @@
+{
+  "protocol": "repeat-holdout v1",
+  "deviation": "official OCF not computed; epoch locked by F1/F2 mean validation NLL",
+  "utc": "2026-11-28T03:18:28.119950+00:00",
+  "script_sha256": "d89718e2c54578fb5ee990a7ba0b52d227d528c3b78336db6ea02c16ad27e82c",
+  "train_done_sha256": "e1aaac4e5b84dddc735e0aad8a6b6f60d841198cbc38c67aaeab3272be5de290",
+  "selected_epochs": {
+    "B": 4,
+    "C": 4
+  },
+  "selection_metric": {
+    "B": [
+      {
+        "epoch": 4,
+        "mean_nll": 7.66607940196991,
+        "mean_top1": 0.006413755458515283,
+        "worst_top1": 0.002638282387190684
+      },
+      {
+        "epoch": 8,
+        "mean_nll": 7.992888450622559,
+        "mean_top1": 0.006277292576419215,
+        "worst_top1": 0.002274381368267831
+      },
+      {
+        "epoch": 12,
+        "mean_nll": 8.119767427444458,
+        "mean_top1": 0.006504730713245996,
+        "worst_top1": 0.0023653566229985446
+      }
+    ],
+    "C": [
+      {
+        "epoch": 4,
+        "mean_nll": 7.665117979049683,
+        "mean_top1": 0.006163573508005823,
+        "worst_top1": 0.002274381368267831
+      },
+      {
+        "epoch": 8,
+        "mean_nll": 7.987940073013306,
+        "mean_top1": 0.006800400291120816,
+        "worst_top1": 0.0024563318777292577
+      },
+      {
+        "epoch": 12,
+        "mean_nll": 8.110007286071777,
+        "mean_top1": 0.0066866812227074236,
+        "worst_top1": 0.002274381368267831
+      }
+    ]
+  }
+}
