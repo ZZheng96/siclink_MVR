@@ -229,7 +229,7 @@ v5 固定公开 heldout 三任务等权平均为 **19.67368**，只用于同协�
 - **口径**：repeat1-3 训练、repeat4 评估；单 trial 身份识别，对应 v5 Task3。Task1 的 20-repeat 聚合、Task2 的 4-repeat 平均无法由 R4 单 trial 复现，不纳入。无官方 OCF。
 - **入口**：`test/68_repeat_split/r4_benchmark.py --stage train|eval|all`（方案对比）与 `r4_iterations.py`（四轮迭代）；结果 `data/derived/repeat_bench_v1/R4_BENCHMARK.{json,md}`、`R4_ITERATIONS.{json,md}`，仓库副本在 `test/68_repeat_split/`。
 - **首轮宏平均（匈牙利分配，3 seeds 除注明）**：v5 分支三视图 **Top-1 2.09% / Recall@32 20.16% / NLL 6.699**；53 三视图 1.87% / **20.30%** / 6.699；v5 Task3 50ms 3 seeds argmax **1.94%** / 19.77% / 6.796（匈牙利 1.82%）；v5 Task3 1 seed 1.62% / 17.93% / 7.152；48 Task3 25ms e12 1 seed 0.83% / 12.15% / 7.874；上一轮简单 25ms MLP 1.16% / 14.24% / 7.382。
-- **四轮迭代（argmax，宏平均）**：B0 2.1698% / 20.1556% → R1 CSLS50 2.3426% / 21.1790% → R2 跨分支集成 2.3790% / 22.8439% → R3 加 250ms 视图 2.5564% / 23.1896% → R4 CSLS100 **2.6019% / 23.3397%**；NLL 固定 6.6992。R2/R4 的 Top-1 区间跨 0，按预设规则以 Recall@32 显著提升通过；R4 的 k=100 是在 R4 上选择的，只算边际增益。
+- **四轮迭代（argmax，宏平均）**：B0 2.1698% / 20.1556% → R1 CSLS50 2.3426% / 21.1790% → R2 跨分支集成 2.3790% / 22.8439% → R3 加 250ms 视图 2.5564% / 23.1896% → R4 CSLS100 **2.6019% / 23.3397%**；NLL 固定 6.6992。匈牙利口径 R4 为 **2.27% Top-1 / 2.27% macro-F1**。R2/R4 的 Top-1 区间跨 0，按预设规则以 Recall@32 显著提升通过；R4 的 k=100 是在 R4 上选择的，只算边际增益。
 - **结论**：v5 的 encoding + DCT continuous、三视图和三种子集成均明显优于简单 25ms；四轮中最大增益来自跨分支集成（Recall@32 +1.67pp）和 250ms 多尺度视图（Top-1 +0.18pp），CSLS 提供较小增益。匈牙利通常提高 macro-F1 但可能降低 Top-1，两个口径都要报。
 - **风险**：CSLS/列归一化是 transductive，只使用 R4 无标签分数统计；反复用 R4 调参会过拟合。新改动须预注册并报两鼠、8 个鼠日及 character/session 配对差。v5 生产提交仍是 2026-11-25 的 v5 包，本轮没有改生产配置或生成新 Kaggle 提交。
 

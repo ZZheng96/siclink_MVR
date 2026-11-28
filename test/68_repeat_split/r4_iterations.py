@@ -49,12 +49,12 @@ def pick(key):
             for n in ("v10", "v25", "v50")]
 
 
-def evaluate(scores):
+def evaluate(scores, assignment=False):
     logits = {m: {s: np.mean([DATA[n][m][s]["logits_s3"] for n in ("v10", "v25", "v50")], axis=0)
                   for s in B.SESSIONS} for m in B.MICE}
     data = {m: {s: {"scores": scores[m][s], "logits": logits[m][s], "y": DATA["v10"][m][s]["y"]}
                 for s in B.SESSIONS} for m in B.MICE}
-    return B.evaluate("round", data, False)
+    return B.evaluate("round", data, assignment)
 
 
 base = fuse(pick("v5_s3"))
@@ -81,8 +81,11 @@ ROUNDS = [
 ]
 
 results = {r[0]: evaluate(r[2]) for r in ROUNDS}
+hungarian = {r[0]: evaluate(r[2], True) for r in ROUNDS}
 char_sums = {r[0]: results[r[0]]["_char"] for r in ROUNDS}
 for r in results.values():
+    r.pop("_char", None)
+for r in hungarian.values():
     r.pop("_char", None)
 
 DECISIONS = {
@@ -110,6 +113,7 @@ for i, (key, name, _, desc, refs) in enumerate(ROUNDS):
         "macro": r["macro"], "mouse": r["mouse"],
         "macro_ci95": r["macro_ci95_character_bootstrap"],
         "per_session": r["per_session"],
+        "hungarian": {"macro": hungarian[key]["macro"], "mouse": hungarian[key]["mouse"]},
         "delta_vs_previous": delta,
     }
 
@@ -147,6 +151,11 @@ for key, name, _, _, _ in ROUNDS:
         f"{r['macro']['recall32']:.4f} | {r['macro']['nll']:.4f} | {r['macro']['macro_f1']:.4f} | "
         f"{r['mouse']['mice1']['top1']:.4f} / {r['mouse']['mice2']['top1']:.4f} | {dt} | {dr} |"
     )
+lines += ["", "## argmax 与匈牙利分配", "",
+          "| 轮次 | argmax Top-1 | 匈牙利 Top-1 | 匈牙利 macro-F1 |", "|---|---:|---:|---:|"]
+for key, _, _, _, _ in ROUNDS:
+    h = summary[key]["hungarian"]["macro"]
+    lines.append(f"| {key} | {summary[key]['macro']['top1']:.4f} | {h['top1']:.4f} | {h['macro_f1']:.4f} |")
 lines += ["", "## 每轮依据与变化", ""]
 for key, name, _, desc, refs in ROUNDS:
     r = summary[key]
@@ -184,8 +193,8 @@ lines += ["", "## 结论与限制", "",
           "- R4 的 CSLS k=100 是在同一开发反馈集上选择的，Top-1 区间跨 0，只能算边际增益；"
           "R4 不是独立盲测，不能据此宣称生产提升。",
           "- CSLS 只重排分数，不改变 NLL；NLL 保持 6.6992，说明融合没有破坏校准。",
-          "- 匈牙利分配不改变 CSLS 后的 Top-1（行/列常数不影响最优分配），但会提高 macro-F1；"
-          "本表以 argmax 为主，生产 Task3 的历史口径使用匈牙利，需要同时报告。",
+          "- CSLS 的行/列常数不改变匈牙利最优分配，因此 R3→R4 只改 k 时匈牙利 Top-1 不变；"
+          "但匈牙利 Top-1 低于 argmax、macro-F1 更高。本表以 argmax 为主，生产 Task3 历史口径使用匈牙利，必须同时报告。",
           "- 下一步：把 CSLS + 跨分支集成接入 Task3 推理链，在固定公开 heldout/OcF 上复核；"
           "250ms 视图需要全量重训和打包后才能进入生产。"]
 

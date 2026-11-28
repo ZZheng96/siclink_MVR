@@ -120,6 +120,7 @@ F1_delta | F2_delta | selected_epoch_B/C | seed_SD_B/C | worst_mouse_day | nonne
 | R4 | CSLS k=100 | **2.6019%** | **23.3397%** | 6.6992 |
 
 - R2 的 Top-1 配对区间跨 0，按预设规则以 Recall@32（+1.67pp，区间 >0）通过；R3 的 Top-1 +0.18pp（区间 >0）；R4 的 Top-1 +0.05pp（区间跨 0）、Recall@32 +0.15pp（区间 >0），只能算边际增益。
+- 匈牙利口径下 R4 Top-1 为 2.27%、macro-F1 2.27%；低于 argmax 的 2.60%，但生产 Task3 历史口径使用匈牙利，需同时报告。
 - CSLS、列归一化是 **transductive**，只使用 R4 无标签分数统计；k=100 是在 R4 上选择的，不构成独立确认。
 - 下一步：CSLS + 跨分支集成可直接进入 Task3 推理链做固定公开 heldout/OcF 复核；250ms 视图需要全量重训与打包后才能进生产。
 
