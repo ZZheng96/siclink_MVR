@@ -159,13 +159,15 @@ def score_rows(scores, logits, y, assignment):
     top32 = np.argpartition(-scores, 32, axis=1)[:, :32]
     hit32 = (top32 == y[:, None]).any(axis=1)
     logp = log_softmax(logits)
+    nll_rows = -logp[np.arange(n), y]
     return {
         "y": y,
         "idx": idx,
         "hit32": hit32,
         "top1": float((idx == y).mean()),
         "recall32": float(hit32.mean()),
-        "nll": float(-logp[np.arange(n), y].mean()),
+        "nll": float(nll_rows.mean()),
+        "nll_rows": nll_rows,
     }
 
 
@@ -190,7 +192,7 @@ def char_sums(result, mouse):
     ys = np.concatenate([result[s]["y"] for s in SESSIONS])
     idx = np.concatenate([result[s]["idx"] for s in SESSIONS])
     hit = np.concatenate([result[s]["hit32"] for s in SESSIONS])
-    nll = np.concatenate([np.full(len(result[s]["y"]), result[s]["nll"]) for s in SESSIONS])
+    nll = np.concatenate([result[s]["nll_rows"] for s in SESSIONS])
     count = np.bincount(ys, minlength=K).astype(np.float64)
     return {
         "count": count,
@@ -235,7 +237,26 @@ def evaluate(name, data, assignment):
         "macro": macro,
         "macro_ci95_character_bootstrap": bootstrap_ci(results),
         "per_session": per_session,
+        "_char": {m: char_sums(results[m], m) for m in MICE},
     }
+
+
+def paired_delta(sums_a, sums_b):
+    """Paired character bootstrap for A-B; NLL: negative delta is better."""
+    rng = np.random.default_rng(31415)
+    values = {k: [] for k in ("top1", "recall32", "nll")}
+    for _ in range(2000):
+        w = np.bincount(rng.integers(0, K, K), minlength=K)
+        mouse_a, mouse_b = {k: [] for k in values}, {k: [] for k in values}
+        for m in MICE:
+            den = float(np.dot(w, sums_a[m]["count"]))
+            for k in values:
+                mouse_a[k].append(float(np.dot(w, sums_a[m][k]) / den))
+                mouse_b[k].append(float(np.dot(w, sums_b[m][k]) / den))
+        for k in values:
+            values[k].append(float(np.mean(mouse_a[k]) - np.mean(mouse_b[k])))
+    return {k: [float(np.mean(v)), float(np.quantile(v, 0.025)), float(np.quantile(v, 0.975))]
+            for k, v in values.items()}
 
 
 def main():
@@ -266,14 +287,17 @@ def main():
                          for m in MICE} for name, kw in runs.items()}
 
         candidates = {}
+        char_sums_by_key = {}
 
         def add(name, scores_by_mouse_session, nll_logits_by_mouse_session, note):
             for assignment in (False, True):
                 data = {m: {s: {"scores": scores_by_mouse_session[m][s],
                                 "logits": nll_logits_by_mouse_session[m][s],
                                 "y": loaded["v5_50e7"][m][s]["y"]} for s in SESSIONS} for m in MICE}
+                result = evaluate(name, data, assignment)
+                char_sums_by_key[f"{name}{'_assign' if assignment else '_argmax'}"] = result.pop("_char")
                 candidates[f"{name}{'_assign' if assignment else '_argmax'}"] = {
-                    **evaluate(name, data, assignment), "note": note}
+                    **result, "note": note}
 
         def view_logits(run, seed):
             return {m: {s: loaded[run][m][s][seed] for s in SESSIONS} for m in MICE}
@@ -312,6 +336,17 @@ def main():
         add("v5_task3_3view_s3", fuse(v5_view_maps), mean_logits(views3),
             "v5 branch at 10/25/50 ms, three seeds, row-z fusion")
 
+        pairs = {
+            "v5_3view_s3_vs_53_3view_s3": ("v5_task3_3view_s3_assign", "53_task3_3view_s3_assign"),
+            "v5_s3_vs_s1": ("v5_task3_s3_argmax", "v5_task3_s1_argmax"),
+            "53_s3_vs_s1": ("53_task3_3view_s3_argmax", "53_task3_3view_s1_argmax"),
+            "v5_s3_vs_mlp_only_s3": ("v5_task3_s3_argmax", "v5_task3_mlp_s3_argmax"),
+            "v5_s3_assign_vs_argmax": ("v5_task3_s3_assign", "v5_task3_s3_argmax"),
+            "v5_3view_assign_vs_argmax": ("v5_task3_3view_s3_assign", "v5_task3_3view_s3_argmax"),
+        }
+        paired = {name: paired_delta(char_sums_by_key[a], char_sums_by_key[b])
+                  for name, (a, b) in pairs.items()}
+
         payload = {
             "protocol": "repeat-holdout v1",
             "deviation": "official OCF not computed; R4 used as labelled development feedback",
@@ -327,6 +362,7 @@ def main():
                 "pictures_sha256": sha(DATA / "train/pictures.npz"),
             },
             "candidates": candidates,
+            "paired_deltas": paired,
         }
         (OUT / "R4_BENCHMARK.json").write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
@@ -367,6 +403,23 @@ def main():
                 f"{r['macro']['recall32']:.4f} | {r['macro']['macro_f1']:.4f} | "
                 f"{r['macro']['nll']:.4f} | {r['mouse']['mice1']['top1']:.4f} | "
                 f"{r['mouse']['mice2']['top1']:.4f} |"
+            )
+        pair_labels = {
+            "v5_3view_s3_vs_53_3view_s3": "v5 三分支三视图 − 53 三视图",
+            "v5_s3_vs_s1": "v5 三种子 − v5 单种子",
+            "53_s3_vs_s1": "53 三种子 − 53 单种子",
+            "v5_s3_vs_mlp_only_s3": "v5 三分支 − v5 MLP-only（均 argmax）",
+            "v5_s3_assign_vs_argmax": "v5 三种子 匈牙利 − argmax",
+            "v5_3view_assign_vs_argmax": "v5 三视图 匈牙利 − argmax",
+        }
+        lines += ["", "## 配对差（A − B，字符级 bootstrap 95% 区间）", "",
+                  "| 对比 | Top-1 差 | Recall@32 差 | NLL 差 |", "|---|---:|---:|---:|"]
+        for key, label in pair_labels.items():
+            d = paired[key]
+            lines.append(
+                f"| {label} | {d['top1'][0]:+.4f} [{d['top1'][1]:+.4f}, {d['top1'][2]:+.4f}] | "
+                f"{d['recall32'][0]:+.4f} [{d['recall32'][1]:+.4f}, {d['recall32'][2]:+.4f}] | "
+                f"{d['nll'][0]:+.4f} [{d['nll'][1]:+.4f}, {d['nll'][2]:+.4f}] |"
             )
         (OUT / "R4_BENCHMARK.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
         print("\n".join(lines), flush=True)
