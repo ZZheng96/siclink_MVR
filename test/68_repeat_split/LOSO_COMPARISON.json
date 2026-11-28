@@ -1,0 +1,521 @@
+{
+  "protocol": "Other three days R1-3; log1p then pooled per-feature training z-score, zero SD -> 1. Held day R4 row-independent logits, no adaptation or assignment.",
+  "torch_version": "2.5.1+cu121",
+  "device": "cuda",
+  "linear": {
+    "optimizer": "AdamW",
+    "epochs": 20,
+    "batch": 512,
+    "lr": 0.001,
+    "wd": 0.1,
+    "seed": 42
+  },
+  "mlp": {
+    "architecture": "512 LayerNorm SiLU Dropout -> 512 SiLU Dropout -> 2748",
+    "dropout": 0.2,
+    "label_smoothing": 0.05,
+    "grad_clip": 5,
+    "optimizer": "AdamW",
+    "epochs": 7,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "weight_decay": 0.001,
+    "seed": 42
+  },
+  "differences_from_v5": "Single seed, shared pooled training normalization rather than session normalization; forward-compatible bin-major features, raw standalone MLP logits in FP32 at inference, no encoding/DCT fusion or assignment.",
+  "results": [
+    {
+      "mouse": "mice1",
+      "held_day": 1,
+      "train_days": [
+        2,
+        3,
+        4
+      ],
+      "model": "250ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.004730713245997089,
+      "recall32": 0.06404657933042213,
+      "nll": 8.010440826416016
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 1,
+      "train_days": [
+        2,
+        3,
+        4
+      ],
+      "model": "50ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.004002911208151383,
+      "recall32": 0.06259097525473072,
+      "nll": 8.278131484985352
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 1,
+      "train_days": [
+        2,
+        3,
+        4
+      ],
+      "model": "50ms_mlp",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.006186317321688501,
+      "recall32": 0.10334788937409024,
+      "nll": 7.665091037750244
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 2,
+      "train_days": [
+        1,
+        3,
+        4
+      ],
+      "model": "250ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.008005822416302766,
+      "recall32": 0.09716157205240175,
+      "nll": 7.699530124664307
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 2,
+      "train_days": [
+        1,
+        3,
+        4
+      ],
+      "model": "50ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.009461426491994178,
+      "recall32": 0.10262008733624454,
+      "nll": 7.856098651885986
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 2,
+      "train_days": [
+        1,
+        3,
+        4
+      ],
+      "model": "50ms_mlp",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.013828238719068414,
+      "recall32": 0.1564774381368268,
+      "nll": 7.179503440856934
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 3,
+      "train_days": [
+        1,
+        2,
+        4
+      ],
+      "model": "250ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.002547307132459971,
+      "recall32": 0.06768558951965066,
+      "nll": 7.996151447296143
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 3,
+      "train_days": [
+        1,
+        2,
+        4
+      ],
+      "model": "50ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.002183406113537118,
+      "recall32": 0.06441048034934498,
+      "nll": 8.242914199829102
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 3,
+      "train_days": [
+        1,
+        2,
+        4
+      ],
+      "model": "50ms_mlp",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.005094614264919942,
+      "recall32": 0.10262008733624454,
+      "nll": 7.559785842895508
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 4,
+      "train_days": [
+        1,
+        2,
+        3
+      ],
+      "model": "250ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.006186317321688501,
+      "recall32": 0.08733624454148471,
+      "nll": 7.754533290863037
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 4,
+      "train_days": [
+        1,
+        2,
+        3
+      ],
+      "model": "50ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.00727802037845706,
+      "recall32": 0.08660844250363901,
+      "nll": 8.064653396606445
+    },
+    {
+      "mouse": "mice1",
+      "held_day": 4,
+      "train_days": [
+        1,
+        2,
+        3
+      ],
+      "model": "50ms_mlp",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.016739446870451237,
+      "recall32": 0.14956331877729256,
+      "nll": 7.12438440322876
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 1,
+      "train_days": [
+        2,
+        3,
+        4
+      ],
+      "model": "250ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.004002911208151383,
+      "recall32": 0.07096069868995633,
+      "nll": 7.669952392578125
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 1,
+      "train_days": [
+        2,
+        3,
+        4
+      ],
+      "model": "50ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.004730713245997089,
+      "recall32": 0.06186317321688501,
+      "nll": 8.373308181762695
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 1,
+      "train_days": [
+        2,
+        3,
+        4
+      ],
+      "model": "50ms_mlp",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.005822416302765648,
+      "recall32": 0.09934497816593886,
+      "nll": 7.435297966003418
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 2,
+      "train_days": [
+        1,
+        3,
+        4
+      ],
+      "model": "250ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.00363901018922853,
+      "recall32": 0.06622998544395925,
+      "nll": 7.721214294433594
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 2,
+      "train_days": [
+        1,
+        3,
+        4
+      ],
+      "model": "50ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.0054585152838427945,
+      "recall32": 0.06477438136826782,
+      "nll": 8.389246940612793
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 2,
+      "train_days": [
+        1,
+        3,
+        4
+      ],
+      "model": "50ms_mlp",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.0054585152838427945,
+      "recall32": 0.0906113537117904,
+      "nll": 7.553308010101318
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 3,
+      "train_days": [
+        1,
+        2,
+        4
+      ],
+      "model": "250ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.001819505094614265,
+      "recall32": 0.06259097525473072,
+      "nll": 7.710085868835449
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 3,
+      "train_days": [
+        1,
+        2,
+        4
+      ],
+      "model": "50ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.00363901018922853,
+      "recall32": 0.06550218340611354,
+      "nll": 8.416075706481934
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 3,
+      "train_days": [
+        1,
+        2,
+        4
+      ],
+      "model": "50ms_mlp",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.004730713245997089,
+      "recall32": 0.09679767103347889,
+      "nll": 7.36372709274292
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 4,
+      "train_days": [
+        1,
+        2,
+        3
+      ],
+      "model": "250ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.000363901018922853,
+      "recall32": 0.02438136826783115,
+      "nll": 12.296910285949707
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 4,
+      "train_days": [
+        1,
+        2,
+        3
+      ],
+      "model": "50ms_linear",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.000727802037845706,
+      "recall32": 0.019650655021834062,
+      "nll": 25.106714248657227
+    },
+    {
+      "mouse": "mice2",
+      "held_day": 4,
+      "train_days": [
+        1,
+        2,
+        3
+      ],
+      "model": "50ms_mlp",
+      "train_n": 24732,
+      "test_n": 2748,
+      "top1": 0.001091703056768559,
+      "recall32": 0.033114992721979625,
+      "nll": 8.311247825622559
+    }
+  ],
+  "eight_fold_macro": {
+    "250ms_linear": {
+      "top1": 0.00391193595342067,
+      "recall32": 0.06754912663755458,
+      "nll": 8.357352316379547
+    },
+    "50ms_linear": {
+      "top1": 0.004685225618631732,
+      "recall32": 0.06600254730713245,
+      "nll": 10.340892851352692
+    },
+    "50ms_mlp": {
+      "top1": 0.007368995633187773,
+      "recall32": 0.10398471615720523,
+      "nll": 7.5240432024002075
+    }
+  },
+  "day4_forward_reference": "TEMPORAL_RESULTS_FORWARD.json; linear only, no original MLP",
+  "day4_forward_comparison": [
+    {
+      "mouse": "mice1",
+      "model": "250ms_linear",
+      "original": {
+        "top1": 0.006186317321688501,
+        "recall32": 0.08733624454148471,
+        "nll": 7.754533290863037
+      },
+      "loso_minus_original": {
+        "top1": 0.0,
+        "recall32": 0.0,
+        "nll": 0.0
+      }
+    },
+    {
+      "mouse": "mice1",
+      "model": "50ms_linear",
+      "original": {
+        "top1": 0.00727802037845706,
+        "recall32": 0.08660844250363901,
+        "nll": 8.064653396606445
+      },
+      "loso_minus_original": {
+        "top1": 0.0,
+        "recall32": 0.0,
+        "nll": 0.0
+      }
+    },
+    {
+      "mouse": "mice2",
+      "model": "250ms_linear",
+      "original": {
+        "top1": 0.000363901018922853,
+        "recall32": 0.02438136826783115,
+        "nll": 12.296910285949707
+      },
+      "loso_minus_original": {
+        "top1": 0.0,
+        "recall32": 0.0,
+        "nll": 0.0
+      }
+    },
+    {
+      "mouse": "mice2",
+      "model": "50ms_linear",
+      "original": {
+        "top1": 0.000727802037845706,
+        "recall32": 0.019650655021834062,
+        "nll": 25.106714248657227
+      },
+      "loso_minus_original": {
+        "top1": 0.0,
+        "recall32": 0.0,
+        "nll": 0.0
+      }
+    }
+  ],
+  "exploratory_mice2_250ms_col56": {
+    "intervention": "Zero standardized feature index 56 only at inference, same trained weights; prompted by R1-3 day4 mean shift. Excluded from model comparison/selection.",
+    "results": [
+      {
+        "held_day": 1,
+        "masked": {
+          "top1": 0.004002911208151383,
+          "recall32": 0.06950509461426492,
+          "nll": 7.670523166656494
+        },
+        "masked_minus_main": {
+          "top1": 0.0,
+          "recall32": -0.0014556040756914107,
+          "nll": 0.0005707740783691406
+        }
+      },
+      {
+        "held_day": 2,
+        "masked": {
+          "top1": 0.0032751091703056767,
+          "recall32": 0.06368267831149928,
+          "nll": 7.719212055206299
+        },
+        "masked_minus_main": {
+          "top1": -0.0003639010189228531,
+          "recall32": -0.002547307132459972,
+          "nll": -0.002002239227294922
+        }
+      },
+      {
+        "held_day": 3,
+        "masked": {
+          "top1": 0.002547307132459971,
+          "recall32": 0.06331877729257641,
+          "nll": 7.711551666259766
+        },
+        "masked_minus_main": {
+          "top1": 0.000727802037845706,
+          "recall32": 0.0007278020378456984,
+          "nll": 0.0014657974243164062
+        }
+      },
+      {
+        "held_day": 4,
+        "masked": {
+          "top1": 0.0032751091703056767,
+          "recall32": 0.05458515283842795,
+          "nll": 7.871280193328857
+        },
+        "masked_minus_main": {
+          "top1": 0.0029112081513828236,
+          "recall32": 0.0302037845705968,
+          "nll": -4.42563009262085
+        }
+      }
+    ]
+  }
+}

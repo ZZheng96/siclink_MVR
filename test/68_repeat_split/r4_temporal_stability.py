@@ -1,73 +1,97 @@
-"""Representational stability of rate code vs temporal code across R4 sessions.
-
-No classifier is trained. For each session, per-character mean responses from repeat1-3
-are used to build a character-by-character cosine similarity matrix. Stability is the
-correlation between similarity matrices across sessions and between repeat halves.
-"""
+"""Target-aligned representational stability, using repeats 1–3 only."""
 import json
-import sys
+from itertools import combinations
 from pathlib import Path
 
 import numpy as np
 
-HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
 import r4_temporal_code as T
 
-OUT = T.OUT
-SESSIONS = T.SESSIONS
+OUT = Path(__file__).resolve().with_name("TEMPORAL_STABILITY.json")
 FEATURES = ("rate250", "rate50", "temporal25", "temporal10")
+REPEATS = (1, 2, 3)
+LABEL_SEED = 42
+ROW_SEED = 2026
 
 
-def mean_response(mouse, session, bin_ms, repeats=(1, 2, 3)):
-    arr = np.stack([T.load_counts(mouse, session, r, bin_ms)[0] for r in repeats])
-    x = np.log1p(arr.mean(axis=0))
-    if bin_ms == 250:
-        x = x.sum(axis=1)
-    else:
-        x = x.reshape(len(x), -1)
-    # z-score each feature across characters; removes session-wide gain
-    x = (x - x.mean(0, keepdims=True)) / np.maximum(x.std(0, keepdims=True), 1e-6)
-    return x.astype(np.float32)
+def align(counts, target):
+    if counts.shape[0] != T.K or target.shape != (T.K,) or target.dtype.kind not in 'iu':
+        raise ValueError("expected one integer target per character")
+    order = np.argsort(target)
+    if not np.array_equal(target[order], np.arange(T.K)):
+        raise ValueError(f"target is not a permutation of 0..{T.K - 1}")
+    return counts[order]
 
 
-def sim_matrix(x):
-    x = x / np.maximum(np.linalg.norm(x, axis=1, keepdims=True), 1e-6)
+def sim_matrix(counts):
+    x = np.log1p(counts).reshape(T.K, -1)
+    x -= x.mean(0)
+    x /= np.maximum(x.std(0), 1e-6)
+    x /= np.maximum(np.linalg.norm(x, axis=1, keepdims=True), 1e-6)
     return x @ x.T
 
 
-def upper(s):
-    iu = np.triu_indices(len(s), k=1)
-    return s[iu]
-
-
 def corr(a, b):
-    a = a - a.mean()
-    b = b - b.mean()
+    a, b = a.astype(np.float64), b.astype(np.float64)
+    a -= a.mean()
+    b -= b.mean()
     return float((a @ b) / np.sqrt((a @ a) * (b @ b)))
 
 
-results = {}
-for mouse in T.MICE:
-    for name in FEATURES:
-        bin_ms = T.BINS[name]
-        mats = {s: sim_matrix(mean_response(mouse, s, bin_ms)) for s in SESSIONS}
-        cross = {}
-        for i, s1 in enumerate(SESSIONS):
-            for s2 in SESSIONS[i + 1:]:
-                cross[f"s{s1}-s{s2}"] = corr(upper(mats[s1]), upper(mats[s2]))
-        halves = {}
-        for s in SESSIONS:
-            h1 = sim_matrix(mean_response(mouse, s, bin_ms, (1,)))
-            h2h3 = sim_matrix(mean_response(mouse, s, bin_ms, (2, 3)))
-            halves[f"session{s}"] = corr(upper(h1), upper(h2h3))
-        results[f"{mouse}/{name}"] = {
-            "cross_session": cross,
-            "cross_session_mean": float(np.mean(list(cross.values()))),
-            "split_half": halves,
-            "split_half_mean": float(np.mean(list(halves.values()))),
-        }
-        print(mouse, name, "cross", round(results[f"{mouse}/{name}"]["cross_session_mean"], 4),
-              "half", round(results[f"{mouse}/{name}"]["split_half_mean"], 4), flush=True)
+def analyze(mouse, name, upper):
+    label_rng = np.random.default_rng(LABEL_SEED)
+    row_rng = np.random.default_rng(ROW_SEED)
+    real, shuffled = ({"split_half": {}, "cross_session": {}} for _ in range(2))
 
-(OUT / "TEMPORAL_STABILITY.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
+    def compare(kind, key, left, right):
+        # The same second-side relabeling applies to both axes, preserving geometry.
+        p = label_rng.permutation(T.K)
+        i, j = upper
+        a = left[i, j]
+        real[kind][key] = corr(a, right[i, j])
+        shuffled[kind][key] = corr(a, right[p[i], p[j]])
+
+    mats = {}
+    for s in T.SESSIONS:
+        blocks = []
+        for r in REPEATS:
+            counts, y = T.load_counts(mouse, s, r, T.BINS[name])
+            aligned = align(counts, y)
+            p = row_rng.permutation(T.K)
+            if not np.array_equal(aligned, align(counts[p], y[p])):
+                raise AssertionError(f"row-order dependence: {mouse}/{name}/s{s}/r{r}")
+            blocks.append(aligned)
+            T.CACHE.pop((mouse, s, r, T.BINS[name]), None)
+        a, b, c = blocks
+        compare("split_half", f"session{s}", sim_matrix(a), sim_matrix((b + c) / 2))
+        mats[s] = sim_matrix((a + b + c) / 3)
+    for s, t in combinations(T.SESSIONS, 2):
+        compare("cross_session", f"s{s}-s{t}", mats[s], mats[t])
+    for result in (real, shuffled):
+        for key in ("cross_session", "split_half"):
+            result[f"{key}_mean"] = float(np.mean(list(result[key].values())))
+    real['label_shuffle'] = shuffled
+    return real
+
+
+def main():
+    results = {}
+    upper = np.triu_indices(T.K, k=1)
+    for mouse in T.MICE:
+        for name in FEATURES:
+            r = analyze(mouse, name, upper)
+            results[f"{mouse}/{name}"] = r
+            print(mouse, name, *(round(d[k + '_mean'], 6) for k in ('split_half', 'cross_session')
+                                 for d in (r, r['label_shuffle'])), flush=True)
+    results['_protocol'] = {
+        'repeats': REPEATS, 'sessions': T.SESSIONS, 'targets_per_repeat': T.K,
+        'split_half': 'R1 vs mean(R2,R3)', 'cross_session': 'mean(R1,R2,R3) on each day',
+        'label_shuffle': 'One second-side permutation per comparison; same permutations across mice/features.',
+        'label_seed': LABEL_SEED, 'row_seed': ROW_SEED,
+        'row_invariance': 'All aligned count tensors exactly equal after joint count/target row permutation.',
+    }
+    OUT.write_text(json.dumps(results, indent=2, allow_nan=False) + '\n', encoding='utf-8')
+
+
+if __name__ == '__main__':
+    main()
