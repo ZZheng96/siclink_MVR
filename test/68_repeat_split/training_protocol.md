@@ -79,3 +79,33 @@ F1_delta | F2_delta | selected_epoch_B/C | seed_SD_B/C | worst_mouse_day | nonne
 ```
 
 未运行填 `NOT_RUN`，不适用填 `NA`，未解盲填 `SEALED`。先留存台账再作解释。本协议只交付设计；不调用原有全量训练/打包命令，不改变生产配置或提交包。
+
+## 6. R4 作为后续反馈基准（2026-11-28 更新）
+
+官方 test 无标签，用户决定后续候选先以第 4 次 repeat 做开发反馈。**R4 已解封，不再是一次性盲测**；下面的指标只用于方案筛选，不能当作 Kaggle 分数或最终确认。
+
+**固定口径**
+
+- 训练只用 repeat1-3（每鼠、每 session、每字 3 条）；评估只用 repeat4（每字 1 条）。任何候选不得读 R4 做归一化、选轮、早停或伪标签。
+- 任务为单 trial 身份识别，对应 v5 Task3。Task1 的 20-repeat 聚合和 Task2 的 4-repeat 平均无法由 R4 单 trial 复现，不纳入该基准。
+- 主指标：Top-1、Recall@32、NLL（统一用 MLP logits）、macro-F1；同时报 argmax 与整块匈牙利分配。按鼠、session 分层；主表为两鼠等权宏平均。无官方 OCF。
+- 入口：`test/68_repeat_split/r4_benchmark.py --stage train|eval|all`；结果在 `data/derived/repeat_bench_v1/R4_BENCHMARK.{json,md}`，仓库副本在 `test/68_repeat_split/`。
+- 重复使用 R4 会逐渐过拟合该集合。新改动应先预注册，比较 character/session 配对差，并报告两鼠与 8 个鼠日；不能只报宏平均。
+
+**首轮结果（宏平均；R1-3 训练、R4 评估）**
+
+| 方案 | 分配 | Top-1 | Recall@32 | macro-F1 | NLL |
+|---|---|---|---:|---:|---:|
+| v5 分支三视图（10/25/50ms，3 seeds） | 匈牙利 | **2.09%** | 20.16% | 2.09% | **6.699** |
+| 53 三视图（10/25/50ms，3 seeds） | 匈牙利 | 1.87% | **20.30%** | 1.87% | **6.699** |
+| v5 Task3（50ms，3 seeds） | argmax | 1.94% | 19.77% | 1.30% | 6.796 |
+| v5 Task3（50ms，3 seeds） | 匈牙利 | 1.82% | 19.77% | 1.82% | 6.796 |
+| v5 Task3（50ms，1 seed） | 匈牙利 | 1.62% | 17.93% | 1.62% | 7.152 |
+| 48 Task3（25ms，e12，1 seed） | 匈牙利 | 0.83% | 12.15% | 0.83% | 7.874 |
+| 简单 25ms MLP（上一轮 B，e4，3 seeds） | argmax | 1.16% | 14.24% | 0.96% | 7.382 |
+
+- v5 三分支（MLP + encoding + DCT continuous）和 10/25/50ms 三视图、三种子集成均显著优于简单 25ms MLP；48 的 25ms e12 单种子在本基准最弱。
+- v5 三视图与 53 三视图的 Top-1 差仅 +0.22 个百分点，95% 区间重叠，**不能据此宣称前者明确更优**。
+- 匈牙利分配通常提高 macro-F1，但可能降低 Top-1，尤其 v5 三种子；两个口径都要报。
+- 本基准不含连续图 OCF；若候选输出连续图，另报 MAE/RMSE/IoU，但不以像素误差替代身份指标。
+
