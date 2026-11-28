@@ -1,0 +1,167 @@
+{
+  "classes": 2748,
+  "baseline": "csls",
+  "readouts": [
+    "csls",
+    "ridge_dct16",
+    "ridge_hv",
+    "total250",
+    "bins50",
+    "early_minus_late125",
+    "column",
+    "mlp10",
+    "mlp25",
+    "mlp50",
+    "mlp250",
+    "encoding50",
+    "soft_dct50",
+    "ridge_dct32",
+    "ridge_pix16",
+    "ridge_stroke",
+    "corr25",
+    "corr10",
+    "lda50",
+    "softmax25",
+    "ridge_tsum50"
+  ],
+  "seeds": [
+    42,
+    202,
+    777
+  ],
+  "protocol": "R3: train R1-2, predict R3; R4: train R1-3, predict R4; verify saved MLP hashes. All trials, original order per mouse/session. No oracle masks. Union is a diagnostic upper bound, not a predictor.",
+  "candidates": "Protect CSLS top24; remaining 20 top1 votes; sort by votes desc, CSLS desc, ID asc; deduplicate and fill to 32 from baseline. Compare to CSLS top32. All score ties use ascending ID.",
+  "gate": "Train iff pooled R3 net > 0. Never train on R4-only gains.",
+  "reranker": "Binary logistic, sum of logistic losses + 0.5 * squared L2 norm, no intercept; full-gallery row-z scores for each candidate only, no ID features; pooled R3 holdout predictions, lock before R4; final tie uses candidate order.",
+  "trained": false,
+  "locked_weights": null,
+  "r3": {
+    "trials": 21984,
+    "baseline": {
+      "hits": 429,
+      "unique": 353
+    },
+    "union": {
+      "hits": 1645,
+      "unique": 1087
+    },
+    "rescued": 1216,
+    "new_chars": 734,
+    "old32": 4292,
+    "new32": 4022,
+    "added": 318,
+    "displaced": 588,
+    "net": -270,
+    "reranked": null,
+    "by_mouse": {
+      "mice1": {
+        "trials": 10992,
+        "baseline": {
+          "hits": 282,
+          "unique": 246
+        },
+        "union": {
+          "hits": 994,
+          "unique": 778
+        },
+        "rescued": 712,
+        "new_chars": 532,
+        "old32": 2450,
+        "new32": 2320,
+        "added": 180,
+        "displaced": 310,
+        "net": -130,
+        "reranked": null
+      },
+      "mice2": {
+        "trials": 10992,
+        "baseline": {
+          "hits": 147,
+          "unique": 132
+        },
+        "union": {
+          "hits": 651,
+          "unique": 522
+        },
+        "rescued": 504,
+        "new_chars": 390,
+        "old32": 1842,
+        "new32": 1702,
+        "added": 138,
+        "displaced": 278,
+        "net": -140,
+        "reranked": null
+      }
+    }
+  },
+  "r4": {
+    "trials": 21984,
+    "baseline": {
+      "hits": 572,
+      "unique": 462
+    },
+    "union": {
+      "hits": 1914,
+      "unique": 1213
+    },
+    "rescued": 1342,
+    "new_chars": 751,
+    "old32": 5131,
+    "new32": 4778,
+    "added": 282,
+    "displaced": 635,
+    "net": -353,
+    "reranked": null,
+    "by_mouse": {
+      "mice1": {
+        "trials": 10992,
+        "baseline": {
+          "hits": 390,
+          "unique": 343
+        },
+        "union": {
+          "hits": 1200,
+          "unique": 897
+        },
+        "rescued": 810,
+        "new_chars": 554,
+        "old32": 3029,
+        "new32": 2863,
+        "added": 162,
+        "displaced": 328,
+        "net": -166,
+        "reranked": null
+      },
+      "mice2": {
+        "trials": 10992,
+        "baseline": {
+          "hits": 182,
+          "unique": 154
+        },
+        "union": {
+          "hits": 714,
+          "unique": 569
+        },
+        "rescued": 532,
+        "new_chars": 415,
+        "old32": 2102,
+        "new32": 1915,
+        "added": 120,
+        "displaced": 307,
+        "net": -187,
+        "reranked": null
+      }
+    }
+  },
+  "acceptance": {
+    "scope": "R4 single top1, not union/top32",
+    "selected": "baseline",
+    "unique_gt": 462,
+    "hits_ge": 572,
+    "observed": {
+      "hits": 572,
+      "unique": 462
+    },
+    "passed": false
+  }
+}
