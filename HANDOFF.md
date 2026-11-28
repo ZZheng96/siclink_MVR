@@ -68,7 +68,7 @@
 - 重复序号按每字在该 session 内的**呈现时间顺序**编号，所以 `repeat k` 是每个字第 k 次被看到的单 trial 记录；
 - 每个文件 2,748 个样本、每字恰好一次；schema 与官方块一致（`sample_ids, group_ptr, trial_ptr, spike_samples, unit_index, target`）外加 `repeat_index`、`source_trial_index`；
 - 4 个 repeat 文件的事件数之和等于原 session 总量（全部 38,100,565 个事件），抽查事件与 `target` 逐元素一致；
-- 构建脚本：`test/00_infra/68_repeat_split/build.py`。
+- 实验 68 现位于 `test/68_repeat_split/`（已从 `00_infra` 移出）。`build.py` 是拆分工具，不是训练入口；第 4 次呈现留出实验遵循同目录 `training_protocol.md`，禁止开发时重读完整原块。
 
 常用命令：
 
