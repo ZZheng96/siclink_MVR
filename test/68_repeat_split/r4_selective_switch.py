@@ -10,7 +10,7 @@ B, Z, DEVICE = F.B, F.Z, F.H.DEVICE
 GRID = (None, .05, .15, .30)  # conservative first, including off
 
 
-def predict(out, m, s, r, centered, thresholds):
+def scores_and_votes(out, m, s, r, centered):
     # Same comb3 as F.full_scores; retain the three branch votes in the same pass.
     v5, mlp, votes = [], [], []
     for name, width, _ in F.RUNS:
@@ -33,7 +33,11 @@ def predict(out, m, s, r, centered, thresholds):
             v5.append(Z((mlp[-1] + Z(enc) + Z(dct)) / 3))
     row = np.partition(current, -100, axis=1)[:, -100:].mean(1, keepdims=True)
     col = np.partition(current, -100, axis=0)[-100:].mean(0, keepdims=True)
-    csls = 2 * current - row - col
+    return 2 * current - row - col, np.stack(votes)
+
+
+def predict(out, m, s, r, centered, thresholds):
+    csls, votes = scores_and_votes(out, m, s, r, centered)
     first = csls.argmax(1)
     rows = np.arange(len(first))
     z = Z(csls)

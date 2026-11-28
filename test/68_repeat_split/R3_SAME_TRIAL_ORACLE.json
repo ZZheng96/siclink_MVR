@@ -1,0 +1,732 @@
+{
+  "protocol": "F.train_dev on repeats 1,2. R3 only. Per-session current CSLS100; stable descending score, ties by ascending class ID. Each MLP vote is argmax of mean logits over seeds 42,202,777.",
+  "units": "trials are distinct mouse/session/row hits. unique counts target IDs; new_unique excludes baseline top1 coverage within the same reporting scope. Opportunities count (trial,candidate) pairs over ALL trials, with the named branch, any branch, or >=2 branches nominating that candidate. Multiple nominators of one candidate count once per rule. nominated_trials collapses different candidates on the same trial. precision = correct pairs / opportunities; each trial has one truth.",
+  "overall": {
+    "trials": 21984,
+    "baseline": {
+      "hits": 429,
+      "unique": 353
+    },
+    "2-5": {
+      "truth": {
+        "trials": 921,
+        "unique": 707,
+        "new_unique": 576
+      },
+      "10ms": {
+        "trials": 23,
+        "unique": 23,
+        "new_unique": 18,
+        "opportunities": 2659,
+        "nominated_trials": 2659,
+        "precision": 0.008649868371568259
+      },
+      "25ms": {
+        "trials": 56,
+        "unique": 55,
+        "new_unique": 45,
+        "opportunities": 4869,
+        "nominated_trials": 4869,
+        "precision": 0.011501334976381188
+      },
+      "50ms": {
+        "trials": 81,
+        "unique": 77,
+        "new_unique": 54,
+        "opportunities": 5466,
+        "nominated_trials": 5466,
+        "precision": 0.014818880351262349
+      },
+      "any": {
+        "trials": 154,
+        "unique": 141,
+        "new_unique": 108,
+        "opportunities": 12431,
+        "nominated_trials": 10608,
+        "precision": 0.012388383879012147
+      },
+      "ge2": {
+        "trials": 6,
+        "unique": 6,
+        "new_unique": 3,
+        "opportunities": 560,
+        "nominated_trials": 560,
+        "precision": 0.010714285714285714
+      }
+    },
+    "2": {
+      "truth": {
+        "trials": 263,
+        "unique": 239,
+        "new_unique": 186
+      },
+      "10ms": {
+        "trials": 11,
+        "unique": 11,
+        "new_unique": 8,
+        "opportunities": 879,
+        "nominated_trials": 879,
+        "precision": 0.012514220705346985
+      },
+      "25ms": {
+        "trials": 25,
+        "unique": 24,
+        "new_unique": 22,
+        "opportunities": 1771,
+        "nominated_trials": 1771,
+        "precision": 0.014116318464144552
+      },
+      "50ms": {
+        "trials": 38,
+        "unique": 36,
+        "new_unique": 25,
+        "opportunities": 2044,
+        "nominated_trials": 2044,
+        "precision": 0.018590998043052837
+      },
+      "any": {
+        "trials": 70,
+        "unique": 66,
+        "new_unique": 51,
+        "opportunities": 4426,
+        "nominated_trials": 4426,
+        "precision": 0.015815634884771803
+      },
+      "ge2": {
+        "trials": 4,
+        "unique": 4,
+        "new_unique": 3,
+        "opportunities": 266,
+        "nominated_trials": 266,
+        "precision": 0.015037593984962405
+      }
+    },
+    "3": {
+      "truth": {
+        "trials": 247,
+        "unique": 235,
+        "new_unique": 192
+      },
+      "10ms": {
+        "trials": 3,
+        "unique": 3,
+        "new_unique": 2,
+        "opportunities": 663,
+        "nominated_trials": 663,
+        "precision": 0.004524886877828055
+      },
+      "25ms": {
+        "trials": 18,
+        "unique": 18,
+        "new_unique": 14,
+        "opportunities": 1293,
+        "nominated_trials": 1293,
+        "precision": 0.013921113689095127
+      },
+      "50ms": {
+        "trials": 28,
+        "unique": 28,
+        "new_unique": 18,
+        "opportunities": 1428,
+        "nominated_trials": 1428,
+        "precision": 0.0196078431372549
+      },
+      "any": {
+        "trials": 47,
+        "unique": 46,
+        "new_unique": 33,
+        "opportunities": 3236,
+        "nominated_trials": 3236,
+        "precision": 0.014524103831891224
+      },
+      "ge2": {
+        "trials": 2,
+        "unique": 2,
+        "new_unique": 0,
+        "opportunities": 147,
+        "nominated_trials": 147,
+        "precision": 0.013605442176870748
+      }
+    },
+    "4": {
+      "truth": {
+        "trials": 209,
+        "unique": 202,
+        "new_unique": 162
+      },
+      "10ms": {
+        "trials": 5,
+        "unique": 5,
+        "new_unique": 5,
+        "opportunities": 603,
+        "nominated_trials": 603,
+        "precision": 0.008291873963515755
+      },
+      "25ms": {
+        "trials": 6,
+        "unique": 6,
+        "new_unique": 3,
+        "opportunities": 989,
+        "nominated_trials": 989,
+        "precision": 0.006066734074823054
+      },
+      "50ms": {
+        "trials": 10,
+        "unique": 10,
+        "new_unique": 9,
+        "opportunities": 1119,
+        "nominated_trials": 1119,
+        "precision": 0.008936550491510277
+      },
+      "any": {
+        "trials": 21,
+        "unique": 21,
+        "new_unique": 17,
+        "opportunities": 2628,
+        "nominated_trials": 2628,
+        "precision": 0.007990867579908675
+      },
+      "ge2": {
+        "trials": 0,
+        "unique": 0,
+        "new_unique": 0,
+        "opportunities": 83,
+        "nominated_trials": 83,
+        "precision": 0.0
+      }
+    },
+    "5": {
+      "truth": {
+        "trials": 202,
+        "unique": 193,
+        "new_unique": 155
+      },
+      "10ms": {
+        "trials": 4,
+        "unique": 4,
+        "new_unique": 3,
+        "opportunities": 514,
+        "nominated_trials": 514,
+        "precision": 0.007782101167315175
+      },
+      "25ms": {
+        "trials": 7,
+        "unique": 7,
+        "new_unique": 6,
+        "opportunities": 816,
+        "nominated_trials": 816,
+        "precision": 0.00857843137254902
+      },
+      "50ms": {
+        "trials": 5,
+        "unique": 5,
+        "new_unique": 4,
+        "opportunities": 875,
+        "nominated_trials": 875,
+        "precision": 0.005714285714285714
+      },
+      "any": {
+        "trials": 16,
+        "unique": 16,
+        "new_unique": 13,
+        "opportunities": 2141,
+        "nominated_trials": 2141,
+        "precision": 0.007473143390938813
+      },
+      "ge2": {
+        "trials": 0,
+        "unique": 0,
+        "new_unique": 0,
+        "opportunities": 64,
+        "nominated_trials": 64,
+        "precision": 0.0
+      }
+    }
+  },
+  "by_mouse": {
+    "mice1": {
+      "trials": 10992,
+      "baseline": {
+        "hits": 282,
+        "unique": 246
+      },
+      "2-5": {
+        "truth": {
+          "trials": 549,
+          "unique": 484,
+          "new_unique": 425
+        },
+        "10ms": {
+          "trials": 14,
+          "unique": 14,
+          "new_unique": 11,
+          "opportunities": 1269,
+          "nominated_trials": 1269,
+          "precision": 0.01103230890464933
+        },
+        "25ms": {
+          "trials": 33,
+          "unique": 33,
+          "new_unique": 32,
+          "opportunities": 2420,
+          "nominated_trials": 2420,
+          "precision": 0.013636363636363636
+        },
+        "50ms": {
+          "trials": 45,
+          "unique": 44,
+          "new_unique": 38,
+          "opportunities": 2706,
+          "nominated_trials": 2706,
+          "precision": 0.01662971175166297
+        },
+        "any": {
+          "trials": 90,
+          "unique": 86,
+          "new_unique": 77,
+          "opportunities": 6175,
+          "nominated_trials": 5283,
+          "precision": 0.014574898785425101
+        },
+        "ge2": {
+          "trials": 2,
+          "unique": 2,
+          "new_unique": 1,
+          "opportunities": 218,
+          "nominated_trials": 218,
+          "precision": 0.009174311926605505
+        }
+      },
+      "2": {
+        "truth": {
+          "trials": 169,
+          "unique": 156,
+          "new_unique": 134
+        },
+        "10ms": {
+          "trials": 8,
+          "unique": 8,
+          "new_unique": 6,
+          "opportunities": 439,
+          "nominated_trials": 439,
+          "precision": 0.018223234624145785
+        },
+        "25ms": {
+          "trials": 17,
+          "unique": 17,
+          "new_unique": 17,
+          "opportunities": 876,
+          "nominated_trials": 876,
+          "precision": 0.019406392694063926
+        },
+        "50ms": {
+          "trials": 21,
+          "unique": 21,
+          "new_unique": 16,
+          "opportunities": 1016,
+          "nominated_trials": 1016,
+          "precision": 0.02066929133858268
+        },
+        "any": {
+          "trials": 44,
+          "unique": 43,
+          "new_unique": 37,
+          "opportunities": 2223,
+          "nominated_trials": 2223,
+          "precision": 0.01979307242465137
+        },
+        "ge2": {
+          "trials": 2,
+          "unique": 2,
+          "new_unique": 1,
+          "opportunities": 106,
+          "nominated_trials": 106,
+          "precision": 0.018867924528301886
+        }
+      },
+      "3": {
+        "truth": {
+          "trials": 143,
+          "unique": 141,
+          "new_unique": 128
+        },
+        "10ms": {
+          "trials": 0,
+          "unique": 0,
+          "new_unique": 0,
+          "opportunities": 322,
+          "nominated_trials": 322,
+          "precision": 0.0
+        },
+        "25ms": {
+          "trials": 9,
+          "unique": 9,
+          "new_unique": 8,
+          "opportunities": 649,
+          "nominated_trials": 649,
+          "precision": 0.01386748844375963
+        },
+        "50ms": {
+          "trials": 17,
+          "unique": 17,
+          "new_unique": 16,
+          "opportunities": 708,
+          "nominated_trials": 708,
+          "precision": 0.02401129943502825
+        },
+        "any": {
+          "trials": 26,
+          "unique": 26,
+          "new_unique": 24,
+          "opportunities": 1621,
+          "nominated_trials": 1621,
+          "precision": 0.016039481801357187
+        },
+        "ge2": {
+          "trials": 0,
+          "unique": 0,
+          "new_unique": 0,
+          "opportunities": 58,
+          "nominated_trials": 58,
+          "precision": 0.0
+        }
+      },
+      "4": {
+        "truth": {
+          "trials": 117,
+          "unique": 116,
+          "new_unique": 99
+        },
+        "10ms": {
+          "trials": 3,
+          "unique": 3,
+          "new_unique": 3,
+          "opportunities": 270,
+          "nominated_trials": 270,
+          "precision": 0.011111111111111112
+        },
+        "25ms": {
+          "trials": 3,
+          "unique": 3,
+          "new_unique": 3,
+          "opportunities": 491,
+          "nominated_trials": 491,
+          "precision": 0.006109979633401222
+        },
+        "50ms": {
+          "trials": 5,
+          "unique": 5,
+          "new_unique": 5,
+          "opportunities": 538,
+          "nominated_trials": 538,
+          "precision": 0.00929368029739777
+        },
+        "any": {
+          "trials": 11,
+          "unique": 11,
+          "new_unique": 11,
+          "opportunities": 1269,
+          "nominated_trials": 1269,
+          "precision": 0.008668242710795903
+        },
+        "ge2": {
+          "trials": 0,
+          "unique": 0,
+          "new_unique": 0,
+          "opportunities": 30,
+          "nominated_trials": 30,
+          "precision": 0.0
+        }
+      },
+      "5": {
+        "truth": {
+          "trials": 120,
+          "unique": 118,
+          "new_unique": 104
+        },
+        "10ms": {
+          "trials": 3,
+          "unique": 3,
+          "new_unique": 2,
+          "opportunities": 238,
+          "nominated_trials": 238,
+          "precision": 0.012605042016806723
+        },
+        "25ms": {
+          "trials": 4,
+          "unique": 4,
+          "new_unique": 4,
+          "opportunities": 404,
+          "nominated_trials": 404,
+          "precision": 0.009900990099009901
+        },
+        "50ms": {
+          "trials": 2,
+          "unique": 2,
+          "new_unique": 2,
+          "opportunities": 444,
+          "nominated_trials": 444,
+          "precision": 0.0045045045045045045
+        },
+        "any": {
+          "trials": 9,
+          "unique": 9,
+          "new_unique": 8,
+          "opportunities": 1062,
+          "nominated_trials": 1062,
+          "precision": 0.00847457627118644
+        },
+        "ge2": {
+          "trials": 0,
+          "unique": 0,
+          "new_unique": 0,
+          "opportunities": 24,
+          "nominated_trials": 24,
+          "precision": 0.0
+        }
+      }
+    },
+    "mice2": {
+      "trials": 10992,
+      "baseline": {
+        "hits": 147,
+        "unique": 132
+      },
+      "2-5": {
+        "truth": {
+          "trials": 372,
+          "unique": 328,
+          "new_unique": 294
+        },
+        "10ms": {
+          "trials": 9,
+          "unique": 9,
+          "new_unique": 9,
+          "opportunities": 1390,
+          "nominated_trials": 1390,
+          "precision": 0.006474820143884892
+        },
+        "25ms": {
+          "trials": 23,
+          "unique": 23,
+          "new_unique": 20,
+          "opportunities": 2449,
+          "nominated_trials": 2449,
+          "precision": 0.009391588403429971
+        },
+        "50ms": {
+          "trials": 36,
+          "unique": 34,
+          "new_unique": 32,
+          "opportunities": 2760,
+          "nominated_trials": 2760,
+          "precision": 0.013043478260869565
+        },
+        "any": {
+          "trials": 64,
+          "unique": 61,
+          "new_unique": 56,
+          "opportunities": 6256,
+          "nominated_trials": 5325,
+          "precision": 0.010230179028132993
+        },
+        "ge2": {
+          "trials": 4,
+          "unique": 4,
+          "new_unique": 4,
+          "opportunities": 342,
+          "nominated_trials": 342,
+          "precision": 0.011695906432748537
+        }
+      },
+      "2": {
+        "truth": {
+          "trials": 94,
+          "unique": 93,
+          "new_unique": 80
+        },
+        "10ms": {
+          "trials": 3,
+          "unique": 3,
+          "new_unique": 3,
+          "opportunities": 440,
+          "nominated_trials": 440,
+          "precision": 0.006818181818181818
+        },
+        "25ms": {
+          "trials": 8,
+          "unique": 8,
+          "new_unique": 6,
+          "opportunities": 895,
+          "nominated_trials": 895,
+          "precision": 0.008938547486033519
+        },
+        "50ms": {
+          "trials": 17,
+          "unique": 16,
+          "new_unique": 16,
+          "opportunities": 1028,
+          "nominated_trials": 1028,
+          "precision": 0.016536964980544747
+        },
+        "any": {
+          "trials": 26,
+          "unique": 25,
+          "new_unique": 23,
+          "opportunities": 2203,
+          "nominated_trials": 2203,
+          "precision": 0.011802088061733999
+        },
+        "ge2": {
+          "trials": 2,
+          "unique": 2,
+          "new_unique": 2,
+          "opportunities": 160,
+          "nominated_trials": 160,
+          "precision": 0.0125
+        }
+      },
+      "3": {
+        "truth": {
+          "trials": 104,
+          "unique": 100,
+          "new_unique": 91
+        },
+        "10ms": {
+          "trials": 3,
+          "unique": 3,
+          "new_unique": 3,
+          "opportunities": 341,
+          "nominated_trials": 341,
+          "precision": 0.008797653958944282
+        },
+        "25ms": {
+          "trials": 9,
+          "unique": 9,
+          "new_unique": 8,
+          "opportunities": 644,
+          "nominated_trials": 644,
+          "precision": 0.013975155279503106
+        },
+        "50ms": {
+          "trials": 11,
+          "unique": 11,
+          "new_unique": 9,
+          "opportunities": 720,
+          "nominated_trials": 720,
+          "precision": 0.015277777777777777
+        },
+        "any": {
+          "trials": 21,
+          "unique": 21,
+          "new_unique": 18,
+          "opportunities": 1615,
+          "nominated_trials": 1615,
+          "precision": 0.013003095975232198
+        },
+        "ge2": {
+          "trials": 2,
+          "unique": 2,
+          "new_unique": 2,
+          "opportunities": 89,
+          "nominated_trials": 89,
+          "precision": 0.02247191011235955
+        }
+      },
+      "4": {
+        "truth": {
+          "trials": 92,
+          "unique": 89,
+          "new_unique": 81
+        },
+        "10ms": {
+          "trials": 2,
+          "unique": 2,
+          "new_unique": 2,
+          "opportunities": 333,
+          "nominated_trials": 333,
+          "precision": 0.006006006006006006
+        },
+        "25ms": {
+          "trials": 3,
+          "unique": 3,
+          "new_unique": 3,
+          "opportunities": 498,
+          "nominated_trials": 498,
+          "precision": 0.006024096385542169
+        },
+        "50ms": {
+          "trials": 5,
+          "unique": 5,
+          "new_unique": 5,
+          "opportunities": 581,
+          "nominated_trials": 581,
+          "precision": 0.008605851979345954
+        },
+        "any": {
+          "trials": 10,
+          "unique": 10,
+          "new_unique": 10,
+          "opportunities": 1359,
+          "nominated_trials": 1359,
+          "precision": 0.007358351729212656
+        },
+        "ge2": {
+          "trials": 0,
+          "unique": 0,
+          "new_unique": 0,
+          "opportunities": 53,
+          "nominated_trials": 53,
+          "precision": 0.0
+        }
+      },
+      "5": {
+        "truth": {
+          "trials": 82,
+          "unique": 80,
+          "new_unique": 71
+        },
+        "10ms": {
+          "trials": 1,
+          "unique": 1,
+          "new_unique": 1,
+          "opportunities": 276,
+          "nominated_trials": 276,
+          "precision": 0.0036231884057971015
+        },
+        "25ms": {
+          "trials": 3,
+          "unique": 3,
+          "new_unique": 3,
+          "opportunities": 412,
+          "nominated_trials": 412,
+          "precision": 0.007281553398058253
+        },
+        "50ms": {
+          "trials": 3,
+          "unique": 3,
+          "new_unique": 3,
+          "opportunities": 431,
+          "nominated_trials": 431,
+          "precision": 0.0069605568445475635
+        },
+        "any": {
+          "trials": 7,
+          "unique": 7,
+          "new_unique": 7,
+          "opportunities": 1079,
+          "nominated_trials": 1079,
+          "precision": 0.006487488415199258
+        },
+        "ge2": {
+          "trials": 0,
+          "unique": 0,
+          "new_unique": 0,
+          "opportunities": 40,
+          "nominated_trials": 40,
+          "precision": 0.0
+        }
+      }
+    }
+  }
+}
