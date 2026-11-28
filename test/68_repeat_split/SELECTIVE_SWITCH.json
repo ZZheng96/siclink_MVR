@@ -1,0 +1,120 @@
+{
+  "protocol": "Fresh R1-2 training for R3; R1-3 saved models for R4. Each 10/25/50ms vote is argmax of mean MLP logits over seeds 42/202/777. Switch only to CSLS100 current runner-up with >=2 votes and row-z margin <= threshold. Maximize R3 unique with hits >= baseline; ties favor off then smaller threshold. R4 historically used for feedback.",
+  "classes": 2748,
+  "trials_per_repeat": 21984,
+  "r3": {
+    "off": {
+      "unique": 353,
+      "hits": 429,
+      "switched": 0,
+      "corrected": 0,
+      "spoiled": 0,
+      "both_wrong": 0,
+      "eligible": true
+    },
+    "0.05": {
+      "unique": 354,
+      "hits": 430,
+      "switched": 112,
+      "corrected": 3,
+      "spoiled": 2,
+      "both_wrong": 107,
+      "eligible": true
+    },
+    "0.15": {
+      "unique": 353,
+      "hits": 425,
+      "switched": 201,
+      "corrected": 4,
+      "spoiled": 8,
+      "both_wrong": 189,
+      "eligible": false
+    },
+    "0.3": {
+      "unique": 353,
+      "hits": 425,
+      "switched": 254,
+      "corrected": 4,
+      "spoiled": 8,
+      "both_wrong": 242,
+      "eligible": false
+    }
+  },
+  "locked_threshold": "0.05",
+  "r4": {
+    "baseline": {
+      "unique": 462,
+      "hits": 572
+    },
+    "locked": {
+      "unique": 461,
+      "hits": 568,
+      "switched": 127,
+      "corrected": 2,
+      "spoiled": 6,
+      "both_wrong": 119
+    },
+    "unique_changes": {
+      "gained": 1,
+      "lost": 2,
+      "net": -1
+    },
+    "trial_changes": {
+      "gained": 2,
+      "lost": 6,
+      "net": -4
+    },
+    "by_mouse": {
+      "mice1": {
+        "baseline": {
+          "unique": 343,
+          "hits": 390
+        },
+        "locked": {
+          "unique": 341,
+          "hits": 388,
+          "switched": 46,
+          "corrected": 2,
+          "spoiled": 4,
+          "both_wrong": 40
+        },
+        "unique_changes": {
+          "gained": 1,
+          "lost": 3,
+          "net": -2
+        },
+        "trial_changes": {
+          "gained": 2,
+          "lost": 4,
+          "net": -2
+        }
+      },
+      "mice2": {
+        "baseline": {
+          "unique": 154,
+          "hits": 182
+        },
+        "locked": {
+          "unique": 153,
+          "hits": 180,
+          "switched": 81,
+          "corrected": 0,
+          "spoiled": 2,
+          "both_wrong": 79
+        },
+        "unique_changes": {
+          "gained": 0,
+          "lost": 1,
+          "net": -1
+        },
+        "trial_changes": {
+          "gained": 0,
+          "lost": 2,
+          "net": -2
+        }
+      }
+    },
+    "unique_at_least_500": false,
+    "hits_at_least_572": false
+  }
+}
