@@ -271,6 +271,7 @@ def main():
 
     runs = {
         "v5_50e7": dict(bin_ms=50, epochs=7, dropouts=(0.2, 0.2)),
+        "v5_250e7": dict(bin_ms=250, epochs=7, dropouts=(0.2, 0.2)),
         "e53_10e7": dict(bin_ms=10, epochs=7, dropouts=(0.2, 0.35)),
         "e53_25e12": dict(bin_ms=25, epochs=12, dropouts=(0.2, 0.35)),
         "e53_50e9": dict(bin_ms=50, epochs=9, dropouts=(0.2, 0.35)),

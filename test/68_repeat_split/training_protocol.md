@@ -86,10 +86,10 @@ F1_delta | F2_delta | selected_epoch_B/C | seed_SD_B/C | worst_mouse_day | nonne
 
 **固定口径**
 
-- 训练只用 repeat1-3（每鼠、每 session、每字 3 条）；评估只用 repeat4（每字 1 条）。任何候选不得读 R4 做归一化、选轮、早停或伪标签。
+- 训练只用 repeat1-3（每鼠、每 session、每字 3 条）；评估只用 repeat4（每字 1 条）。严格非转导候选不得读 R4 做归一化、选轮、早停或伪标签。CSLS、列归一化等测试时方法只使用 R4 的无标签分数统计，必须单独标记为 **transductive**，不与普通模型同口径。
 - 任务为单 trial 身份识别，对应 v5 Task3。Task1 的 20-repeat 聚合和 Task2 的 4-repeat 平均无法由 R4 单 trial 复现，不纳入该基准。
 - 主指标：Top-1、Recall@32、NLL（统一用 MLP logits）、macro-F1；同时报 argmax 与整块匈牙利分配。按鼠、session 分层；主表为两鼠等权宏平均。无官方 OCF。
-- 入口：`test/68_repeat_split/r4_benchmark.py --stage train|eval|all`；结果在 `data/derived/repeat_bench_v1/R4_BENCHMARK.{json,md}`，仓库副本在 `test/68_repeat_split/`。
+- 入口：`test/68_repeat_split/r4_benchmark.py --stage train|eval|all`（方案对比）与 `r4_iterations.py`（四轮迭代）；结果在 `data/derived/repeat_bench_v1/R4_BENCHMARK.{json,md}`、`R4_ITERATIONS.{json,md}`，仓库副本在 `test/68_repeat_split/`。
 - 重复使用 R4 会逐渐过拟合该集合。新改动应先预注册，比较 character/session 配对差，并报告两鼠与 8 个鼠日；不能只报宏平均。
 
 **首轮结果（宏平均；R1-3 训练、R4 评估）**
@@ -108,4 +108,18 @@ F1_delta | F2_delta | selected_epoch_B/C | seed_SD_B/C | worst_mouse_day | nonne
 - v5 三视图与 53 三视图的 Top-1 差仅 +0.22 个百分点，95% 区间重叠，**不能据此宣称前者明确更优**。
 - 匈牙利分配通常提高 macro-F1，但可能降低 Top-1，尤其 v5 三种子；两个口径都要报。
 - 本基准不含连续图 OCF；若候选输出连续图，另报 MAE/RMSE/IoU，但不以像素误差替代身份指标。
+
+**四轮迭代后的当前最优（argmax；宏平均）**
+
+| 轮次 | 方法 | Top-1 | Recall@32 | NLL |
+|---|---|---|---:|---:|---:|
+| B0 | v5 三视图三种子 | 2.1698% | 20.1556% | 6.6992 |
+| R1 | + CSLS k=50 | 2.3426% | 21.1790% | 6.6992 |
+| R2 | + 跨分支集成 + CSLS50 | 2.3790% | 22.8439% | 6.6992 |
+| R3 | + 250ms 全局视图 + CSLS50 | 2.5564% | 23.1896% | 6.6992 |
+| R4 | CSLS k=100 | **2.6019%** | **23.3397%** | 6.6992 |
+
+- R2 的 Top-1 配对区间跨 0，按预设规则以 Recall@32（+1.67pp，区间 >0）通过；R3 的 Top-1 +0.18pp（区间 >0）；R4 的 Top-1 +0.05pp（区间跨 0）、Recall@32 +0.15pp（区间 >0），只能算边际增益。
+- CSLS、列归一化是 **transductive**，只使用 R4 无标签分数统计；k=100 是在 R4 上选择的，不构成独立确认。
+- 下一步：CSLS + 跨分支集成可直接进入 Task3 推理链做固定公开 heldout/OcF 复核；250ms 视图需要全量重训与打包后才能进生产。
 
